@@ -1,6 +1,6 @@
 # Gardarobenummer
 
-This application is made on React Native.
+This application is made on React Native. 
 
 TEST
 - Test is made using jest (https://jestjs.io/docs/getting-started).
