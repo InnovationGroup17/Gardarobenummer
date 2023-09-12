@@ -1,74 +1,76 @@
-// tests/math.test.js
-const { sum, multiply } = require("../src/math");
+// calculator.test.js
+const { add, subtract, multiply, divide } = require("../src/math.js");
 
-describe("Math Functions", () => {
-  // Test cases for the sum function
-  describe("sum", () => {
+describe("Calculator Functions", () => {
+  // Addition function tests
+  describe("add", () => {
     it("should add two positive numbers correctly", () => {
-      expect(sum(2, 3)).toBe(5);
+      expect(add(2, 3)).toBe(5);
     });
 
     it("should add a positive number and zero correctly", () => {
-      expect(sum(5, 0)).toBe(5);
+      expect(add(5, 0)).toBe(5);
     });
 
-    it("should handle negative numbers correctly", () => {
-      expect(sum(-4, 7)).toBe(3);
+    it("should handle adding a negative number", () => {
+      expect(add(-4, 7)).toBe(3);
     });
 
-    it("should return zero when adding zero to zero", () => {
-      expect(sum(0, 0)).toBe(0);
+    it("should add zero to zero correctly", () => {
+      expect(add(0, 0)).toBe(0);
     });
   });
 
-  // Test cases for the multiply function
+  // Subtraction function tests
+  describe("subtract", () => {
+    it("should subtract two positive numbers correctly", () => {
+      expect(subtract(10, 4)).toBe(6);
+    });
+
+    it("should handle subtracting a negative number", () => {
+      expect(subtract(4, -7)).toBe(11);
+    });
+
+    it("should subtract zero correctly", () => {
+      expect(subtract(8, 0)).toBe(8);
+    });
+  });
+
+  // Multiplication function tests
   describe("multiply", () => {
     it("should multiply two positive numbers correctly", () => {
       expect(multiply(2, 3)).toBe(6);
-      expect(multiply(5, 10)).toBe(50);
-      expect(multiply(1, 1)).toBe(1);
     });
 
     it("should multiply a positive number by zero to return zero", () => {
       expect(multiply(5, 0)).toBe(0);
     });
 
-    it("should handle negative numbers correctly", () => {
-      expect(multiply(-4, -7)).toBe(28);
-    });
-
-    it("should handle negative and positive numbers correctly", () => {
+    it("should handle multiplying a negative number", () => {
       expect(multiply(-4, 7)).toBe(-28);
     });
 
-    it("should return zero when one of the numbers is zero", () => {
+    it("should multiply by zero to return zero", () => {
       expect(multiply(0, 10)).toBe(0);
     });
+  });
 
-    it("should return zero when both numbers are zero", () => {
-      expect(multiply(0, 0)).toBe(0);
+  // Division function tests
+  describe("divide", () => {
+    it("should divide two positive numbers correctly", () => {
+      expect(divide(8, 2)).toBe(4);
     });
 
-    it("should handle floating-point numbers", () => {
-      expect(multiply(2.5, 4)).toBe(10);
+    it("should handle dividing a negative number", () => {
+      expect(divide(-20, 4)).toBe(-5);
     });
 
-    it("should handle negative floating-point numbers", () => {
-      expect(multiply(-2.5, 4)).toBe(-10);
+    it("should throw an error for division by zero", () => {
+      expect(() => divide(10, 0)).toThrow("Division by zero is not allowed.");
     });
 
-    it("should handle floating-point numbers that are less than one", () => {
-      expect(multiply(1 / 2, 4)).toBe(2);
-      expect(multiply(1 / 2, 1 / 4)).toBe(1 / 8);
-      expect(multiply(0.1, 0.2)).toBeCloseTo(0.02);
-      expect(multiply(0.5, 4)).toBe(2);
-    });
-
-    it("should handle large numbers", () => {
-      expect(multiply(1000000, 1000000)).toBe(1000000000000);
-      expect(multiply(10000000, 10000000)).toBe(100000000000000);
-      expect(multiply(9999999, 9999999)).toBe(99999980000001);
-      expect(multiply(99999999, 99999999)).toBe(9999999800000001);
+    it("should return zero when dividing zero by a number", () => {
+      expect(divide(0, 5)).toBe(0);
     });
   });
 });

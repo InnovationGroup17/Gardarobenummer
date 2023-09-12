@@ -1,10 +1,24 @@
-// src/math.js
-function sum(a, b) {
+// Addition function
+function add(a, b) {
   return a + b;
 }
 
-function multiply(x, y) {
-  return x * y;
+// Subtraction function
+function subtract(a, b) {
+  return a - b;
 }
 
-module.exports = { sum, multiply };
+// Multiplication function
+function multiply(a, b) {
+  return a * b;
+}
+
+// Division function
+function divide(a, b) {
+  if (b === 0) {
+    throw new Error("Division by zero is not allowed.");
+  }
+  return a / b;
+}
+
+module.exports = { add, subtract, multiply, divide };
