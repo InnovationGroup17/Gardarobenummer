@@ -1,45 +1,28 @@
-import React, {useState, firebase} from 'react';
-import {Button,Text,
-    View,
-    TextInput,
-    ActivityIndicator,
-    StyleSheet,
-} from 'react-native';
-//import firebase from 'firebase';
+import React, { useState } from 'react';
+import { Button, Text, View, TextInput, StyleSheet } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigation } from '@react-navigation/native';  // Import the useNavigation hook
 
 function LoginForm() {
-    //Instantiering af state-variabler, der skal benyttes i SignUpForm
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [isCompleted, setCompleted] = useState(false)
-    const [errorMessage, setErrorMessage] = useState(null)
+    const navigation = useNavigation();  // Use the hook to get the navigation object
 
-    
-    const auth = getAuth()
-    //Her defineres brugeroprettelsesknappen, som aktiverer handleSubmit igennem onPress
-    const renderButton = () => {
-        return <Button onPress={() => handleSubmit()} title="Login" />;
-        }; 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState(null);
 
-          const handleSubmit = async() => {
-            await signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-              // Signed in 
-              const user = userCredential.user;
-              // ...
-            })
-            .catch((error) => {
-              const errorCode = error.code;
-              const errorMessage = error.message;
-              setErrorMessage(errorMessage)
-              // ..
-            });
-          }
+    const auth = getAuth();
 
-//I return oprettes en tekstkomponent, der angiver at dette er SignUpfrom
-//Dernæst er der to inputfelter, som løbeende sætter værdien af state-variablerne, mail og password.
-// Afslutningsvis, angives det at, hvis errorMessage får fastsat en værdi, skal denne udskrives i en tekstkomponent.
+    const handleSubmit = async() => {
+        await signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            navigation.navigate('Home');  // Navigate to HomeScreen upon successful login
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrorMessage(errorMessage);
+        });
+    }
 
     return (
         <View>
@@ -60,12 +43,11 @@ function LoginForm() {
             {errorMessage && (
                 <Text style={styles.error}>Error: {errorMessage}</Text>
             )}
-            {renderButton()}
+            <Button onPress={handleSubmit} title="Login" />
         </View>
     );
 }
 
-//Lokal styling til brug i SignUpForm
 const styles = StyleSheet.create({
     error: {
         color: 'red',
@@ -81,5 +63,4 @@ const styles = StyleSheet.create({
     },
 });
 
-//Eksport af Loginform, således denne kan importeres og benyttes i andre komponenter
-export default LoginForm
+export default LoginForm;
