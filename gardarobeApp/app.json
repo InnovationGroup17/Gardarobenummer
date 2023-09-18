@@ -15,9 +15,13 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.garderobe.garderobeapp",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "We need access to your location for..."
-      }
+      },
+      "config": {
+        "googleMapsApiKey": "AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY"
+     }
     },
     "android": {
       "adaptiveIcon": {

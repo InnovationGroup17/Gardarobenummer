@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MapView from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { StyleSheet, View, Alert } from 'react-native';
 import * as Location from 'expo-location';
 
@@ -30,6 +30,7 @@ export default function MapScreen() {
     <View style={styles.container}>
       {initialRegion ? (
         <MapView
+          provider={PROVIDER_GOOGLE}
           style={styles.map}
           initialRegion={initialRegion}
           showsUserLocation={true}
