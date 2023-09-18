@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from "react";  // Add this line
+import { useState, useEffect } from "react"; // Add this line
 import { StyleSheet, Text, View, Button } from "react-native";
 import { getApps, initializeApp } from "firebase/app";
 import SignUpForm from "./components/stackComponents/SigninForm";
@@ -11,8 +11,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "./components/ProfileScreen";
 import MapScreen from "./components/stackComponents/MapScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-
-
+import QrScanner from "./components/stackComponents/QrScanner";
 
 const app = initializeApp(firebaseConfig);
 
@@ -23,12 +22,12 @@ function HomeTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
       <Tab.Screen name="Map" component={MapScreen} />
+      <Tab.Screen name="QR" component={QrScanner} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
-
 
 function HomeScreen({ navigation }) {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
@@ -54,7 +53,10 @@ function HomeScreen({ navigation }) {
   } else {
     return (
       <View style={styles.container}>
-        <Button title="Sign Up" onPress={() => navigation.navigate("Sign Up")} />
+        <Button
+          title="Sign Up"
+          onPress={() => navigation.navigate("Sign Up")}
+        />
         <Button title="Log In" onPress={() => navigation.navigate("Log In")} />
       </View>
     );
@@ -83,14 +85,24 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={isUserLoggedIn ? "HomeTabs" : "HomeScreen"}>
+      <Stack.Navigator
+        initialRouteName={isUserLoggedIn ? "HomeTabs" : "HomeScreen"}
+      >
         {isUserLoggedIn ? (
           <>
-            <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
+            <Stack.Screen
+              name="HomeTabs"
+              component={HomeTabs}
+              options={{ headerShown: false }}
+            />
           </>
         ) : (
           <>
-            <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen
+              name="HomeScreen"
+              component={HomeScreen}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen name="Sign Up" component={SignUpForm} />
             <Stack.Screen name="Log In" component={LoginForm} />
           </>
@@ -99,7 +111,6 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
