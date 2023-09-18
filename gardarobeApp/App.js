@@ -46,7 +46,6 @@ function HomeScreen({ navigation }) {
       }
     });
 
-    // Cleanup the observer on unmount
     return () => unsubscribe();
   }, [auth]);
 
