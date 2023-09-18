@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "gardarobeApp",
-    "slug": "gardarobeApp",
+    "name": "wardrobeNumber",
+    "slug": "wardrobeNumber",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
