@@ -1,15 +1,15 @@
 // Date: 18.09.2020
 import { Button, StyleSheet, Text, View, Linking } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import * as React from "react";
+import React, {useState, useEffect} from "react";
 
 //Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
 const QrScanner = () => {
-  const [hasPermission, setHasPermission] = React.useState(null);
-  const [scanned, setScanned] = React.useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
 
   //Metode til at få adgang til kameraet på enheden
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");
@@ -17,14 +17,14 @@ const QrScanner = () => {
   }, []);
 
   //Metode til at håndtere scanninger. Denne metode bliver kaldt, når der scannes en QR kode
-
   //!!!!!Skal sættes op med en metode, der sender dataen videre til databasen. !!!!!
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     let collectedData = [];
     collectedData.push({ Qr: { data: data, type: type } });
     console.log(collectedData[0].Qr);
-    Linking.openURL(data);
+    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    //Linking.openURL(data);
   };
 
   //Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette
@@ -54,13 +54,9 @@ export default QrScanner;
 const styles = StyleSheet.create({
   constainer: {
     flex: 1,
-    flexDirection: "column",
     justifyContent: "center",
   },
   scanner: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
