@@ -17,14 +17,13 @@ const QrScanner = () => {
   }, []);
 
   //Metode til at håndtere scanninger. Denne metode bliver kaldt, når der scannes en QR kode
-  
+
   //!!!!!Skal sættes op med en metode, der sender dataen videre til databasen. !!!!!
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     let collectedData = [];
-    collectedData.push(data, type);
-    console.log("Data: " + collectedData[0]);
-    console.log("Type: " + collectedData[1]);
+    collectedData.push({ Qr: { data: data, type: type } });
+    console.log(collectedData[0].Qr);
     Linking.openURL(data);
   };
 
@@ -58,7 +57,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
   },
-  button: {},
   scanner: {
     flex: 1,
     flexDirection: "column",
