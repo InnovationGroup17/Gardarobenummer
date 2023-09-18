@@ -24,7 +24,8 @@ const QrScanner = () => {
     let collectedData = [];
     collectedData.push({ Qr: { data: data, type: type } });
     console.log(collectedData[0].Qr);
-    Linking.openURL(data);
+    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    //Linking.openURL(data);
   };
 
   //Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette
@@ -38,6 +39,7 @@ const QrScanner = () => {
   //Hvis der er givet adgang til kameraet, så returneres BarCodeScanner komponenten fra expo
   return (
     <View style={styles.constainer}>
+      <Button title="Create QR" />
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={styles.scanner}
