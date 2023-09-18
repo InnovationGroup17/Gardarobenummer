@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, Button, Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { getApps, initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebaseConfig";
@@ -21,11 +22,44 @@ const Tab = createBottomTabNavigator();
 
 function HomeTabs() {
   return (
+    //add different icons for the different tabs
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Scan QR" component={QrScanner} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="map" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Scan QR"
+        component={QrScanner}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="qrcode" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="user" color={color} size={size} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
