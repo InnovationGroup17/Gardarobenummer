@@ -2,7 +2,6 @@
 import { Button, StyleSheet, Text, View, Linking } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import * as React from "react";
-import db from "../../data.json";
 
 //Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
 const QrScanner = () => {
@@ -20,10 +19,10 @@ const QrScanner = () => {
   //Metode til at håndtere scanninger. Denne metode bliver kaldt, når der scannes en QR kode
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    console.log(data);
-    console.log(type);
-    //send data to json file.
-    db.push(data);
+    let collectedData = [];
+    collectedData.push(data, type);
+    console.log("Data: " + collectedData[0]);
+    console.log("Type: " + collectedData[1]);
     Linking.openURL(data);
   };
 
