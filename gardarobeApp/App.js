@@ -50,29 +50,57 @@ function HomeScreen({ navigation }) {
     return () => unsubscribe();
   }, [auth]);
 
-  return (
-    <View style={styles.container}>
-      {!isUserLoggedIn && (
-        <>
-          <Button title="Sign Up" onPress={() => navigation.navigate("Sign Up")} />
-          <Button title="Log In" onPress={() => navigation.navigate("Log In")} />
-        </>
-      )}
-    </View>
-  );
+  if (isUserLoggedIn) {
+    return <MapScreen />;
+  } else {
+    return (
+      <View style={styles.container}>
+        <Button title="Sign Up" onPress={() => navigation.navigate("Sign Up")} />
+        <Button title="Log In" onPress={() => navigation.navigate("Log In")} />
+      </View>
+    );
+  }
 }
 
 export default function App() {
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const auth = getAuth();
+
+  useEffect(() => {
+    // Set an authentication state observer and get user data
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        setIsUserLoggedIn(true);
+      } else {
+        // User is signed out
+        setIsUserLoggedIn(false);
+      }
+    });
+
+    // Cleanup the observer on unmount
+    return () => unsubscribe();
+  }, [auth]);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="HomeTabs">
-        <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
-        <Stack.Screen name="Sign Up" component={SignUpForm} />
-        <Stack.Screen name="Log In" component={LoginForm} />
+      <Stack.Navigator initialRouteName={isUserLoggedIn ? "HomeTabs" : "HomeScreen"}>
+        {isUserLoggedIn ? (
+          <>
+            <Stack.Screen name="HomeTabs" component={HomeTabs} options={{ headerShown: false }} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Sign Up" component={SignUpForm} />
+            <Stack.Screen name="Log In" component={LoginForm} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
