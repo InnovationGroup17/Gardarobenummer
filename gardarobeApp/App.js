@@ -23,7 +23,7 @@ function HomeTabs() {
     <Tab.Navigator>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="QR" component={QrScanner} />
+      <Tab.Screen name="Scan QR" component={QrScanner} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
