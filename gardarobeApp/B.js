@@ -21,6 +21,12 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function HomeTabs() {
+  //function to make icons for the different tabs
+  const getTabBarIcon =
+    (name) =>
+    ({ color, size }) =>
+      <FontAwesome name={name} color={color} size={size} />;
+
   return (
     //add different icons for the different tabs
     <Tab.Navigator>
@@ -28,36 +34,28 @@ function HomeTabs() {
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="home" color={color} size={size} />
-          ),
+          tabBarIcon: getTabBarIcon("home"),
         }}
       />
       <Tab.Screen
         name="Map"
         component={MapScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="map" color={color} size={size} />
-          ),
+          tabBarIcon: getTabBarIcon("map"),
         }}
       />
       <Tab.Screen
         name="Scan QR"
         component={QrScanner}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="qrcode" color={color} size={size} />
-          ),
+          tabBarIcon: getTabBarIcon("qrcode"),
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="user" color={color} size={size} />
-          ),
+          tabBarIcon: getTabBarIcon("user"),
         }}
       />
     </Tab.Navigator>
