@@ -1,33 +1,9 @@
-import { View, StyleSheet } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import React from "react";
-import Compiled from "./B";
-
-const App = () => {
-  return (
-    <View style={styles.constainer}>
-      <Compiled />
-      <StatusBar style="auto" />
-    </View>
-  );
-};
-
-export default App;
-
-const styles = StyleSheet.create({
-  constainer: {
-    flex: 1,
-    justifyContent: "center",
-  },
-});
-
-/*
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View, Button, Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import { getApps, initializeApp } from "firebase/app";
 import { firebaseConfig } from "./firebaseConfig";
@@ -45,12 +21,43 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 function HomeTabs() {
+  //function to make icons for the different tabs
+  const getTabBarIcon =
+    (name) =>
+    ({ color, size }) =>
+      <FontAwesome name={name} color={color} size={size} />;
+
   return (
+    //add different icons for the different tabs
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Map" component={MapScreen} />
-      <Tab.Screen name="Scan QR" component={QrScanner} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: getTabBarIcon("home"),
+        }}
+      />
+      <Tab.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          tabBarIcon: getTabBarIcon("map"),
+        }}
+      />
+      <Tab.Screen
+        name="Scan QR"
+        component={QrScanner}
+        options={{
+          tabBarIcon: getTabBarIcon("qrcode"),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: getTabBarIcon("user"),
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -84,13 +91,12 @@ function HomeScreen({ navigation }) {
           onPress={() => navigation.navigate("Sign Up")}
         />
         <Button title="Log In" onPress={() => navigation.navigate("Log In")} />
-        <StatusBar style="auto" />
       </View>
     );
   }
 }
 
-export default function App() {
+export default function Compiled() {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const auth = getAuth();
 
@@ -135,7 +141,6 @@ export default function App() {
           </>
         )}
       </Stack.Navigator>
-      <StatusBar style="auto" />
     </NavigationContainer>
   );
 }
@@ -148,4 +153,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-*/
