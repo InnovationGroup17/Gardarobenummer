@@ -1,15 +1,15 @@
 // Date: 18.09.2020
 import { Button, StyleSheet, Text, View, Linking } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import * as React from "react";
+import React, {useState, useEffect} from "react";
 
 //Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
 const QrScanner = () => {
-  const [hasPermission, setHasPermission] = React.useState(null);
-  const [scanned, setScanned] = React.useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
 
   //Metode til at få adgang til kameraet på enheden
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       setHasPermission(status === "granted");

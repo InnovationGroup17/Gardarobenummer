@@ -1,30 +1,5 @@
-import { View, StyleSheet } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import React from "react";
-import Compiled from "./B";
-
-const App = () => {
-  return (
-    <View style={styles.constainer}>
-      <Compiled />
-      <StatusBar style="auto" />
-    </View>
-  );
-};
-
-export default App;
-
-const styles = StyleSheet.create({
-  constainer: {
-    flex: 1,
-    justifyContent: "center",
-  },
-});
-
-/*
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Button } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -84,13 +59,12 @@ function HomeScreen({ navigation }) {
           onPress={() => navigation.navigate("Sign Up")}
         />
         <Button title="Log In" onPress={() => navigation.navigate("Log In")} />
-        <StatusBar style="auto" />
       </View>
     );
   }
 }
 
-export default function App() {
+export default function Compiled() {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const auth = getAuth();
 
@@ -135,7 +109,6 @@ export default function App() {
           </>
         )}
       </Stack.Navigator>
-      <StatusBar style="auto" />
     </NavigationContainer>
   );
 }
@@ -148,4 +121,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-*/
