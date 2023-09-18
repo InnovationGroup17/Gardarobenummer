@@ -11,6 +11,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "./components/ProfileScreen";
 import MapScreen from "./components/stackComponents/MapScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import QrScanner from "./components/stackComponents/QrScanner";
 
 const app = initializeApp(firebaseConfig);
 
@@ -22,6 +23,7 @@ function HomeTabs() {
     <Tab.Navigator>
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Map" component={MapScreen} />
+      <Tab.Screen name="QR" component={QrScanner} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
