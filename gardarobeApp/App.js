@@ -1,16 +1,18 @@
-import * as React from "react";
-import { useState, useEffect } from "react"; // Add this line
-import { StyleSheet, Text, View, Button } from "react-native";
-import { getApps, initializeApp } from "firebase/app";
-import SignUpForm from "./components/stackComponents/SigninForm";
-import LoginForm from "./components/stackComponents/LoginForm";
-import { firebaseConfig } from "./firebaseConfig";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Button } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+import { getApps, initializeApp } from "firebase/app";
+import { firebaseConfig } from "./firebaseConfig";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+import SignUpForm from "./components/stackComponents/SigninForm";
+import LoginForm from "./components/stackComponents/LoginForm";
 import ProfileScreen from "./components/ProfileScreen";
 import MapScreen from "./components/stackComponents/MapScreen";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 import QrScanner from "./components/stackComponents/QrScanner";
 
 const app = initializeApp(firebaseConfig);
@@ -58,6 +60,7 @@ function HomeScreen({ navigation }) {
           onPress={() => navigation.navigate("Sign Up")}
         />
         <Button title="Log In" onPress={() => navigation.navigate("Log In")} />
+        <StatusBar style="auto" />
       </View>
     );
   }
@@ -108,6 +111,7 @@ export default function App() {
           </>
         )}
       </Stack.Navigator>
+      <StatusBar style="auto" />
     </NavigationContainer>
   );
 }

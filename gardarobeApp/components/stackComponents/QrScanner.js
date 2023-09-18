@@ -17,7 +17,6 @@ const QrScanner = () => {
   }, []);
 
   //Metode til at håndtere scanninger. Denne metode bliver kaldt, når der scannes en QR kode
-
   //!!!!!Skal sættes op med en metode, der sender dataen videre til databasen. !!!!!
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
@@ -39,7 +38,6 @@ const QrScanner = () => {
   //Hvis der er givet adgang til kameraet, så returneres BarCodeScanner komponenten fra expo
   return (
     <View style={styles.constainer}>
-      <Button title="Create QR" />
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={styles.scanner}
@@ -56,13 +54,9 @@ export default QrScanner;
 const styles = StyleSheet.create({
   constainer: {
     flex: 1,
-    flexDirection: "column",
     justifyContent: "center",
   },
   scanner: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });
