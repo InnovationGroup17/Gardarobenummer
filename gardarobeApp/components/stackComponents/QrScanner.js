@@ -2,11 +2,14 @@
 import { Button, StyleSheet, Text, View, Linking } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import * as React from "react";
+import db from "../../data.json";
 
+//Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
 const QrScanner = () => {
   const [hasPermission, setHasPermission] = React.useState(null);
   const [scanned, setScanned] = React.useState(false);
 
+  //Metode til at få adgang til kameraet på enheden
   React.useEffect(() => {
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -14,22 +17,30 @@ const QrScanner = () => {
     })();
   }, []);
 
+  //Metode til at håndtere scanninger. Denne metode bliver kaldt, når der scannes en QR kode
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
+    console.log(data);
+    console.log(type);
+    //send data to json file.
+    db.push(data);
     Linking.openURL(data);
   };
 
+  //Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
+  //Hvis der er givet adgang til kameraet, så returneres BarCodeScanner komponenten fra expo
   return (
-    <View style={(styles.constainer, StyleSheet.absoluteFillObject)}>
+    <View style={styles.constainer}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
+        style={styles.scanner}
       />
       {scanned && (
         <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
@@ -46,9 +57,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
   },
-  button: {
+  button: {},
+  scanner: {
     flex: 1,
-    alignItems: "center",
+    flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
   },
 });
