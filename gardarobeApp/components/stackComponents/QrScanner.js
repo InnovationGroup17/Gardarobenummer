@@ -17,6 +17,8 @@ const QrScanner = () => {
   }, []);
 
   //Metode til at håndtere scanninger. Denne metode bliver kaldt, når der scannes en QR kode
+  
+  //!!!!!Skal sættes op med en metode, der sender dataen videre til databasen. !!!!!
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
     let collectedData = [];
