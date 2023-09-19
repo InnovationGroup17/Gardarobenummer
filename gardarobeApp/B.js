@@ -20,6 +20,8 @@ const app = initializeApp(firebaseConfig);
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+
+
 function HomeTabs() {
   //function to make icons for the different tabs
   const getTabBarIcon =
@@ -62,6 +64,9 @@ function HomeTabs() {
   );
 }
 
+
+
+
 function HomeScreen({ navigation }) {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const auth = getAuth();
@@ -95,6 +100,9 @@ function HomeScreen({ navigation }) {
     );
   }
 }
+
+
+
 
 export default function Compiled() {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
