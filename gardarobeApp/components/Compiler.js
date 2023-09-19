@@ -1,35 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button, Image } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-import { getApps, initializeApp } from "firebase/app";
-import { firebaseConfig } from "./firebaseConfig";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-
-import SignUpForm from "./components/stackComponents/SigninForm";
-import LoginForm from "./components/stackComponents/LoginForm";
-import ProfileScreen from "./components/ProfileScreen";
-import MapScreen from "./components/stackComponents/MapScreen";
-import TicketNavigation from "./components/ticket/TicketNavigation";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../firebaseConfig";
+import { useAuthListener } from "./authenticate/RealTime";
+import SignUpForm from "./stackComponents/SigninForm";
+import LoginForm from "./stackComponents/LoginForm";
+import ProfileScreen from "./ProfileScreen";
+import MapScreen from "./stackComponents/MapScreen";
+import TicketNavigation from "./ticket/TicketNavigation";
 
 const app = initializeApp(firebaseConfig);
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-//Denne kan nemt flyttes til en anden fil
 function HomeTabs() {
-  //function to make icons for the different tabs
   const getTabBarIcon =
     (name) =>
     ({ color, size }) =>
       <FontAwesome name={name} color={color} size={size} />;
 
   return (
-    //add different icons for the different tabs
     <Tab.Navigator>
       <Tab.Screen
         name="Home"
@@ -64,23 +59,7 @@ function HomeTabs() {
 }
 
 function HomeScreen({ navigation }) {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const auth = getAuth();
-
-  useEffect(() => {
-    // Set an authentication state observer and get user data
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        setIsUserLoggedIn(true);
-      } else {
-        // User is signed out
-        setIsUserLoggedIn(false);
-      }
-    });
-
-    return () => unsubscribe();
-  }, [auth]);
+  const isUserLoggedIn = useAuthListener();
 
   if (isUserLoggedIn) {
     return <MapScreen />;
@@ -97,25 +76,8 @@ function HomeScreen({ navigation }) {
   }
 }
 
-export default function Compiled() {
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const auth = getAuth();
-
-  useEffect(() => {
-    // Set an authentication state observer and get user data
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        setIsUserLoggedIn(true);
-      } else {
-        // User is signed out
-        setIsUserLoggedIn(false);
-      }
-    });
-
-    // Cleanup the observer on unmount
-    return () => unsubscribe();
-  }, [auth]);
+export default function Compiler() {
+  const isUserLoggedIn = useAuthListener();
 
   return (
     <NavigationContainer>
