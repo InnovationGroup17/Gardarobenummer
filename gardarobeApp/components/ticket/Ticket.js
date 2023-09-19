@@ -1,31 +1,61 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, ImageBackground, StyleSheet } from "react-native";
+import BackgroundGif from "../../assets/gifs/ByRk.gif";
 
-//design of a ticket. It should take in some props from the QRscanner and display them
 const Ticket = ({ route }) => {
-  const { ticketData } = route.params;
-  console.log(ticketData);
+  const data = route.params;
+  console.log(data);
+
   return (
-    <View style={styles.ticket}>
-      <Text style={styles.ticketText}>Ticket:</Text>
-      <Text style={styles.ticketText}>Ticket number: {ticketData}</Text>
+    <View style={styles.container}>
+      <View style={styles.ticket}>
+        <View style={styles.gifContainer}>
+          <ImageBackground source={BackgroundGif} style={styles.gif}>
+            <Text style={styles.ticketText}>Your Ticket</Text>
+            <Text style={styles.ticketText}>
+              Ticket number: {data.ticketData.ticketNumber}
+            </Text>
+            <Text style={styles.ticketText}>Bar: </Text>
+            <Text style={styles.ticketText}>
+              User: {data.ticketData.userData.email}
+            </Text>
+            <Text style={styles.ticketText}>Time: {data.time}</Text>
+          </ImageBackground>
+        </View>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "grey",
+  },
   ticket: {
-    backgroundColor: "#fff",
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#000",
     width: 300,
     height: 300,
     alignItems: "center",
     justifyContent: "center",
+    borderRadius: 20,
+  },
+  gifContainer: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 18,
+    borderColor: "#000",
+    borderWidth: 2,
+    overflow: "hidden",
+  },
+  gif: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: "100%",
   },
   ticketText: {
     fontSize: 20,
