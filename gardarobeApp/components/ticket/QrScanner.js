@@ -1,12 +1,12 @@
-// Date: 18.09.2020
-import { Button, StyleSheet, Text, View, Linking } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 //Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
-const QrScanner = () => {
+const QrScanner = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [ticketData, setTicketData] = useState(null);
 
   //Metode til at få adgang til kameraet på enheden
   useEffect(() => {
@@ -16,15 +16,12 @@ const QrScanner = () => {
     })();
   }, []);
 
-  //Metode til at håndtere scanninger. Denne metode bliver kaldt, når der scannes en QR kode
-  //!!!!!Skal sættes op med en metode, der sender dataen videre til databasen. !!!!!
+  //Metode til at håndtere scanninger af QR koder og lave en ticket med dataen fra QR koden
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    let collectedData = [];
-    collectedData.push({ Qr: { data: data, type: type } });
-    console.log(collectedData[0].Qr);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    //Linking.openURL(data);
+    console.log(data);
+    setTicketData(data);
+    navigation.navigate("Ticket", { ticketData: data });
   };
 
   //Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette
@@ -42,9 +39,15 @@ const QrScanner = () => {
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={styles.scanner}
       />
-      {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
-      )}
+      {
+        (scanned,
+        ticketData && (
+          <Button
+            title={"Tap to Scan Again"}
+            onPress={() => setScanned(false)}
+          />
+        ))
+      }
     </View>
   );
 };

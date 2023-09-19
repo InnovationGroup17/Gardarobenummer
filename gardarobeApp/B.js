@@ -13,13 +13,12 @@ import SignUpForm from "./components/stackComponents/SigninForm";
 import LoginForm from "./components/stackComponents/LoginForm";
 import ProfileScreen from "./components/ProfileScreen";
 import MapScreen from "./components/stackComponents/MapScreen";
-import QrScanner from "./components/stackComponents/QrScanner";
+import TicketNavigation from "./components/ticket/TicketNavigation";
 
 const app = initializeApp(firebaseConfig);
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
 
 //Denne kan nemt flyttes til en anden fil
 function HomeTabs() {
@@ -47,10 +46,10 @@ function HomeTabs() {
         }}
       />
       <Tab.Screen
-        name="Scan QR"
-        component={QrScanner}
+        name="Ticket"
+        component={TicketNavigation}
         options={{
-          tabBarIcon: getTabBarIcon("qrcode"),
+          tabBarIcon: getTabBarIcon("ticket"),
         }}
       />
       <Tab.Screen
@@ -63,7 +62,6 @@ function HomeTabs() {
     </Tab.Navigator>
   );
 }
-
 
 function HomeScreen({ navigation }) {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
@@ -98,9 +96,6 @@ function HomeScreen({ navigation }) {
     );
   }
 }
-
-
-
 
 export default function Compiled() {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
