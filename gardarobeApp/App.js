@@ -1,7 +1,7 @@
 import { View, StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import Compiled from "./B";
+import Compiled from "./components/Compiler";
 
 const App = () => {
   return (
