@@ -21,7 +21,7 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
-
+//Denne kan nemt flyttes til en anden fil
 function HomeTabs() {
   //function to make icons for the different tabs
   const getTabBarIcon =
@@ -63,8 +63,6 @@ function HomeTabs() {
     </Tab.Navigator>
   );
 }
-
-
 
 
 function HomeScreen({ navigation }) {
