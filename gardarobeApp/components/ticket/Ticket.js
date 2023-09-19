@@ -3,9 +3,8 @@ import { View, Text, ImageBackground, StyleSheet } from "react-native";
 import BackgroundGif from "../../assets/gifs/ByRk.gif";
 
 const Ticket = ({ route }) => {
-  const data = route.params;
-  console.log(data);
-
+  const data = route.params.ticketData;
+  console.log("Ticket made: " + data);
   return (
     <View style={styles.container}>
       <View style={styles.ticket}>
@@ -13,13 +12,11 @@ const Ticket = ({ route }) => {
           <ImageBackground source={BackgroundGif} style={styles.gif}>
             <Text style={styles.ticketText}>Your Ticket</Text>
             <Text style={styles.ticketText}>
-              Ticket number: {data.ticketData.ticketNumber}
+              Ticket number: {data.ticketNumber}
             </Text>
             <Text style={styles.ticketText}>Bar: </Text>
-            <Text style={styles.ticketText}>
-              User: {data.ticketData.userData.email}
-            </Text>
-            <Text style={styles.ticketText}>Time: {data.time}</Text>
+            <Text style={styles.ticketText}>User: {data.userData.email} </Text>
+            <Text style={styles.ticketText}>Time: {data.time} </Text>
           </ImageBackground>
         </View>
       </View>
