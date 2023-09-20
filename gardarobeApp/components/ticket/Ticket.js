@@ -1,22 +1,29 @@
 import React from "react";
 import { View, Text, ImageBackground, StyleSheet } from "react-native";
 import BackgroundGif from "../../assets/gifs/ByRk.gif";
+import QRCodeGenerator from "./QRCodeGenerator";
 
 const Ticket = ({ route }) => {
   const data = route.params.ticketData;
-  console.log("Ticket made: " + data);
+  console.log(data.ticketNumber);
+  console.log(data.userData.email);
+  console.log(data.time);
+
+  const QrData = {
+    ticketNumber: 1,
+    userData: {
+      email: "En email",
+      password: data.userData.password,
+    },
+    time: data.time,
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.ticket}>
         <View style={styles.gifContainer}>
           <ImageBackground source={BackgroundGif} style={styles.gif}>
-            <Text style={styles.ticketText}>Your Ticket</Text>
-            <Text style={styles.ticketText}>
-              Ticket number: {data.ticketNumber}
-            </Text>
-            <Text style={styles.ticketText}>Bar: </Text>
-            <Text style={styles.ticketText}>User: {data.userData.email} </Text>
-            <Text style={styles.ticketText}>Time: {data.time} </Text>
+            <QRCodeGenerator value={JSON.stringify(QrData)} size={250} />
           </ImageBackground>
         </View>
       </View>
