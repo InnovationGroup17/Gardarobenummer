@@ -10,7 +10,7 @@ const App = () => {
       <StatusBar style="auto" />
     </View>
   );
-};
+}
 
 export default App;
 
