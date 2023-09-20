@@ -41,7 +41,7 @@ function SignUpForm() {
         password
       );
       const user = userCredential.user;
-      console.log(user);
+      
       // Store additional user data in the Realtime Database
       const usersRef = ref(database, "users/" + user.uid); // Create a reference to the user's data
       const userData = {
