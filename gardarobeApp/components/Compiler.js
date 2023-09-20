@@ -13,8 +13,6 @@ import ProfileScreen from "./ProfileScreen";
 import MapScreen from "./stackComponents/MapScreen";
 import TicketNavigation from "./ticket/TicketNavigation";
 
-const app = initializeApp(firebaseConfig);
-
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
