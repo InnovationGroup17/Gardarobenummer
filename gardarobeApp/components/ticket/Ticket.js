@@ -5,18 +5,16 @@ import QRCodeGenerator from "./QRCodeGenerator";
 
 const Ticket = ({ route }) => {
   const data = route.params.ticketData;
-  console.log(data.ticketNumber);
-  console.log(data.userData.email);
-  console.log(data.time);
 
   const QrData = {
-    ticketNumber: 1,
-    userData: {
-      email: "En email",
-      password: data.userData.password,
-    },
+    number: data.ticketNumber,
+    bar: data.bar,
+    uid: data.uid,
+    item: data.item,
+    status: data.status,
     time: data.time,
   };
+  console.log(QrData);
 
   return (
     <View style={styles.container}>

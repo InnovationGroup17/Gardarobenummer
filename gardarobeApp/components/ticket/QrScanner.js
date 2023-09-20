@@ -10,9 +10,6 @@ const QrScanner = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
-  // Use the custom hook to get user data
-  const user = useAuthListener();
-
   // Metode til at få adgang til kameraet på enheden
   useEffect(() => {
     (async () => {
@@ -24,12 +21,18 @@ const QrScanner = ({ navigation }) => {
   // Metode til at håndtere scanninger af QR koder og lave en ticket med dataen fra QR koden
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
-    let user = getAuth().currentUser;
+    let user = getAuth().currentUser.uid;
+    console.log(user);
+
+    let parsedData = JSON.parse(data);
+    console.log(parsedData);
+
     let ticketData = {
-      ticketNumber: data,
-      userData: {
-        email: user.email,
-      },
+      ticketNumber: parsedData.number,
+      bar: parsedData.bar,
+      uid: user,
+      item: parsedData.genstand,
+      status: "active",
       time: timestamp(),
     };
     navigation.navigate("Ticket", { ticketData });
