@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ImageBackground, StyleSheet } from "react-native";
+import { View, ImageBackground, StyleSheet } from "react-native";
 import BackgroundGif from "../../assets/gifs/ByRk.gif";
 import QRCodeGenerator from "./QRCodeGenerator";
 
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "grey",
+    backgroundColor: "lightgrey",
   },
   ticket: {
     width: 300,

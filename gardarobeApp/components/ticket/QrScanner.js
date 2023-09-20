@@ -21,16 +21,13 @@ const QrScanner = ({ navigation }) => {
   // Metode til at håndtere scanninger af QR koder og lave en ticket med dataen fra QR koden
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
-    let user = getAuth().currentUser.uid;
-    console.log(user);
-
+    let user = getAuth().currentUser;
     let parsedData = JSON.parse(data);
-    console.log(parsedData);
 
     let ticketData = {
       ticketNumber: parsedData.number,
       bar: parsedData.bar,
-      uid: user,
+      uid: user.uid,
       item: parsedData.genstand,
       status: "active",
       time: timestamp(),
