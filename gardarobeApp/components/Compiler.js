@@ -61,7 +61,11 @@ function HomeScreen({ navigation }) {
   const isUserLoggedIn = useAuthListener();
 
   if (isUserLoggedIn) {
+<<<<<<< Updated upstream
     return <QrScanner />; //startside på homeScreen
+=======
+    return <ProfileScreen />; //angiver Startpunkt efter login.
+>>>>>>> Stashed changes
   } else {
     return (
       <View style={styles.container}>
@@ -87,7 +91,11 @@ export default function Compiler() {
           <>
             <Stack.Screen
               name="HomeTabs"
+<<<<<<< Updated upstream
               component={HomeTabs} //benytter HomeTabs
+=======
+              component={HomeTabs}
+>>>>>>> Stashed changes
               options={{ headerShown: false }}
             />
           </>
