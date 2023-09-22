@@ -36,7 +36,6 @@ function ProfileScreen() {
       <Text>Current UID: {user.uid}</Text>
       <Text>Current displayName: {user.displayName}</Text>
       <Text>Current Age: {user.age}</Text>
-      {console.log(user)}
       <Button onPress={handleLogOut} title="Log out" />
     </View>
   );

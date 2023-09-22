@@ -9,31 +9,13 @@ import {
   Modal,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import { getDatabase, ref, set } from "firebase/database";
-
-// Initialize Firebase with your config
-const firebaseConfig = {
-  apiKey: "AIzaSyCb-as5hyWyAqOqZP1_-1ZAYjX0pXx2tBg",
-  authDomain: "database-95c46.firebaseapp.com",
-  projectId: "database-95c46",
-  databaseURL:
-    "https://database-95c46-default-rtdb.europe-west1.firebasedatabase.app/",
-  storageBucket: "database-95c46.appspot.com",
-  messagingSenderId: "693275199236",
-  appId: "1:693275199236:web:04332aed156a57e80bb251",
-};
-const firebaseApp = initializeApp(firebaseConfig);
-
-// Get Firebase services
-const auth = getAuth(firebaseApp);
-const database = getDatabase(firebaseApp);
+import { ref, set } from "firebase/database";
+import { database } from "../../database/firebaseConfig";
 
 function SignUpForm() {
   const navigation = useNavigation();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setUsername] = useState("");
