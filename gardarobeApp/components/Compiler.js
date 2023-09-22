@@ -12,6 +12,7 @@ import LoginForm from "./stackComponents/LoginForm";
 import ProfileScreen from "./ProfileScreen";
 import MapScreen from "./stackComponents/MapScreen";
 import TicketNavigation from "./ticket/TicketNavigation";
+import QrScanner from "./ticket/QrScanner";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,7 +61,7 @@ function HomeScreen({ navigation }) {
   const isUserLoggedIn = useAuthListener();
 
   if (isUserLoggedIn) {
-    return <MapScreen />;
+    return <QrScanner />;
   } else {
     return (
       <View style={styles.container}>
@@ -86,7 +87,7 @@ export default function Compiler() {
           <>
             <Stack.Screen
               name="HomeTabs"
-              component={HomeTabs}
+              component={QrScanner}
               options={{ headerShown: false }}
             />
           </>
