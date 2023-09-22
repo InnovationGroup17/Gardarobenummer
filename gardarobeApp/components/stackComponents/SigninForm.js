@@ -36,7 +36,7 @@ function SignUpForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [displayName, setUsername] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedAge, setSelectedAge] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
@@ -59,7 +59,7 @@ function SignUpForm() {
       const usersRef = ref(database, "users/" + user.uid);
       const userData = {
         email: user.email,
-        username: username,
+        displayName: displayName,
         gender: selectedGender,
         age: selectedAge,
       };
@@ -106,9 +106,9 @@ function SignUpForm() {
         style={styles.inputField}
       />
       <TextInput
-        placeholder="username"
-        value={username}
-        onChangeText={(username) => setUsername(username)}
+        placeholder="displayName"
+        value={displayName}
+        onChangeText={(displayName) => setUsername(displayName)}
         style={styles.inputField}
       />
       {/* Custom Gender Picker */}
@@ -140,10 +140,7 @@ function SignUpForm() {
       </Modal>
       {/* End Custom Gender Picker */}
       {/* Custom Age Picker */}
-      <TouchableOpacity
-        onPress={handleAgeSelection}
-        style={styles.inputField}
-      >
+      <TouchableOpacity onPress={handleAgeSelection} style={styles.inputField}>
         <Text>{selectedAge ? selectedAge : "Select Age"}</Text>
       </TouchableOpacity>
       <Modal
@@ -160,11 +157,7 @@ function SignUpForm() {
             >
               <Picker.Item label="Select Age" value="" />
               {Array.from({ length: 100 }, (_, i) => (
-                <Picker.Item
-                  label={`${i + 1}`}
-                  value={`${i + 1}`}
-                  key={i}
-                />
+                <Picker.Item label={`${i + 1}`} value={`${i + 1}`} key={i} />
               ))}
             </Picker>
             <Button title="OK" onPress={handleAgeConfirm} />
