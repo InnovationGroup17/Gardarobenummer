@@ -61,7 +61,7 @@ function HomeScreen({ navigation }) {
   const isUserLoggedIn = useAuthListener();
 
   if (isUserLoggedIn) {
-    return <QrScanner />;
+    return <QrScanner />; //startside på homeScreen
   } else {
     return (
       <View style={styles.container}>
@@ -87,7 +87,7 @@ export default function Compiler() {
           <>
             <Stack.Screen
               name="HomeTabs"
-              component={QrScanner}
+              component={HomeTabs} //benytter HomeTabs
               options={{ headerShown: false }}
             />
           </>

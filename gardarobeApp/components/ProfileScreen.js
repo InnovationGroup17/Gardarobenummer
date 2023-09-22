@@ -33,6 +33,10 @@ function ProfileScreen() {
   return (
     <View style={styles.container}>
       <Text>Current user: {user.email}</Text>
+      <Text>Current UID: {user.uid}</Text>
+      <Text>Current displayName: {user.displayName}</Text>
+      <Text>Current Age: {user.age}</Text>
+      {console.log(user)}
       <Button onPress={handleLogOut} title="Log out" />
     </View>
   );
