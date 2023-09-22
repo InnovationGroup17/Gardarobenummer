@@ -11,9 +11,17 @@ const Stack = createStackNavigator();
 const TicketNavigation = () => {
   return (
     <NavigationContainer independent={true}>
-      <Stack.Navigator initialRouteName="QR" >
-        <Stack.Screen name="QR" component={QrScanner} />
-        <Stack.Screen name="Ticket" component={Ticket} />
+      <Stack.Navigator initialRouteName="QR">
+        <Stack.Screen
+          name="QR"
+          component={QrScanner}
+          options={{ headerTitle: "", headerShown: false }}
+        />
+        <Stack.Screen
+          name="Ticket"
+          component={Ticket}
+          options={{ headerTitle: "" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
