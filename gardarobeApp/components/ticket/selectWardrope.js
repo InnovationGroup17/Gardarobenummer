@@ -24,38 +24,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { timestamp } from "../../utilites/timestamp";
 import { fetchFirestoreData } from "../../database/firestoreApi";
 
-//Hardcoded data
-const wardrobeDB = [
-  {
-    id: 1,
-    name: "Jakke",
-    price: 50,
-    amount: 0,
-    selected: false,
-  },
-  {
-    id: 2,
-    name: "Taske",
-    price: 30,
-    amount: 0,
-    selected: false,
-  },
-  {
-    id: 3,
-    name: "Andet",
-    price: 30,
-    amount: 0,
-    selected: false,
-  },
-  {
-    id: 4,
-    name: "Shot",
-    price: 20,
-    amount: 0,
-    selected: false,
-  },
-];
-
 const SelectWardrope = ({ route }) => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
