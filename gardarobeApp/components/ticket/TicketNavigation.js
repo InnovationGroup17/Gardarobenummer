@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 //screens
 import QrScanner from "./QrScanner";
 import Ticket from "./Ticket";
+import SelectWardrope from "./selectWardrope";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,11 @@ const TicketNavigation = () => {
           name="Ticket"
           component={Ticket}
           options={{ headerTitle: "" }}
+        />
+        <Stack.Screen
+          name="SelectWardrope"
+          component={SelectWardrope}
+          options={{ headerTitle: "", headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
