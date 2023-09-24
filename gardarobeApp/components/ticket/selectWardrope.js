@@ -63,9 +63,7 @@ const SelectWardrope = ({ route }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const collectionName = "WardrobeItem";
-
   const { QrCodeData } = route.params;
-  console.log("Qr data: " + QrCodeData);
 
   useEffect(() => {
     calculateTotal();
@@ -73,7 +71,6 @@ const SelectWardrope = ({ route }) => {
     const fetchData = async () => {
       try {
         const data = await fetchFirestoreData(collectionName);
-        console.log(data);
         setFirestoreData(data);
       } catch (error) {
         console.error(error);
@@ -81,7 +78,6 @@ const SelectWardrope = ({ route }) => {
     };
     fetchData();
   }, [isFocused, collectionName]);
-  console.log("firestore data: " + firestoreData);
 
   // Calculate total price and total items
   calculateTotal = () => {
