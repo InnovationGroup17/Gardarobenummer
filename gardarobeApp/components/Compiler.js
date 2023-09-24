@@ -4,8 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../firebaseConfig";
+import React from "react";
 import { useAuthListener } from "./authenticate/RealTime";
 import SignUpForm from "./stackComponents/SigninForm";
 import LoginForm from "./stackComponents/LoginForm";
