@@ -22,6 +22,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { timestamp } from "../../utilites/timestamp";
+import { fetchFirestoreData } from "../../database/firestoreApi";
 
 //Hardcoded data
 const wardrobeDB = [
@@ -58,22 +59,35 @@ const wardrobeDB = [
 const SelectWardrope = ({ route }) => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  const [wardrobeList, setWardrobeList] = useState([]);
+  const [firestoreData, setFirestoreData] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
+  const collectionName = "WardrobeItem";
 
   const { QrCodeData } = route.params;
+  console.log("Qr data: " + QrCodeData);
 
   useEffect(() => {
-    setWardrobeList(wardrobeDB);
     calculateTotal();
-  }, [isFocused]);
+
+    const fetchData = async () => {
+      try {
+        const data = await fetchFirestoreData(collectionName);
+        console.log(data);
+        setFirestoreData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [isFocused, collectionName]);
+  console.log("firestore data: " + firestoreData);
 
   // Calculate total price and total items
   calculateTotal = () => {
     let price = 0;
     let items = 0;
-    wardrobeList.forEach((wardrobe) => {
+    firestoreData.forEach((wardrobe) => {
       price += wardrobe.price * wardrobe.amount;
       items += wardrobe.amount;
 
@@ -89,34 +103,34 @@ const SelectWardrope = ({ route }) => {
 
   // Handle select wardrobe
   const handleSelect = (wardrobe) => {
-    const updatedWardrobeList = wardrobeList.map((item) => {
+    const updatedWardrobeList = firestoreData.map((item) => {
       if (item.id === wardrobe.id) {
         item.selected = !item.selected;
         item.amount = item.selected ? 1 : 0;
       }
       return item;
     });
-    setWardrobeList(updatedWardrobeList);
+    setFirestoreData(updatedWardrobeList);
     calculateTotal();
   };
 
   // Handle amount change
   const handleAmountChange = (wardrobe, amount) => {
-    const updatedWardrobeList = wardrobeList.map((item) => {
+    const updatedWardrobeList = firestoreData.map((item) => {
       if (item.id === wardrobe.id) {
         item.amount = amount;
       }
       return item;
     });
 
-    setWardrobeList(updatedWardrobeList);
+    setFirestoreData(updatedWardrobeList);
     calculateTotal();
   };
 
   // Handle confirm
   const handleConfirm = () => {
     const { QrCodeData } = route.params;
-    const selectedWardrobes = wardrobeList.filter(
+    const selectedWardrobes = firestoreData.filter(
       (wardrobe) => wardrobe.selected
     );
     const ticketData = {
@@ -130,6 +144,8 @@ const SelectWardrope = ({ route }) => {
       Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
       return;
     }
+
+    //tilføj betaling. Har vi pt fravalgt da vi ikke har en betalingsløsning.
     alert(
       "Du har valgt " + totalItems + " genstand(e) til " + totalPrice + " kr."
     );
@@ -182,7 +198,7 @@ const SelectWardrope = ({ route }) => {
         Velkommen til {QrCodeData.bar.barname}
       </Text>
       <FlatList
-        data={wardrobeList}
+        data={firestoreData}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
       />
