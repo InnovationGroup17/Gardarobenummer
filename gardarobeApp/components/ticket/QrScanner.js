@@ -39,7 +39,7 @@ const QrScanner = ({ navigation }) => {
       uid: user.uid,
       time: timestamp(),
     };
-    
+
     navigation.navigate("SelectWardrope", { QrCodeData });
   };
 
