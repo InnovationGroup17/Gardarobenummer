@@ -102,6 +102,7 @@ const SelectWardrope = ({ route }) => {
       totalPrice,
       totalItems,
       QrCodeData,
+      active: true,
       ticketTime: timestamp(),
     };
     if (selectedWardrobes.length === 0) {
@@ -159,7 +160,7 @@ const SelectWardrope = ({ route }) => {
         <Text style={styles.headerText}>Vælg garderobe</Text>
       </View>
       <Text style={styles.WelcommeText}>
-        Velkommen til {QrCodeData.bar.barname}
+        Velkommen til {QrCodeData.bar.title}
       </Text>
       <FlatList
         data={firestoreData}
