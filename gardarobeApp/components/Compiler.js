@@ -12,6 +12,8 @@ import LoginForm from "./stackComponents/LoginForm";
 import ProfileScreen from "./ProfileScreen";
 import MapScreen from "./stackComponents/MapScreen";
 import TicketNavigation from "./ticket/TicketNavigation";
+import HistoryScreen from "./HistoryScreen";
+import PaymentScreen from "./PaymentScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -50,6 +52,20 @@ function HomeTabs() {
         component={ProfileScreen}
         options={{
           tabBarIcon: getTabBarIcon("user"),
+        }}
+      />
+      <Tab.Screen
+        name="History Screen"
+        component={HistoryScreen}
+        options={{
+          tabBarIcon: getTabBarIcon("history"),
+        }}
+      />
+      <Tab.Screen
+        name="Payment Screen"
+        component={PaymentScreen}
+        options={{
+          tabBarIcon: getTabBarIcon("terminal"),
         }}
       />
     </Tab.Navigator>

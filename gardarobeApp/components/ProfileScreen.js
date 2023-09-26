@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { useNavigation } from "@react-navigation/native";
+import HistoryScreen from "./HistoryScreen";
 
-function ProfileScreen() {
-  const [user, setUser] = useState(null);
-  const auth = getAuth();
+function ProfileScreen ({ navigation }) {
+
+const [user, setUser] = useState(null);
+const auth = getAuth();
 
   useEffect(() => {
     // Set up the real-time listener
@@ -16,6 +19,7 @@ function ProfileScreen() {
     return () => unsubscribe();
   }, [auth]);
 
+  //Ønsker at brugeren skal logge ud 
   const handleLogOut = async () => {
     await signOut(auth).catch((error) => {
       console.error("Error signing out: ", error);
@@ -32,8 +36,19 @@ function ProfileScreen() {
 
   return (
     <View style={styles.container}>
+      <Text>Welcome to your profile!</Text>
       <Text>Current user: {user.email}</Text>
       <Button onPress={handleLogOut} title="Log out" />
+      <Button title="Go to History Screen"
+        onPress={() => {
+          // Således vi kan navigere til vores History Screen
+          navigation.navigate("History Screen");
+        }} />
+        <Button title="Go to Payment Terms"
+        onPress={() => {
+          // Navigation til vores Payment Screen
+          navigation.navigate("Payment Screen");
+        }} />
     </View>
   );
 }
@@ -43,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     paddingTop: "5%",
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "blue",
     padding: 8,
   },
 });
