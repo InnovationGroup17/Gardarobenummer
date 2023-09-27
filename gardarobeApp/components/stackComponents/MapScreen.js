@@ -64,43 +64,27 @@ export default function MapScreen({ navigation }) {
           coordinate={item.location}
           title={item.title}
           description={item.description}
-        />
+        >
+          <Callout>
+            <Text>{item.title}</Text>
+            <Text>{item.description}</Text>
+            <Text> {count}</Text>
+            <Button
+              style={styles.button}
+              title="Choose location"
+              onPress={() => {
+                console.log("Button pressed");
+                console.log("Count before:", count);
+                setCount(count + 1);
+                console.log("Count after:", count);
+              }}
+            />
+          </Callout>
+        </Marker>
       );
     });
   };
 
-  const renderCallout = (item) => {
-    console.log("render:", item);
-    return (
-      <Callout>
-        <View>
-          <Text>{item.title}</Text>
-          <Text>{item.description}</Text>
-          <Text> {count}</Text>
-          <Button title="Choose location" onPress={() => setCount(count + 1)} />
-        </View>
-      </Callout>
-    );
-  };
-  /*
-  const handleChooseLocation = (selectedLocation) => {
-    // Implement your logic for handling the selected location here
-    console.log("Selected Location:", selectedLocation);
-    // For example, you can display an alert with the location details
-    Alert.alert(
-      "Location Selected",
-      `You chose the location: ${selectedLocation.title}`,
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            // Handle OK button press if needed
-          },
-        },
-      ]
-    );
-  };
-*/
   return (
     <View style={styles.container}>
       {initialRegion ? (
@@ -109,26 +93,7 @@ export default function MapScreen({ navigation }) {
           initialRegion={initialRegion}
           showsUserLocation={true}
         >
-          {locationOfInterest.map((item, index) => (
-            <Marker
-              key={index}
-              coordinate={item.location}
-              title={item.title}
-              description={item.description}
-            >
-              <Callout>
-                <View>
-                  <Text>{item.title}</Text>
-                  <Text>{item.description}</Text>
-                  <Text> {count}</Text>
-                  <Button
-                    title="Choose location"
-                    onPress={() => setCount(count + 1)}
-                  />
-                </View>
-              </Callout>
-            </Marker>
-          ))}
+          {showLocationOfInterest()}
         </MapView>
       ) : null}
     </View>
@@ -142,5 +107,10 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  button: {
+    backgroundColor: "red",
+    padding: 10,
+    borderRadius: 5,
   },
 });
