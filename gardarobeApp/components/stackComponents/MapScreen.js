@@ -1,36 +1,20 @@
 import React, { useState, useEffect } from "react";
-import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View, Alert } from "react-native";
-import * as Location from "expo-location";
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
-
-// Initialize Firebase with your Firebase project configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCb-as5hyWyAqOqZP1_-1ZAYjX0pXx2tBg",
-  authDomain: "database-95c46.firebaseapp.com",
-  projectId: "database-95c46",
-  databaseURL:
-    "https://database-95c46-default-rtdb.europe-west1.firebasedatabase.app/",
-  storageBucket: "database-95c46.appspot.com",
-  messagingSenderId: "693275199236",
-  appId: "1:693275199236:web:04332aed156a57e80bb251",
-};
-const firebaseApp = initializeApp(firebaseConfig);
-const firestore = getFirestore(firebaseApp);
+import {
+  StyleSheet,
+  View,
+  Alert,
+  Text,
+  TouchableOpacity,
+  Button,
+} from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
-import { StyleSheet, View, Alert, Text, TouchableOpacity, Button } from "react-native";
 import * as Location from "expo-location";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
-import { firebaseConfig, firestore } from "../../database/firebaseConfig";
-
-// Initialize Firebase with your Firebase project configuration
-firebaseConfig;
+import { fetchFirestoreData } from "../../database/firestoreApi";
 
 export default function MapScreen() {
   const [initialRegion, setInitialRegion] = useState(null);
-  const [locations, setLocations] = useState([]);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
+  const collectionName = "Bars";
 
   useEffect(() => {
     (async () => {
@@ -53,33 +37,21 @@ export default function MapScreen() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const locationsCollection = collection(firestore, "Bars");
-        const querySnapshot = await getDocs(locationsCollection);
-
-        const locationsData = [];
-        querySnapshot.forEach((doc) => {
-          const location = doc.data();
-          locationsData.push(location);
-        });
-
-        setLocations(locationsData);
-
-        // Log the fetched data
-        console.log("Fetched Data:", locationsData);
+        const fetchData = await fetchFirestoreData(collectionName);
 
         // Create objects for locationOfInterest using a for loop
         const interestLocations = [];
-        for (let i = 0; i < locationsData.length; i++) {
+        for (let i = 0; i < fetchData.length; i++) {
           interestLocations.push({
-            title: locationsData[i].title,
+            title: fetchData[i].title,
             location: {
-              latitude: locationsData[i].location.latitude,
-              longitude: locationsData[i].location.longitude,
+              latitude: fetchData[i].location.latitude,
+              longitude: fetchData[i].location.longitude,
             },
-            description: locationsData[i].description,
+            description: fetchData[i].description,
+            id: fetchData[i].id,
           });
         }
-
         // Set the locationOfInterest state
         setLocationOfInterest(interestLocations);
       } catch (error) {
@@ -89,7 +61,6 @@ export default function MapScreen() {
 
     fetchData();
   }, []);
-
 
   const showLocationOfInterest = () => {
     return locationOfInterest.map((item, index) => {
@@ -102,14 +73,19 @@ export default function MapScreen() {
         />
       );
     });
+  };
 
   const renderCallout = (item) => {
+    console.log("item", item);
     return (
       <Callout>
         <View>
           <Text>{item.title}</Text>
           <Text>{item.description}</Text>
-          <Button title="Coose location" onPress={() => handleChooseLocation(item)}/>
+          <Button
+            title="Coose location"
+            onPress={() => handleChooseLocation(item)}
+          />
         </View>
       </Callout>
     );
@@ -131,7 +107,6 @@ export default function MapScreen() {
         },
       ]
     );
-
   };
 
   return (
@@ -142,7 +117,6 @@ export default function MapScreen() {
           initialRegion={initialRegion}
           showsUserLocation={true}
         >
-
           {showLocationOfInterest()}
 
           {locationOfInterest.map((item, index) => (
