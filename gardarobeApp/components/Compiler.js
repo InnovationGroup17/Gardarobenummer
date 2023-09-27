@@ -3,7 +3,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-
 import React from "react";
 import { useAuthListener } from "./authenticate/RealTime";
 import SignUpForm from "./stackComponents/SigninForm";
@@ -11,7 +10,6 @@ import LoginForm from "./stackComponents/LoginForm";
 import ProfileScreen from "./ProfileScreen";
 import MapScreen from "./stackComponents/MapScreen";
 import TicketNavigation from "./ticket/TicketNavigation";
-import QrScanner from "./ticket/QrScanner";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,7 +58,7 @@ function HomeScreen({ navigation }) {
   const isUserLoggedIn = useAuthListener();
 
   if (isUserLoggedIn) {
-    return <QrScanner />; //startside på homeScreen
+    return <ProfileScreen />; //angiver Startpunkt efter login.
   } else {
     return (
       <View style={styles.container}>

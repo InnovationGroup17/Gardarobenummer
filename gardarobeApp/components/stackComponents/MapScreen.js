@@ -18,6 +18,14 @@ const firebaseConfig = {
 };
 const firebaseApp = initializeApp(firebaseConfig);
 const firestore = getFirestore(firebaseApp);
+import MapView, { Callout, Marker } from "react-native-maps";
+import { StyleSheet, View, Alert, Text, TouchableOpacity, Button } from "react-native";
+import * as Location from "expo-location";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { firebaseConfig, firestore } from "../../database/firebaseConfig";
+
+// Initialize Firebase with your Firebase project configuration
+firebaseConfig;
 
 export default function MapScreen() {
   const [initialRegion, setInitialRegion] = useState(null);
@@ -82,6 +90,7 @@ export default function MapScreen() {
     fetchData();
   }, []);
 
+
   const showLocationOfInterest = () => {
     return locationOfInterest.map((item, index) => {
       return (
@@ -93,6 +102,36 @@ export default function MapScreen() {
         />
       );
     });
+
+  const renderCallout = (item) => {
+    return (
+      <Callout>
+        <View>
+          <Text>{item.title}</Text>
+          <Text>{item.description}</Text>
+          <Button title="Coose location" onPress={() => handleChooseLocation(item)}/>
+        </View>
+      </Callout>
+    );
+  };
+
+  const handleChooseLocation = (selectedLocation) => {
+    // Implement your logic for handling the selected location here
+    console.log("Selected Location:", selectedLocation);
+    // For example, you can display an alert with the location details
+    Alert.alert(
+      "Location Selected",
+      `You chose the location: ${selectedLocation.title}`,
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            // Handle OK button press if needed
+          },
+        },
+      ]
+    );
+
   };
 
   return (
@@ -103,7 +142,19 @@ export default function MapScreen() {
           initialRegion={initialRegion}
           showsUserLocation={true}
         >
+
           {showLocationOfInterest()}
+
+          {locationOfInterest.map((item, index) => (
+            <Marker
+              key={index}
+              coordinate={item.location}
+              title={item.title}
+              description={item.description}
+            >
+              {renderCallout(item)}
+            </Marker>
+          ))}
         </MapView>
       ) : null}
     </View>
