@@ -3,6 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import React from "react";
 import { useAuthListener } from "./authenticate/RealTime";
 import SignUpForm from "./stackComponents/SigninForm";
 import LoginForm from "./stackComponents/LoginForm";

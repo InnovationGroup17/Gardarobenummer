@@ -1,4 +1,23 @@
 import React, { useState, useEffect } from "react";
+import MapView, { Marker } from "react-native-maps";
+import { StyleSheet, View, Alert } from "react-native";
+import * as Location from "expo-location";
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+
+// Initialize Firebase with your Firebase project configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCb-as5hyWyAqOqZP1_-1ZAYjX0pXx2tBg",
+  authDomain: "database-95c46.firebaseapp.com",
+  projectId: "database-95c46",
+  databaseURL:
+    "https://database-95c46-default-rtdb.europe-west1.firebasedatabase.app/",
+  storageBucket: "database-95c46.appspot.com",
+  messagingSenderId: "693275199236",
+  appId: "1:693275199236:web:04332aed156a57e80bb251",
+};
+const firebaseApp = initializeApp(firebaseConfig);
+const firestore = getFirestore(firebaseApp);
 import MapView, { Callout, Marker } from "react-native-maps";
 import { StyleSheet, View, Alert, Text, TouchableOpacity, Button } from "react-native";
 import * as Location from "expo-location";
@@ -11,7 +30,7 @@ firebaseConfig;
 export default function MapScreen() {
   const [initialRegion, setInitialRegion] = useState(null);
   const [locations, setLocations] = useState([]);
-  const [locationOfInterest, setLocationOfInterest] = useState([]);
+  const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
 
   useEffect(() => {
     (async () => {
@@ -71,6 +90,19 @@ export default function MapScreen() {
     fetchData();
   }, []);
 
+
+  const showLocationOfInterest = () => {
+    return locationOfInterest.map((item, index) => {
+      return (
+        <Marker
+          key={index}
+          coordinate={item.location}
+          title={item.title}
+          description={item.description}
+        />
+      );
+    });
+
   const renderCallout = (item) => {
     return (
       <Callout>
@@ -99,6 +131,7 @@ export default function MapScreen() {
         },
       ]
     );
+
   };
 
   return (
@@ -109,6 +142,9 @@ export default function MapScreen() {
           initialRegion={initialRegion}
           showsUserLocation={true}
         >
+
+          {showLocationOfInterest()}
+
           {locationOfInterest.map((item, index) => (
             <Marker
               key={index}
