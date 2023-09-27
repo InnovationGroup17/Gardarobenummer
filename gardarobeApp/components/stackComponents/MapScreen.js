@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Alert,
-  Text,
-  TouchableOpacity,
-  Button,
-} from "react-native";
+import { StyleSheet, View, Alert, Text, Button } from "react-native";
 import MapView, { Callout, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../database/firestoreApi";
@@ -76,21 +69,22 @@ export default function MapScreen() {
   };
 
   const renderCallout = (item) => {
-    console.log("item", item);
     return (
       <Callout>
         <View>
           <Text>{item.title}</Text>
           <Text>{item.description}</Text>
           <Button
-            title="Coose location"
-            onPress={() => handleChooseLocation(item)}
+            title="Choose location"
+            onPress={() => {
+              console.log("You chose the location:", item.title);
+            }}
           />
         </View>
       </Callout>
     );
   };
-
+  /*
   const handleChooseLocation = (selectedLocation) => {
     // Implement your logic for handling the selected location here
     console.log("Selected Location:", selectedLocation);
@@ -108,7 +102,7 @@ export default function MapScreen() {
       ]
     );
   };
-
+*/
   return (
     <View style={styles.container}>
       {initialRegion ? (
