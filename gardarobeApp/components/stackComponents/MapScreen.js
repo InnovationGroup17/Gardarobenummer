@@ -28,8 +28,8 @@ export default function MapScreen({ navigation }) {
       setInitialRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 55.67292517757718,
+        longitudeDelta: 12.564790340208798,
       });
     })();
   }, []);
