@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Alert, Text, Button } from "react-native";
-import MapView, { Callout, Marker } from "react-native-maps";
+import {
+  StyleSheet,
+  View,
+  Alert,
+  Text,
+  Button,
+  TouchableOpacity,
+} from "react-native";
+import MapView, { Callout, Marker, CalloutSubview } from "react-native-maps";
 import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../database/firestoreApi";
 
@@ -8,7 +15,6 @@ export default function MapScreen({ navigation }) {
   const [initialRegion, setInitialRegion] = useState(null);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
   const collectionName = "Bars";
-  const [count, setCount] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -56,51 +62,6 @@ export default function MapScreen({ navigation }) {
     fetchData();
   }, []);
 
-  const showLocationOfInterest = () => {
-    return locationOfInterest.map((item, index) => {
-      return (
-        <Marker
-          key={index}
-          coordinate={item.location}
-          title={item.title}
-          description={item.description}
-        />
-      );
-    });
-  };
-
-  const renderCallout = (item) => {
-    console.log("render:", item);
-    return (
-      <Callout>
-        <View>
-          <Text>{item.title}</Text>
-          <Text>{item.description}</Text>
-          <Text> {count}</Text>
-          <Button title="Choose location" onPress={() => setCount(count + 1)} />
-        </View>
-      </Callout>
-    );
-  };
-  /*
-  const handleChooseLocation = (selectedLocation) => {
-    // Implement your logic for handling the selected location here
-    console.log("Selected Location:", selectedLocation);
-    // For example, you can display an alert with the location details
-    Alert.alert(
-      "Location Selected",
-      `You chose the location: ${selectedLocation.title}`,
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            // Handle OK button press if needed
-          },
-        },
-      ]
-    );
-  };
-*/
   return (
     <View style={styles.container}>
       {initialRegion ? (
@@ -120,11 +81,15 @@ export default function MapScreen({ navigation }) {
                 <View>
                   <Text>{item.title}</Text>
                   <Text>{item.description}</Text>
-                  <Text> {count}</Text>
-                  <Button
-                    title="Choose location"
-                    onPress={() => setCount(count + 1)}
-                  />
+                  <CalloutSubview
+                    style={styles.button}
+                    onPress={() => {
+                      alert(`id: ${item.id}`);
+                      console.log(item.id);
+                    }}
+                  >
+                    <Text>Go to bar</Text>
+                  </CalloutSubview>
                 </View>
               </Callout>
             </Marker>
@@ -142,5 +107,10 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  button: {
+    backgroundColor: "#007AFF",
+    padding: 10,
+    borderRadius: 5,
   },
 });
