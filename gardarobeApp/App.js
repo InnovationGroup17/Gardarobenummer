@@ -1,9 +1,6 @@
-import { View, StyleSheet } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import {StyleSheet } from "react-native";
 import React from "react";
-import Compiled from "./components/Compiler";
 import DrawerNavigator from "./components/DrawNavigator/drawNavigator";
-import { NavigationContainer } from "@react-navigation/native";
 
 
 export default function App() {

@@ -3,9 +3,7 @@ import {
   StyleSheet,
   View,
   Alert,
-  Text,
-  Button,
-  TouchableOpacity,
+  Text
 } from "react-native";
 import MapView, { Callout, Marker, CalloutSubview } from "react-native-maps";
 import * as Location from "expo-location";

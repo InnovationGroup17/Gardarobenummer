@@ -4,7 +4,6 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import TermsOfConditions from "./TermsOfConditions";
 import AboutUs from "./AboutUs";
 import ShareWithFriends from "./ShareWithFriends";
-import GlobalStyles from "../../globalstyles/Globalstyles";
 import Compiler from "../Compiler";
 
 const Drawer = createDrawerNavigator();
