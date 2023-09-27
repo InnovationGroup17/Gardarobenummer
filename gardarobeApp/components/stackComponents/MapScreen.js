@@ -4,10 +4,11 @@ import MapView, { Callout, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../database/firestoreApi";
 
-export default function MapScreen() {
+export default function MapScreen({ navigation }) {
   const [initialRegion, setInitialRegion] = useState(null);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
   const collectionName = "Bars";
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -69,17 +70,14 @@ export default function MapScreen() {
   };
 
   const renderCallout = (item) => {
+    console.log("render:", item);
     return (
       <Callout>
         <View>
           <Text>{item.title}</Text>
           <Text>{item.description}</Text>
-          <Button
-            title="Choose location"
-            onPress={() => {
-              console.log("You chose the location:", item.title);
-            }}
-          />
+          <Text> {count}</Text>
+          <Button title="Choose location" onPress={() => setCount(count + 1)} />
         </View>
       </Callout>
     );
@@ -111,8 +109,6 @@ export default function MapScreen() {
           initialRegion={initialRegion}
           showsUserLocation={true}
         >
-          {showLocationOfInterest()}
-
           {locationOfInterest.map((item, index) => (
             <Marker
               key={index}
@@ -120,7 +116,17 @@ export default function MapScreen() {
               title={item.title}
               description={item.description}
             >
-              {renderCallout(item)}
+              <Callout>
+                <View>
+                  <Text>{item.title}</Text>
+                  <Text>{item.description}</Text>
+                  <Text> {count}</Text>
+                  <Button
+                    title="Choose location"
+                    onPress={() => setCount(count + 1)}
+                  />
+                </View>
+              </Callout>
             </Marker>
           ))}
         </MapView>
