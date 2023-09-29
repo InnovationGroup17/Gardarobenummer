@@ -1,6 +1,5 @@
 import { StyleSheet, View, Button } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React from "react";
@@ -23,17 +22,19 @@ function HomeTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Home"
+        name="Homes"
         component={HomeScreen}
         options={{
           tabBarIcon: getTabBarIcon("home"),
+          headerShown: false 
         }}
       />
       <Tab.Screen
-        name="Map"
+      name="Map"
         component={MapScreen}
         options={{
           tabBarIcon: getTabBarIcon("map"),
+          headerShown: false 
         }}
       />
       <Tab.Screen
@@ -41,6 +42,7 @@ function HomeTabs() {
         component={TicketNavigation}
         options={{
           tabBarIcon: getTabBarIcon("ticket"),
+          headerShown: false 
         }}
       />
       <Tab.Screen
@@ -48,6 +50,7 @@ function HomeTabs() {
         component={ProfileScreen}
         options={{
           tabBarIcon: getTabBarIcon("user"),
+          headerShown: false 
         }}
       />
     </Tab.Navigator>
@@ -76,7 +79,6 @@ export default function Compiler() {
   const isUserLoggedIn = useAuthListener();
 
   return (
-    <NavigationContainer>
       <Stack.Navigator
         initialRouteName={isUserLoggedIn ? "HomeTabs" : "HomeScreen"}
       >
@@ -100,7 +102,6 @@ export default function Compiler() {
           </>
         )}
       </Stack.Navigator>
-    </NavigationContainer>
   );
 }
 

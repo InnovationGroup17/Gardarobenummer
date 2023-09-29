@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Alert, Text, Button } from "react-native";
-import MapView, { Callout, Marker } from "react-native-maps";
+import { StyleSheet, View, Alert, Text } from "react-native";
+import MapView, { Callout, Marker, CalloutSubview } from "react-native-maps";
 import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../database/firestoreApi";
 
@@ -8,7 +8,6 @@ export default function MapScreen({ navigation }) {
   const [initialRegion, setInitialRegion] = useState(null);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
   const collectionName = "Bars";
-  const [count, setCount] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -22,8 +21,8 @@ export default function MapScreen({ navigation }) {
       setInitialRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 55.67292517757718,
+        longitudeDelta: 12.564790340208798,
       });
     })();
   }, []);
@@ -56,35 +55,6 @@ export default function MapScreen({ navigation }) {
     fetchData();
   }, []);
 
-  const showLocationOfInterest = () => {
-    return locationOfInterest.map((item, index) => {
-      return (
-        <Marker
-          key={index}
-          coordinate={item.location}
-          title={item.title}
-          description={item.description}
-        >
-          <Callout>
-            <Text>{item.title}</Text>
-            <Text>{item.description}</Text>
-            <Text> {count}</Text>
-            <Button
-              style={styles.button}
-              title="Choose location"
-              onPress={() => {
-                console.log("Button pressed");
-                console.log("Count before:", count);
-                setCount(count + 1);
-                console.log("Count after:", count);
-              }}
-            />
-          </Callout>
-        </Marker>
-      );
-    });
-  };
-
   return (
     <View style={styles.container}>
       {initialRegion ? (
@@ -93,7 +63,30 @@ export default function MapScreen({ navigation }) {
           initialRegion={initialRegion}
           showsUserLocation={true}
         >
-          {showLocationOfInterest()}
+          {locationOfInterest.map((item, index) => (
+            <Marker
+              key={index}
+              coordinate={item.location}
+              title={item.title}
+              description={item.description}
+            >
+              <Callout>
+                <View>
+                  <Text>{item.title}</Text>
+                  <Text>{item.description}</Text>
+                  <CalloutSubview
+                    style={styles.button}
+                    onPress={() => {
+                      alert(`id: ${item.id}`);
+                      console.log(item.id);
+                    }}
+                  >
+                    <Text>Go to bar</Text>
+                  </CalloutSubview>
+                </View>
+              </Callout>
+            </Marker>
+          ))}
         </MapView>
       ) : null}
     </View>
@@ -109,7 +102,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   button: {
-    backgroundColor: "red",
+    backgroundColor: "#007AFF",
     padding: 10,
     borderRadius: 5,
   },
