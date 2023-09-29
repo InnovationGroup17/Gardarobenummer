@@ -5,23 +5,21 @@ import QRCodeGenerator from "./QRCodeGenerator";
 
 const Ticket = ({ route }) => {
   const data = route.params.ticketData;
+  console.log("ALL data: ", data);
+  console.log(data.QrCodeData.bar) //Information om bar som er scannet
+  console.log(data.QrCodeData.uid) //Information om bruger som har scannet
+  console.log(data.ticketTime) //Information om tidspunkt for betalt gardarobe
+  console.log(data.totalPrice) //Information om total pris for betalt gardarobe
+  console.log(data.selectedWardrobes) //Information om hvilke gardarobe items der er valgt
+  console.log(data.active)
 
-  const QrData = {
-    number: data.ticketNumber,
-    bar: data.bar,
-    uid: data.uid,
-    item: data.item,
-    status: data.status,
-    time: data.time,
-  };
-  console.log(QrData);
 
   return (
     <View style={styles.container}>
       <View style={styles.ticket}>
         <View style={styles.gifContainer}>
           <ImageBackground source={BackgroundGif} style={styles.gif}>
-            <QRCodeGenerator value={JSON.stringify(QrData)} size={250} />
+            <QRCodeGenerator value={JSON.stringify()} size={250} />
           </ImageBackground>
         </View>
       </View>

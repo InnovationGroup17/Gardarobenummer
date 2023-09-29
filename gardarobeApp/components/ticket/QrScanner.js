@@ -1,38 +1,46 @@
+import React, { useState, useEffect } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import React, { useState, useEffect } from "react";
 import { timestamp } from "../../utilites/timestamp";
 import { getAuth } from "@firebase/auth";
-import { useAuthListener } from "../authenticate/RealTime";
+import { getPermisionBarCodeScanner } from "../../utilites/getPermisionBarCodeScanner";
+import { fetchFirestoreData } from "../../database/firestoreApi";
 
 // Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
 const QrScanner = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [firestoreData, setFirestoreData] = useState(null);
+  const collectionName = "Bars";
 
-  // Metode til at få adgang til kameraet på enheden
   useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, []);
+    setHasPermission(getPermisionBarCodeScanner());
+
+    const fetchData = async () => {
+      try {
+        const data = await fetchFirestoreData(collectionName);
+        setFirestoreData(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [collectionName]);
 
   // Metode til at håndtere scanninger af QR koder og lave en ticket med dataen fra QR koden
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
     let user = getAuth().currentUser;
     let parsedData = JSON.parse(data);
+    const bar = firestoreData.find((item) => item.id === parsedData.barId);
 
-    let ticketData = {
-      ticketNumber: parsedData.number,
-      bar: parsedData.bar,
+    let QrCodeData = {
+      bar: bar,
       uid: user.uid,
-      item: parsedData.genstand,
-      status: "active",
       time: timestamp(),
     };
-    navigation.navigate("Ticket", { ticketData });
+
+    navigation.navigate("SelectWardrope", { QrCodeData });
   };
 
   // Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette
