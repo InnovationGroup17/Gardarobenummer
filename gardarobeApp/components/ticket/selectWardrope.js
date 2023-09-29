@@ -104,19 +104,15 @@ const SelectWardrope = ({ route }) => {
       active: true,
       ticketTime: timestamp(),
     };
-    if (selectedWardrobes.length === 0) {
-      Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
-      return;
-    }
-
-    //tilføj betaling. Har vi pt fravalgt da vi ikke har en betalingsløsning.
     alert(
       "Du har valgt " + totalItems + " genstand(e) til " + totalPrice + " kr."
     );
-
-    alert("du har nu betalt", "Her er din billet");
-
-    navigation.navigate("Ticket", { ticketData });
+    if (selectedWardrobes.length === 0) {
+      Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
+      return;
+    } else {
+      navigation.navigate("Ticket", { ticketData });
+    }
   };
 
   const renderItem = ({ item }) => {

@@ -89,9 +89,13 @@ export default function Compiler() {
           <Stack.Screen
             name="HomeTabs"
             component={HomeTabs} //benytter HomeTabs
-            options={{ headerShown: false }}
+            options={{ headerShown: false, headerTitle: "Home" }}
           />
-          <Stack.Screen name="SelectWardrope" component={SelectWardrope} />
+          <Stack.Screen
+            name="SelectWardrope"
+            component={SelectWardrope}
+            options={{ headerTitle: "Select" }}
+          />
           <Stack.Screen name="Ticket" component={Ticket} />
         </>
       ) : (
