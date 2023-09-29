@@ -10,6 +10,7 @@ import ProfileScreen from "./ProfileScreen";
 import MapScreen from "./stackComponents/MapScreen";
 import SelectWardrope from "./ticket/selectWardrope";
 import QrScanner from "./ticket/QrScanner";
+import Ticket from "./ticket/Ticket";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -90,7 +91,8 @@ export default function Compiler() {
             component={HomeTabs} //benytter HomeTabs
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Ticket" component={SelectWardrope} />
+          <Stack.Screen name="SelectWardrope" component={SelectWardrope} />
+          <Stack.Screen name="Ticket" component={Ticket} />
         </>
       ) : (
         <>

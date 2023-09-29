@@ -10,13 +10,21 @@ const Drawer = createDrawerNavigator();
 
 export default function DrawNavigator() {
   return (
-      <NavigationContainer>
-        <Drawer.Navigator>
-            <Drawer.Screen name="Home" component={Compiler} />
-            <Drawer.Screen name="Share with friends" component={ShareWithFriends} />
-            <Drawer.Screen name="Terms of conditions" component={TermsOfConditions} />
-            <Drawer.Screen name="About us" component={AboutUs} />  
-        </Drawer.Navigator>
-      </NavigationContainer>
+    <NavigationContainer>
+      <Drawer.Navigator>
+        <Drawer.Screen
+          name="Home"
+          component={Compiler}
+          options={{ headerShown: true, headerTitle: "APP NAME" }}
+        />
+
+        <Drawer.Screen name="Share with friends" component={ShareWithFriends} />
+        <Drawer.Screen
+          name="Terms of conditions"
+          component={TermsOfConditions}
+        />
+        <Drawer.Screen name="About us" component={AboutUs} />
+      </Drawer.Navigator>
+    </NavigationContainer>
   );
 }

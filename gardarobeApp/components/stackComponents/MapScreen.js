@@ -11,6 +11,7 @@ export default function MapScreen() {
   const navigation = useNavigation();
   const [initialRegion, setInitialRegion] = useState(null);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
+  const [firestoreData, setFirestoreData] = useState(null);
   const collectionName = "Bars";
 
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function MapScreen() {
     const fetchData = async () => {
       try {
         const fetchData = await fetchFirestoreData(collectionName);
+        setFirestoreData(fetchData);
 
         // Create objects for locationOfInterest using a for loop
         const interestLocations = [];
@@ -61,14 +63,15 @@ export default function MapScreen() {
 
   const handleMarkerPress = (item) => {
     let user = getAuth().currentUser; // Get the current user
-    const id = item.id; // Get the id of the bar
+    let id = firestoreData.find((bar) => bar.id === item.id);
 
+    //NEEDS TO BE MADE LIKE THIS TO WORK
     let BarData = {
       id: id,
       uid: user.uid,
       time: timestamp(),
     };
-    navigation.navigate("Ticket", { BarData });
+    navigation.navigate("SelectWardrope", { BarData });
   };
 
   return (

@@ -43,7 +43,7 @@ const QrScanner = () => {
     };
 
     console.log("QrScanner.js before navigation: ", BarData);
-    navigation.navigate("Ticket", { BarData });
+    navigation.navigate("SelectWardrope", { BarData });
   };
 
   // Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette

@@ -14,13 +14,13 @@ const TicketNavigation = () => {
     <NavigationContainer independent={true}>
       <Stack.Navigator initialRouteName="SelectWardrope">
         <Stack.Screen
-          name="finalTicket"
-          component={Ticket}
-          options={{ headerTitle: "" }}
-        />
-        <Stack.Screen
           name="SelectWardrope"
           component={SelectWardrope}
+          options={{ headerTitle: "", headerShown: false }}
+        />
+        <Stack.Screen
+          name="TicketFinal"
+          component={Ticket}
           options={{ headerTitle: "", headerShown: false }}
         />
       </Stack.Navigator>

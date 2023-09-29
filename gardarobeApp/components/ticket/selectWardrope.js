@@ -31,11 +31,9 @@ const SelectWardrope = ({ route }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const collectionName = "WardrobeItem";
-  const BarData = route.params;
+  const [BarData] = useState(route.params.BarData);
 
   useEffect(() => {
-    calculateTotal();
-
     const fetchData = async () => {
       try {
         const data = await fetchFirestoreData(collectionName);
@@ -44,7 +42,9 @@ const SelectWardrope = ({ route }) => {
         console.error(error);
       }
     };
+
     fetchData();
+    calculateTotal();
   }, [isFocused, collectionName]);
 
   // Calculate total price and total items
@@ -104,7 +104,6 @@ const SelectWardrope = ({ route }) => {
       active: true,
       ticketTime: timestamp(),
     };
-    console.log("SelectWardrope.js: ", ticketData);
     if (selectedWardrobes.length === 0) {
       Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
       return;
@@ -117,7 +116,7 @@ const SelectWardrope = ({ route }) => {
 
     alert("du har nu betalt", "Her er din billet");
 
-    navigation.navigate("finalTicket", { ticketData });
+    navigation.navigate("Ticket", { ticketData });
   };
 
   const renderItem = ({ item }) => {
@@ -153,13 +152,8 @@ const SelectWardrope = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Vælg garderobe</Text>
-      </View>
-      <Text style={styles.WelcommeText}>Velkommen til {}</Text>
+      <View style={styles.header}></View>
+      <Text style={styles.WelcommeText}>Velkommen til {BarData.id.title}</Text>
       <FlatList
         data={firestoreData}
         renderItem={renderItem}
