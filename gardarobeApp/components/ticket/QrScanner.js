@@ -5,9 +5,11 @@ import { timestamp } from "../../utilites/timestamp";
 import { getAuth } from "@firebase/auth";
 import { getPermisionBarCodeScanner } from "../../utilites/getPermisionBarCodeScanner";
 import { fetchFirestoreData } from "../../database/firestoreApi";
+import { useNavigation } from "@react-navigation/native";
 
 // Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
-const QrScanner = ({ navigation }) => {
+const QrScanner = () => {
+  const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [firestoreData, setFirestoreData] = useState(null);
@@ -32,7 +34,7 @@ const QrScanner = ({ navigation }) => {
     setScanned(true);
     let user = getAuth().currentUser;
     let parsedData = JSON.parse(data);
-    const id = firestoreData.find((item) => item.id === parsedData.barId);
+    const id = firestoreData.find((item) => item.id === parsedData.id);
 
     let BarData = {
       id: id, //bar id
@@ -40,7 +42,8 @@ const QrScanner = ({ navigation }) => {
       time: timestamp(),
     };
 
-    navigation.navigate("SelectWardrope", { BarData });
+    console.log("QrScanner.js before navigation: ", BarData);
+    navigation.navigate("Ticket", { BarData });
   };
 
   // Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette

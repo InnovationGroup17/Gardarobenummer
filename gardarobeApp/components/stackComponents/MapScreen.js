@@ -3,8 +3,12 @@ import { StyleSheet, View, Alert, Text } from "react-native";
 import MapView, { Callout, Marker, CalloutSubview } from "react-native-maps";
 import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../database/firestoreApi";
+import { useNavigation } from "@react-navigation/native";
+import { timestamp } from "../../utilites/timestamp";
+import { getAuth } from "@firebase/auth";
 
-export default function MapScreen({ navigation }) {
+export default function MapScreen() {
+  const navigation = useNavigation();
   const [initialRegion, setInitialRegion] = useState(null);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
   const collectionName = "Bars";
@@ -55,6 +59,18 @@ export default function MapScreen({ navigation }) {
     fetchData();
   }, []);
 
+  const handleMarkerPress = (item) => {
+    let user = getAuth().currentUser; // Get the current user
+    const id = item.id; // Get the id of the bar
+
+    let BarData = {
+      id: id,
+      uid: user.uid,
+      time: timestamp(),
+    };
+    navigation.navigate("Ticket", { BarData });
+  };
+
   return (
     <View style={styles.container}>
       {initialRegion ? (
@@ -77,8 +93,7 @@ export default function MapScreen({ navigation }) {
                   <CalloutSubview
                     style={styles.button}
                     onPress={() => {
-                      alert(`id: ${item.id}`);
-                      navigation.navigate("SelectWardrope", { id: item.id });
+                      handleMarkerPress(item);
                     }}
                   >
                     <Text>Go to bar</Text>

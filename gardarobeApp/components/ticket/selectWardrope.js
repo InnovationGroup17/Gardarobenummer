@@ -31,7 +31,7 @@ const SelectWardrope = ({ route }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const collectionName = "WardrobeItem";
-  const { BarData } = route.params;
+  const BarData = route.params;
 
   useEffect(() => {
     calculateTotal();
@@ -93,7 +93,6 @@ const SelectWardrope = ({ route }) => {
 
   // Handle confirm
   const handleConfirm = () => {
-    const { BarData } = route.params;
     const selectedWardrobes = firestoreData.filter(
       (wardrobe) => wardrobe.selected
     );
@@ -105,6 +104,7 @@ const SelectWardrope = ({ route }) => {
       active: true,
       ticketTime: timestamp(),
     };
+    console.log("SelectWardrope.js: ", ticketData);
     if (selectedWardrobes.length === 0) {
       Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
       return;
@@ -117,7 +117,7 @@ const SelectWardrope = ({ route }) => {
 
     alert("du har nu betalt", "Her er din billet");
 
-    navigation.navigate("Ticket", { ticketData });
+    navigation.navigate("finalTicket", { ticketData });
   };
 
   const renderItem = ({ item }) => {
@@ -159,7 +159,7 @@ const SelectWardrope = ({ route }) => {
         </TouchableOpacity>
         <Text style={styles.headerText}>Vælg garderobe</Text>
       </View>
-      <Text style={styles.WelcommeText}>Velkommen til {BarData.id.title}</Text>
+      <Text style={styles.WelcommeText}>Velkommen til {}</Text>
       <FlatList
         data={firestoreData}
         renderItem={renderItem}
