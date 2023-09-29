@@ -78,7 +78,7 @@ export default function MapScreen({ navigation }) {
                     style={styles.button}
                     onPress={() => {
                       alert(`id: ${item.id}`);
-                      console.log(item.id);
+                      navigation.navigate("SelectWardrope", { id: item.id });
                     }}
                   >
                     <Text>Go to bar</Text>

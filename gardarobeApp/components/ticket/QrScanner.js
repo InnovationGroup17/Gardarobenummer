@@ -32,15 +32,15 @@ const QrScanner = ({ navigation }) => {
     setScanned(true);
     let user = getAuth().currentUser;
     let parsedData = JSON.parse(data);
-    const bar = firestoreData.find((item) => item.id === parsedData.barId);
+    const id = firestoreData.find((item) => item.id === parsedData.barId);
 
-    let QrCodeData = {
-      bar: bar,
-      uid: user.uid,
+    let BarData = {
+      id: id, //bar id
+      uid: user.uid, // user id
       time: timestamp(),
     };
 
-    navigation.navigate("SelectWardrope", { QrCodeData });
+    navigation.navigate("SelectWardrope", { BarData });
   };
 
   // Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette

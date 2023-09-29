@@ -31,7 +31,7 @@ const SelectWardrope = ({ route }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const collectionName = "WardrobeItem";
-  const { QrCodeData } = route.params;
+  const { BarData } = route.params;
 
   useEffect(() => {
     calculateTotal();
@@ -93,7 +93,7 @@ const SelectWardrope = ({ route }) => {
 
   // Handle confirm
   const handleConfirm = () => {
-    const { QrCodeData } = route.params;
+    const { BarData } = route.params;
     const selectedWardrobes = firestoreData.filter(
       (wardrobe) => wardrobe.selected
     );
@@ -101,7 +101,7 @@ const SelectWardrope = ({ route }) => {
       selectedWardrobes,
       totalPrice,
       totalItems,
-      QrCodeData,
+      BarData,
       active: true,
       ticketTime: timestamp(),
     };
@@ -159,9 +159,7 @@ const SelectWardrope = ({ route }) => {
         </TouchableOpacity>
         <Text style={styles.headerText}>Vælg garderobe</Text>
       </View>
-      <Text style={styles.WelcommeText}>
-        Velkommen til {QrCodeData.bar.title}
-      </Text>
+      <Text style={styles.WelcommeText}>Velkommen til {BarData.id.title}</Text>
       <FlatList
         data={firestoreData}
         renderItem={renderItem}
