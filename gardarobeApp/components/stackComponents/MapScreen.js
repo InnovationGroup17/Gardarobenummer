@@ -5,15 +5,20 @@ import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../database/firestoreApi";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 
-
-export default function MapScreen({ navigation}) {
+export default function MapScreen({ navigation }) {
   const [initialRegion, setInitialRegion] = useState(null);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
-  
-  
+  const [user, setUser] = useState(null);
+
   const auth = getAuth();
   const collectionName = "Bars";
 
+  useEffect(() => {
+    // Set up the real-time listener for Firebase Authentication
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+  });
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -82,8 +87,9 @@ export default function MapScreen({ navigation}) {
                   <CalloutSubview
                     style={styles.button}
                     onPress={() => {
-                      alert(`id: ${item.id}`);
+                      alert(`Bar id: ${item.id} & user ud${user.uid}`);
                       console.log(item.id);
+                      console.log(user.uid);
                     }}
                   >
                     <Text>Go to bar</Text>
