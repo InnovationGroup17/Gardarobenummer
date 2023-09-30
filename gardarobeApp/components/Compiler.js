@@ -6,10 +6,10 @@ import React from "react";
 import { useAuthListener } from "./authenticate/RealTime";
 import SignUpForm from "./stackComponents/SigninForm";
 import LoginForm from "./stackComponents/LoginForm";
-import ProfileScreen from "./ProfileScreen";
+import ProfileScreen from "./profile/ProfileScreen";
 import MapScreen from "./stackComponents/MapScreen";
 import TicketNavigation from "./ticket/TicketNavigation";
-import QRID from "./QRID";
+import QRID from "./profile/QRID";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();

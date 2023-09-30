@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  View,
-  Alert,
-  Text
-} from "react-native";
+import { StyleSheet, View, Alert, Text } from "react-native";
 import MapView, { Callout, Marker, CalloutSubview } from "react-native-maps";
 import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../database/firestoreApi";
+import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 
-export default function MapScreen({ navigation }) {
+
+export default function MapScreen({ navigation}) {
   const [initialRegion, setInitialRegion] = useState(null);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
+  
+  
+  const auth = getAuth();
   const collectionName = "Bars";
 
   useEffect(() => {
