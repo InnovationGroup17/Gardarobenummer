@@ -10,6 +10,10 @@ import ProfileScreen from "./profile/ProfileScreen";
 import MapScreen from "./stackComponents/MapScreen";
 import TicketNavigation from "./ticket/TicketNavigation";
 import QRID from "./profile/QRID";
+import SelectWardrope from "./ticket/selectWardrope";
+import QrScanner from "./ticket/QrScanner";
+import Ticket from "./ticket/Ticket";
+
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -39,10 +43,10 @@ function HomeTabs() {
         }}
       />
       <Tab.Screen
-        name="Ticket"
-        component={TicketNavigation}
+        name="Scan"
+        component={QrScanner}
         options={{
-          tabBarIcon: getTabBarIcon("ticket"),
+          tabBarIcon: getTabBarIcon("camera"),
           headerShown: false,
         }}
       />
@@ -88,8 +92,14 @@ export default function Compiler() {
           <Stack.Screen
             name="HomeTabs"
             component={HomeTabs} //benytter HomeTabs
-            options={{ headerShown: false }}
+            options={{ headerShown: false, headerTitle: "Home" }}
           />
+          <Stack.Screen
+            name="SelectWardrope"
+            component={SelectWardrope}
+            options={{ headerTitle: "Select" }}
+          />
+          <Stack.Screen name="Ticket" component={Ticket} />
         </>
       ) : (
         <>

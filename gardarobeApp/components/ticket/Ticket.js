@@ -6,13 +6,6 @@ import QRCodeGenerator from "./QRCodeGenerator";
 const Ticket = ({ route }) => {
   const data = route.params.ticketData;
   console.log("ALL data: ", data);
-  console.log(data.QrCodeData.bar) //Information om bar som er scannet
-  console.log(data.QrCodeData.uid) //Information om bruger som har scannet
-  console.log(data.ticketTime) //Information om tidspunkt for betalt gardarobe
-  console.log(data.totalPrice) //Information om total pris for betalt gardarobe
-  console.log(data.selectedWardrobes) //Information om hvilke gardarobe items der er valgt
-  console.log(data.active)
-
 
   return (
     <View style={styles.container}>

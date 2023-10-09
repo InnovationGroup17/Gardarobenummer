@@ -4,13 +4,17 @@ import MapView, { Callout, Marker, CalloutSubview } from "react-native-maps";
 import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../database/firestoreApi";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { useNavigation } from "@react-navigation/native";
+import { timestamp } from "../../utilites/timestamp";
+import { getAuth } from "@firebase/auth";
 
-export default function MapScreen({ navigation }) {
+export default function MapScreen() {
+  const navigation = useNavigation();
   const [initialRegion, setInitialRegion] = useState(null);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
   const [user, setUser] = useState(null);
-
   const auth = getAuth();
+  const [firestoreData, setFirestoreData] = useState(null);
   const collectionName = "Bars";
 
   useEffect(() => {
@@ -41,6 +45,7 @@ export default function MapScreen({ navigation }) {
     const fetchData = async () => {
       try {
         const fetchData = await fetchFirestoreData(collectionName);
+        setFirestoreData(fetchData);
 
         // Create objects for locationOfInterest using a for loop
         const interestLocations = [];
@@ -65,6 +70,19 @@ export default function MapScreen({ navigation }) {
     fetchData();
   }, []);
 
+  const handleMarkerPress = (item) => {
+    let user = getAuth().currentUser; // Get the current user
+    let id = firestoreData.find((bar) => bar.id === item.id);
+
+    //NEEDS TO BE MADE LIKE THIS TO WORK
+    let BarData = {
+      id: id,
+      uid: user.uid,
+      time: timestamp(),
+    };
+    navigation.navigate("SelectWardrope", { BarData });
+  };
+
   return (
     <View style={styles.container}>
       {initialRegion ? (
@@ -87,9 +105,7 @@ export default function MapScreen({ navigation }) {
                   <CalloutSubview
                     style={styles.button}
                     onPress={() => {
-                      alert(`Bar id: ${item.id} & user ud${user.uid}`);
-                      console.log(item.id);
-                      console.log(user.uid);
+                      handleMarkerPress(item);
                     }}
                   >
                     <Text>Go to bar</Text>

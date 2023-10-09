@@ -31,11 +31,9 @@ const SelectWardrope = ({ route }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
   const collectionName = "WardrobeItem";
-  const { QrCodeData } = route.params;
+  const [BarData] = useState(route.params.BarData);
 
   useEffect(() => {
-    calculateTotal();
-
     const fetchData = async () => {
       try {
         const data = await fetchFirestoreData(collectionName);
@@ -44,7 +42,9 @@ const SelectWardrope = ({ route }) => {
         console.error(error);
       }
     };
+
     fetchData();
+    calculateTotal();
   }, [isFocused, collectionName]);
 
   // Calculate total price and total items
@@ -93,7 +93,6 @@ const SelectWardrope = ({ route }) => {
 
   // Handle confirm
   const handleConfirm = () => {
-    const { QrCodeData } = route.params;
     const selectedWardrobes = firestoreData.filter(
       (wardrobe) => wardrobe.selected
     );
@@ -101,23 +100,19 @@ const SelectWardrope = ({ route }) => {
       selectedWardrobes,
       totalPrice,
       totalItems,
-      QrCodeData,
+      BarData,
       active: true,
       ticketTime: timestamp(),
     };
-    if (selectedWardrobes.length === 0) {
-      Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
-      return;
-    }
-
-    //tilføj betaling. Har vi pt fravalgt da vi ikke har en betalingsløsning.
     alert(
       "Du har valgt " + totalItems + " genstand(e) til " + totalPrice + " kr."
     );
-
-    alert("du har nu betalt", "Her er din billet");
-
-    navigation.navigate("Ticket", { ticketData });
+    if (selectedWardrobes.length === 0) {
+      Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
+      return;
+    } else {
+      navigation.navigate("Ticket", { ticketData });
+    }
   };
 
   const renderItem = ({ item }) => {
@@ -153,15 +148,8 @@ const SelectWardrope = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Vælg garderobe</Text>
-      </View>
-      <Text style={styles.WelcommeText}>
-        Velkommen til {QrCodeData.bar.title}
-      </Text>
+      <View style={styles.header}></View>
+      <Text style={styles.WelcommeText}>Velkommen til {BarData.id.title}</Text>
       <FlatList
         data={firestoreData}
         renderItem={renderItem}
