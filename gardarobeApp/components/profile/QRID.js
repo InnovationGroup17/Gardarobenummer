@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
-import QRCode from "react-native-qrcode-svg";
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { View, Text, StyleSheet } from "react-native";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
+import QRCodeGenerator from "../ticket/QRCodeGenerator";
 
 export default function QRID() {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [qrData, setQRData] = useState({}); // To store user data for the QR code
-  const [qrCodeKey, setQRCodeKey] = useState(""); // Key to force re-render of QR code
+  //const [qrCodeKey, setQRCodeKey] = useState(""); Flyttet til QRCodeGenerator.js
   const auth = getAuth();
   const db = getDatabase();
 
@@ -45,8 +45,6 @@ export default function QRID() {
           age: userData?.age || "",
         };
         setQRData(newData);
-        // Generate a random key to force re-render of QR code
-        setQRCodeKey(Math.random().toString(36).substring(7));
       }
     }, 3000);
 
@@ -61,11 +59,9 @@ export default function QRID() {
     );
   }
 
-  const qrCodeValue = JSON.stringify(qrData);
-
   return (
     <View style={styles.container}>
-      <QRCode value={qrCodeValue} size={200} key={qrCodeKey} />
+      <QRCodeGenerator value={JSON.stringify(qrData)} size={200} />
       <Text>Current UID: {user.uid}</Text>
       {userData && (
         <>

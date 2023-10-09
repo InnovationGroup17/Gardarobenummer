@@ -3,7 +3,7 @@ import { StyleSheet, View, Alert, Text } from "react-native";
 import MapView, { Callout, Marker, CalloutSubview } from "react-native-maps";
 import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../database/firestoreApi";
-import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { timestamp } from "../../utilites/timestamp";
 
@@ -22,6 +22,7 @@ export default function MapScreen() {
       setUser(currentUser);
     });
   });
+
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();

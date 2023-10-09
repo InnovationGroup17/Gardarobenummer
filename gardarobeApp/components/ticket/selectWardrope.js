@@ -1,12 +1,3 @@
-//this site is used to select the wardrobe
-//the wardrobe is selected by the user from a list of wardrobes.
-//the list of wardrobes is fetched from the database (start as a dummy list)
-//the items from the list are displayed in a listview and with a checkbox. Also an amount of items can be added.
-//the user can select one or more wardrobes.
-//when the user is done selecting the price is calculated and there is a slitter to pay. //TODO: implement slitter
-//the user can go back to the previous page (QrScanner.js)
-//the selected data is send to the next page (ticket.js)
-
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -20,7 +11,6 @@ import { CheckBox } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { timestamp } from "../../utilites/timestamp";
 import { fetchFirestoreData } from "../../database/firestoreApi";
 

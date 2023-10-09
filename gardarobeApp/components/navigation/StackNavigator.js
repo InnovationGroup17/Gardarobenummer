@@ -1,6 +1,6 @@
 import * as React from "react";
 import SignUpForm from "./stackComponents/SignUpForm";
-import LoginForm from "./stackComponents/LoginForm";
+import LoginForm from "../stackComponents/LoginForm";
 import ProfileScreen from ".profile/ProfileScreen";
 
 import { createStackNavigator } from "@react-navigation/stack";
