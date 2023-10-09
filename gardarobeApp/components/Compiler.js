@@ -1,12 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { useAuthListener } from "./authenticate/RealTime";
-import SignUpForm from "./stackComponents/SigninForm";
-import LoginForm from "./stackComponents/LoginForm";
-import SelectWardrope from "./ticket/selectWardrope";
-import Ticket from "./ticket/Ticket";
+import SignUpForm from "./screens/start_page/SigninForm";
+import LoginForm from "./screens/start_page/LoginForm";
+import SelectWardrope from "./screens/ticket/selectWardrope";
+import Ticket from "./screens/ticket/Ticket";
 import HomeTabs from "./navigation/TabNavigator";
-import HomeScreen from "./HomeScreen";
+import HomeScreen from "./screens/start_page/StartPage";
 
 const Stack = createStackNavigator();
 

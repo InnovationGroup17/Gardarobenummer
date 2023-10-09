@@ -11,8 +11,8 @@ import { CheckBox } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { timestamp } from "../../utilites/timestamp";
-import { fetchFirestoreData } from "../../database/firestoreApi";
+import { timestamp } from "../../../utilites/timestamp";
+import { fetchFirestoreData } from "../../../database/firestoreApi";
 
 const SelectWardrope = ({ route }) => {
   const navigation = useNavigation();

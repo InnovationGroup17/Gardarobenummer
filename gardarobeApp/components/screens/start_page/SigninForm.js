@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
-import { database } from "../../database/firebaseConfig";
+import { database } from "../../../database/firebaseConfig";
 
 function SignUpForm() {
   const navigation = useNavigation();

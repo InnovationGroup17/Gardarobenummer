@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View } from "react-native";
-import GlobalStyles from "../../globalstyles/Globalstyles";
+import GlobalStyles from "../../../globalstyles/Globalstyles";
 
 export default function TermsOfConditions() {
   return (

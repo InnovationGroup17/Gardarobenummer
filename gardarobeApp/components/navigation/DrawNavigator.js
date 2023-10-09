@@ -1,9 +1,9 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
-import TermsOfConditions from "./TermsOfConditions";
-import AboutUs from "./AboutUs";
-import ShareWithFriends from "./ShareWithFriends";
+import TermsOfConditions from "../screens/drawer/TermsOfConditions";
+import AboutUs from "../screens/drawer/AboutUs";
+import ShareWithFriends from "../screens/drawer/ShareWithFriends";
 import Compiler from "../Compiler";
 
 const Drawer = createDrawerNavigator();

@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import HomeScreen from "../HomeScreen";
-import MapScreen from "../stackComponents/MapScreen";
-import QrScanner from "../ticket/QrScanner";
-import ProfileScreen from "../profile/ProfileScreen";
+import HomeScreen from "../screens/start_page/StartPage";
+import MapScreen from "../screens/map/MapScreen";
+import QrScanner from "../screens/ticket/QrScanner";
+import ProfileScreen from "../screens/profile/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 

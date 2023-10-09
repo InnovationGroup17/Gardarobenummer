@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Button, StyleSheet } from "react-native";
-import { useAuthListener } from "./authenticate/RealTime";
-import QRID from "./profile/QRID";
+import { useAuthListener } from "../../authenticate/RealTime";
+import QRID from "../profile/QRID";
 
 const HomeScreen = ({ navigation }) => {
   const isUserLoggedIn = useAuthListener();

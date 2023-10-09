@@ -1,12 +1,9 @@
-import {StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
-import DrawerNavigator from "./components/DrawNavigator/drawNavigator";
-
+import DrawerNavigator from "./components/navigation/DrawNavigator";
 
 export default function App() {
-  return (
-   <DrawerNavigator/>
-  );
+  return <DrawerNavigator />;
 }
 
 const styles = StyleSheet.create({

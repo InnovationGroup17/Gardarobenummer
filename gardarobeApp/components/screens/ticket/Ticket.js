@@ -1,7 +1,7 @@
 import React from "react";
 import { View, ImageBackground, StyleSheet } from "react-native";
-import BackgroundGif from "../../assets/gifs/ByRk.gif";
-import QRCodeGenerator from "./QRCodeGenerator";
+import BackgroundGif from "../../../assets/gifs/ByRk.gif";
+import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
 
 const Ticket = ({ route }) => {
   const data = route.params.ticketData;

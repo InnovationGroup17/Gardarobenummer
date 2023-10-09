@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
-import QRCodeGenerator from "../ticket/QRCodeGenerator";
+import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
 
 export default function QRID() {
   const [user, setUser] = useState(null);
