@@ -8,7 +8,6 @@ import SignUpForm from "./stackComponents/SigninForm";
 import LoginForm from "./stackComponents/LoginForm";
 import ProfileScreen from "./profile/ProfileScreen";
 import MapScreen from "./stackComponents/MapScreen";
-import TicketNavigation from "./ticket/TicketNavigation";
 import QRID from "./profile/QRID";
 import SelectWardrope from "./ticket/selectWardrope";
 import QrScanner from "./ticket/QrScanner";
