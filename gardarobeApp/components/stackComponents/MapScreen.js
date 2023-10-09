@@ -6,7 +6,6 @@ import { fetchFirestoreData } from "../../database/firestoreApi";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { timestamp } from "../../utilites/timestamp";
-import { getAuth } from "@firebase/auth";
 
 export default function MapScreen() {
   const navigation = useNavigation();
