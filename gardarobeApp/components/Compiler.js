@@ -8,7 +8,9 @@ import SignUpForm from "./stackComponents/SigninForm";
 import LoginForm from "./stackComponents/LoginForm";
 import ProfileScreen from "./ProfileScreen";
 import MapScreen from "./stackComponents/MapScreen";
-import TicketNavigation from "./ticket/TicketNavigation";
+import SelectWardrope from "./ticket/selectWardrope";
+import QrScanner from "./ticket/QrScanner";
+import Ticket from "./ticket/Ticket";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -26,23 +28,23 @@ function HomeTabs() {
         component={HomeScreen}
         options={{
           tabBarIcon: getTabBarIcon("home"),
-          headerShown: false 
+          headerShown: false,
         }}
       />
       <Tab.Screen
-      name="Map"
+        name="Map"
         component={MapScreen}
         options={{
           tabBarIcon: getTabBarIcon("map"),
-          headerShown: false 
+          headerShown: false,
         }}
       />
       <Tab.Screen
-        name="Ticket"
-        component={TicketNavigation}
+        name="Scan"
+        component={QrScanner}
         options={{
-          tabBarIcon: getTabBarIcon("ticket"),
-          headerShown: false 
+          tabBarIcon: getTabBarIcon("camera"),
+          headerShown: false,
         }}
       />
       <Tab.Screen
@@ -50,7 +52,7 @@ function HomeTabs() {
         component={ProfileScreen}
         options={{
           tabBarIcon: getTabBarIcon("user"),
-          headerShown: false 
+          headerShown: false,
         }}
       />
     </Tab.Navigator>
@@ -79,29 +81,35 @@ export default function Compiler() {
   const isUserLoggedIn = useAuthListener();
 
   return (
-      <Stack.Navigator
-        initialRouteName={isUserLoggedIn ? "HomeTabs" : "HomeScreen"}
-      >
-        {isUserLoggedIn ? (
-          <>
-            <Stack.Screen
-              name="HomeTabs"
-              component={HomeTabs} //benytter HomeTabs
-              options={{ headerShown: false }}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name="HomeScreen"
-              component={HomeScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name="Sign Up" component={SignUpForm} />
-            <Stack.Screen name="Log In" component={LoginForm} />
-          </>
-        )}
-      </Stack.Navigator>
+    <Stack.Navigator
+      initialRouteName={isUserLoggedIn ? "HomeTabs" : "HomeScreen"}
+    >
+      {isUserLoggedIn ? (
+        <>
+          <Stack.Screen
+            name="HomeTabs"
+            component={HomeTabs} //benytter HomeTabs
+            options={{ headerShown: false, headerTitle: "Home" }}
+          />
+          <Stack.Screen
+            name="SelectWardrope"
+            component={SelectWardrope}
+            options={{ headerTitle: "Select" }}
+          />
+          <Stack.Screen name="Ticket" component={Ticket} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen
+            name="HomeScreen"
+            component={HomeScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="Sign Up" component={SignUpForm} />
+          <Stack.Screen name="Log In" component={LoginForm} />
+        </>
+      )}
+    </Stack.Navigator>
   );
 }
 
