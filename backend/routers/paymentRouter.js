@@ -4,6 +4,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 //Router Endpoint
 router.post("/intents", async (req, res) => {
+  console.log("POST /payments/intents");
   try {
     const { amount } = req.body;
     const paymentIntent = await stripe.paymentIntents.create({

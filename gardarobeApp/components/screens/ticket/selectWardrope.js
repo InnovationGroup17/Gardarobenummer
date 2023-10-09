@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { timestamp } from "../../../utilites/timestamp";
+import { initializeStripe } from "../../../utilites/stripeUtils";
 import { fetchFirestoreData } from "../../../database/firestoreApi";
 
 const SelectWardrope = ({ route }) => {
@@ -82,10 +83,19 @@ const SelectWardrope = ({ route }) => {
   };
 
   // Handle confirm
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const selectedWardrobes = firestoreData.filter(
       (wardrobe) => wardrobe.selected
     );
+
+    if (selectedWardrobes.length === 0) {
+      Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
+      return;
+    }
+
+    // Initialize stripe
+    await initializeStripe(totalPrice);
+
     const OrderData = {
       selectedWardrobes,
       totalPrice,
@@ -94,15 +104,8 @@ const SelectWardrope = ({ route }) => {
       active: true,
       ticketTime: timestamp(),
     };
-    alert(
-      "Du har valgt " + totalItems + " genstand(e) til " + totalPrice + " kr."
-    );
-    if (selectedWardrobes.length === 0) {
-      Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
-      return;
-    } else {
-      navigation.navigate("Order", { OrderData });
-    }
+
+    navigation.navigate("Order", { OrderData });
   };
 
   const renderItem = ({ item }) => {
@@ -148,7 +151,7 @@ const SelectWardrope = ({ route }) => {
       <View style={styles.footer}>
         <Text style={styles.footerText}>Total: {totalPrice} kr.</Text>
         <TouchableOpacity style={styles.button} onPress={handleConfirm}>
-          <Text style={styles.buttonText}>Bekræft</Text>
+          <Text style={styles.buttonText}>Betal</Text>
         </TouchableOpacity>
       </View>
     </View>
