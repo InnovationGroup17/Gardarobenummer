@@ -15,7 +15,7 @@ export default function DrawNavigator() {
         <Drawer.Screen
           name="Home"
           component={Compiler}
-          options={{ headerShown: true, headerTitle: "APP NAME" }}
+          options={{ headerShown: true, headerTitle: "Ticketly" }} //APP NAME
         />
 
         <Drawer.Screen name="Share with friends" component={ShareWithFriends} />

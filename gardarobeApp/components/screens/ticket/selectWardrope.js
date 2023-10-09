@@ -86,7 +86,7 @@ const SelectWardrope = ({ route }) => {
     const selectedWardrobes = firestoreData.filter(
       (wardrobe) => wardrobe.selected
     );
-    const ticketData = {
+    const OrderData = {
       selectedWardrobes,
       totalPrice,
       totalItems,
@@ -101,7 +101,7 @@ const SelectWardrope = ({ route }) => {
       Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
       return;
     } else {
-      navigation.navigate("Ticket", { ticketData });
+      navigation.navigate("Order", { OrderData });
     }
   };
 

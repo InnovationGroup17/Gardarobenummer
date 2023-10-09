@@ -3,9 +3,9 @@ import { View, ImageBackground, StyleSheet } from "react-native";
 import BackgroundGif from "../../../assets/gifs/ByRk.gif";
 import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
 
-const Ticket = ({ route }) => {
-  const data = route.params.ticketData;
-  console.log("ALL data: ", data);
+const Order = ({ route }) => {
+  const data = route.params.OrderData;
+  console.log(data);
 
   return (
     <View style={styles.container}>
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Ticket;
+export default Order;

@@ -42,7 +42,6 @@ const QrScanner = () => {
       time: timestamp(),
     };
 
-    console.log("QrScanner.js before navigation: ", BarData);
     navigation.navigate("SelectWardrope", { BarData });
   };
 

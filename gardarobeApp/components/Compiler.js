@@ -4,7 +4,7 @@ import { useAuthListener } from "./authenticate/RealTime";
 import SignUpForm from "./screens/start_page/SigninForm";
 import LoginForm from "./screens/start_page/LoginForm";
 import SelectWardrope from "./screens/ticket/selectWardrope";
-import Ticket from "./screens/ticket/Ticket";
+import Order from "./screens/ticket/Order";
 import HomeTabs from "./navigation/TabNavigator";
 import HomeScreen from "./screens/start_page/StartPage";
 
@@ -29,7 +29,11 @@ export default function Compiler() {
             component={SelectWardrope}
             options={{ headerTitle: "Select" }}
           />
-          <Stack.Screen name="Ticket" component={Ticket} />
+          <Stack.Screen
+            name="Order"
+            component={Order}
+            options={{ headerTitle: "Order" }}
+          />
         </>
       ) : (
         <>
