@@ -1,31 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const { createPaymentIntent } = require("../src/stripeHandler");
 
 //Router Endpoint
 router.post("/intents", async (req, res) => {
-  console.log("POST /payments/intents");
-  try {
-    const { amount } = req.body;
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: "dkk",
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    });
-    res.send({
-      clientSecret: paymentIntent.client_secret,
-      status: "success",
-      message: "PaymentIntent created",
-    });
-  } catch (error) {
-    res.status(400).send({
-      error: error.message,
-      message: "PaymentIntent not created",
-      status: "failed",
-    });
-  }
+  const { amount } = req.body;
+  const paymentIntent = await createPaymentIntent(amount);
+  res.json(paymentIntent);
 });
 
 module.exports = router;

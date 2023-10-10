@@ -19,6 +19,8 @@
     "@react-navigation/drawer": "^6.6.4",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/stack": "^6.3.17",
+    "@stripe/react-stripe-js": "^2.3.1",
+    "@stripe/stripe-js": "^2.1.7",
     "@stripe/stripe-react-native": "0.28.0",
     "axios": "^1.5.1",
     "babel-plugin-dotenv-import": "^3.0.1",

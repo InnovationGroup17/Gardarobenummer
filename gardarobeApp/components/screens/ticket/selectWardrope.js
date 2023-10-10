@@ -12,7 +12,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { timestamp } from "../../../utilites/timestamp";
-import { initializeStripe } from "../../../utilites/stripeUtils";
 import { fetchFirestoreData } from "../../../database/firestoreApi";
 
 const SelectWardrope = ({ route }) => {
@@ -93,9 +92,7 @@ const SelectWardrope = ({ route }) => {
       return;
     }
 
-    // Initialize stripe
-    await initializeStripe(totalPrice);
-
+    //ORDER DATA
     const OrderData = {
       selectedWardrobes,
       totalPrice,
