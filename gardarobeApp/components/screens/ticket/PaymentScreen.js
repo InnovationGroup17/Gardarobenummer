@@ -41,7 +41,7 @@ const PaymentScreen = ({ route }) => {
     const newOrderRef = push(ordersRef);
     await set(newOrderRef, order);
 
-    navigation.navigate("Order Screen", { newOrderRef });
+    navigation.navigate("OrderScreen", { newOrderRef });
   };
 
   return (

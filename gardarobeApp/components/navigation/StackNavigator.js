@@ -23,7 +23,7 @@ function StackNavigator() {
       <Stack.Screen name={"QRID"} component={QRID} />
       <Stack.Screen name={"Profile Screen"} component={ProfileScreen} />
       <Stack.Screen name={"Map Screen"} component={MapScreen} />
-      <Stack.Screen name={"Order Screen"} component={Order} />
+      <Stack.Screen name={"OrderScreen"} component={Order} />
       <Stack.Screen name={"Payment Screen"} component={PaymentScreen} />
       <Stack.Screen name={"Qr Scanner"} component={QrScanner} />
       <Stack.Screen name={"SelectWardrope"} component={SelectWardrope} />
