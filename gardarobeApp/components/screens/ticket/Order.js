@@ -15,17 +15,17 @@ const Order = ({ route }) => {
       if (user) {
         const orderRef = ref(
           database,
-          `orders/${user.uid}/${route.params.order[1].orderId}`
+          `orders/${user.uid}/${route.params.newOrderRef.key}`
         );
         onValue(orderRef, (snapshot) => {
           const data = snapshot.val();
-          console.log(data);
+          console.log("Data", data);
           setOrderData(data);
         });
       }
     };
     findOrder();
-  }, []);
+  }, [route.params.newOrderRef.key, user]);
 
   return (
     <View style={styles.container}>

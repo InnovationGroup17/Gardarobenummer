@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { ref, set } from "firebase/database";
+import { push, ref, set } from "firebase/database";
 import { database } from "../../../database/firebaseConfig";
 import { timestamp } from "../../../utilites/timestamp";
 import { randomIdGenerator } from "../../../utilites/randomIdGenerator";
@@ -34,14 +34,14 @@ const PaymentScreen = ({ route }) => {
     order.push({
       paymentStatus: true,
       payTime: timestamp(),
-      orderId: randomIdGenerator(),
       status: "readyToBeScanned",
     });
 
-    const ordersRef = ref(database, `orders/${user.uid}/` + order[1].orderId);
-    await set(ordersRef, order);
+    const ordersRef = ref(database, `orders/${user.uid}`);
+    const newOrderRef = push(ordersRef);
+    await set(newOrderRef, order);
 
-    navigation.navigate("Order Screen", { order });
+    navigation.navigate("Order Screen", { newOrderRef });
   };
 
   return (
