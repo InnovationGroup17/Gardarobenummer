@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
 import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
+import { database } from "../../../database/firebaseConfig";
 
 export default function QRID() {
   const [user, setUser] = useState(null);
@@ -10,7 +11,7 @@ export default function QRID() {
   const [qrData, setQRData] = useState({}); // To store user data for the QR code
   //const [qrCodeKey, setQRCodeKey] = useState(""); Flyttet til QRCodeGenerator.js
   const auth = getAuth();
-  const db = getDatabase();
+  const db = database;
 
   useEffect(() => {
     // Set up the real-time listener for Firebase Authentication
@@ -34,22 +35,52 @@ export default function QRID() {
     }
   }, [auth, user, db]);
 
-  // Regenerate QR code data every 3 seconds
+  // Regenerate QR code data every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       if (user) {
-        const newData = {
-          id: user.uid,
-          email: user.email,
-          displayName: userData?.displayName || "",
-          age: userData?.age || "",
-        };
-        setQRData(newData);
+        //Fetch orders from the Firebase Realtime Database
+        const orderRef = ref(db, `orders/${user.uid}`);
+        onValue(orderRef, (snapshot) => {
+          const allOrders = snapshot.val();
+          let newestActiveOrderData = null;
+          let newestTime = null;
+          let newestOrderId = null;
+
+          // Find the active orders
+          for (let orderId in allOrders) {
+            const orderArray = allOrders[orderId];
+            const activeOrder = orderArray.find(
+              (order) => order.status === "active"
+            );
+
+            // Check if an active order was found
+            if (activeOrder) {
+              const currentTime = new Date(activeOrder.payTime); // Convert the 'payTime' of the active order into a JavaScript Date object
+
+              // Check if this is the first active order found, if the current order's time is more recent than the previously found active order's time
+              if (!newestTime || currentTime > newestTime) {
+                newestTime = currentTime; // Update the 'newestTime' to the time of the current active order
+                newestActiveOrderData = orderArray; // Store the data of the current active order as the most recent active order found so far
+                newestOrderId = orderId; // Store the ID of the current active order as the ID of the most recent active order found so far
+              }
+            }
+          }
+          // Set the QR code data to the newest active order
+          if (newestActiveOrderData) {
+            setQRData({
+              orderId: newestOrderId,
+              orderData: newestActiveOrderData,
+            });
+          } else {
+            setQRData({});
+          }
+        });
       }
-    }, 3000);
+    }, 5000);
 
     return () => clearInterval(interval);
-  }, [user, userData]);
+  }, [user, db]);
 
   if (!user) {
     return (
