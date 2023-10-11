@@ -9,8 +9,10 @@ import { ref, set } from "firebase/database";
 import { database } from "../../../database/firebaseConfig";
 import { timestamp } from "../../../utilites/timestamp";
 import { randomIdGenerator } from "../../../utilites/randomIdGenerator";
+import { useAuthListener } from "../../authenticate/RealTime";
 
 const PaymentScreen = ({ route }) => {
+  const user = useAuthListener();
   const navigation = useNavigation();
   const order = [
     {
@@ -36,7 +38,7 @@ const PaymentScreen = ({ route }) => {
       status: "readyToBeScanned",
     });
 
-    const ordersRef = ref(database, "orders/" + order[1].orderId);
+    const ordersRef = ref(database, `orders/${user.uid}/` + order[1].orderId);
     await set(ordersRef, order);
 
     navigation.navigate("Order Screen", { order });
