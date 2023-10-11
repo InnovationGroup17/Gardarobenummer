@@ -5,23 +5,51 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { ref, set } from "firebase/database";
+import { database } from "../../../database/firebaseConfig";
+import { timestamp } from "../../../utilites/timestamp";
+import { randomIdGenerator } from "../../../utilites/randomIdGenerator";
 
 const PaymentScreen = ({ route }) => {
   const navigation = useNavigation();
-  const order = [];
+  const order = [
+    {
+      BarData: {
+        barId: route.params.OrderData.BarData.id.id,
+        barName: route.params.OrderData.BarData.id.title,
+        description: route.params.OrderData.BarData.id.description,
+        location: route.params.OrderData.BarData.id.location,
+      },
+      user: route.params.OrderData.user,
+      wardrobe: route.params.OrderData.selectedWardrobes,
+      ticketTime: route.params.OrderData.ticketTime,
+      totalPrice: route.params.OrderData.totalPrice,
+      totalItems: route.params.OrderData.totalItems,
+    },
+  ];
 
-  useEffect(() => {
-    order.push(route.params);
-    console.log(order);
-    
-  }, []);
+  const handleSubmit = async () => {
+    order.push({
+      paymentStatus: true,
+      payTime: timestamp(),
+      orderId: randomIdGenerator(),
+      status: "readyToBeScanned",
+    });
+
+    const ordersRef = ref(database, "orders/" + order[1].orderId);
+    await set(ordersRef, order);
+
+    navigation.navigate("Order Screen", { order });
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Payment Screen</Text>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate("Order Screen")}
+        onPress={() => {
+          handleSubmit();
+        }}
       >
         <Text style={styles.buttonText}>Pay</Text>
       </TouchableOpacity>

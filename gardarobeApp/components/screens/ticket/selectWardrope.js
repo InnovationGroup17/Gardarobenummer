@@ -13,6 +13,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { timestamp } from "../../../utilites/timestamp";
 import { fetchFirestoreData } from "../../../database/firestoreApi";
+import { useAuthListener } from "../../authenticate/RealTime";
 
 const SelectWardrope = ({ route }) => {
   const navigation = useNavigation();
@@ -22,6 +23,7 @@ const SelectWardrope = ({ route }) => {
   const [totalItems, setTotalItems] = useState(0);
   const collectionName = "WardrobeItem";
   const [BarData] = useState(route.params.BarData);
+  const user = useAuthListener();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,6 +100,7 @@ const SelectWardrope = ({ route }) => {
       totalPrice,
       totalItems,
       BarData,
+      user: user.uid,
       active: true,
       ticketTime: timestamp(),
     };
