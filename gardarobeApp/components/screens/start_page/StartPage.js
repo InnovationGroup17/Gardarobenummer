@@ -11,11 +11,8 @@ const HomeScreen = ({ navigation }) => {
   } else {
     return (
       <View style={styles.container}>
-        <Button
-          title="Sign Up"
-          onPress={() => navigation.navigate("Sign Up")}
-        />
-        <Button title="Log In" onPress={() => navigation.navigate("Log In")} />
+        <Button title="Sign Up" onPress={() => navigation.navigate("Signup")} />
+        <Button title="Log In" onPress={() => navigation.navigate("Login")} />
       </View>
     );
   }

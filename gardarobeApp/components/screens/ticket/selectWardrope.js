@@ -102,7 +102,7 @@ const SelectWardrope = ({ route }) => {
       ticketTime: timestamp(),
     };
 
-    navigation.navigate("Order", { OrderData });
+    navigation.navigate("Payment Screen", { OrderData });
   };
 
   const renderItem = ({ item }) => {

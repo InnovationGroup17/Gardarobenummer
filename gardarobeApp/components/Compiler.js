@@ -1,9 +1,8 @@
-import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 import { useAuthListener } from "./authenticate/RealTime";
 import StartStackNavigator from "./navigation/StartStackNavigator";
 import DrawNavigator from "./navigation/DrawNavigator";
-import StackNavigator from "./navigation/StackNavigator";
 
 const RootStack = createStackNavigator();
 
