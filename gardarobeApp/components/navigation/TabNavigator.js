@@ -1,24 +1,24 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import HomeScreen from "../screens/start_page/StartPage";
+import QRID from "../screens/profile/QRID";
 import MapScreen from "../screens/map/MapScreen";
 import QrScanner from "../screens/ticket/QrScanner";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
-function HomeTabs() {
+function TabNavigator() {
   const getTabBarIcon =
     (name) =>
     ({ color, size }) =>
       <FontAwesome name={name} color={color} size={size} />;
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator initialRouteName="Home">
       <Tab.Screen
-        name="Homes"
-        component={HomeScreen}
+        name="Home"
+        component={QRID}
         options={{
           tabBarIcon: getTabBarIcon("home"),
           headerShown: false,
@@ -52,4 +52,4 @@ function HomeTabs() {
   );
 }
 
-export default HomeTabs;
+export default TabNavigator;
