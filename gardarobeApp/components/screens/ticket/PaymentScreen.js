@@ -3,14 +3,19 @@
 //the user should be redirected to the OrderScreen
 
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { push, ref, set } from "firebase/database";
 import { database } from "../../../database/firebaseConfig";
 import { timestamp } from "../../../utilites/timestamp";
 import { useAuthListener } from "../../authenticate/RealTime";
+import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+
+const SERVER_URL = "http://192.168.1.105:5001";
 
 const PaymentScreen = ({ route }) => {
+  const [cardDetails, setCardDetails] = useState();
+  const { confirmPayment, loading } = useConfirmPayment();
   const user = useAuthListener();
   const navigation = useNavigation();
   const order = [
@@ -29,6 +34,48 @@ const PaymentScreen = ({ route }) => {
     },
   ];
 
+  const fetchPaymentIntentClientSecret = async () => {
+    console.log("order", order[0].totalPrice * 100);
+    const response = await fetch(`${SERVER_URL}/payments/intents`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: order[0].totalPrice * 100 }),
+    });
+    if (!response.ok) {
+      console.log("Error", response);
+    }
+    const { clientSecret, error } = await response.json();
+    return { clientSecret, error };
+  };
+
+  const handlePayPress = async () => {
+    if (!cardDetails?.complete) {
+      Alert.alert("Please enter Complete card details");
+      return;
+    }
+    const billingDetails = {
+      email: "test@test.dk",
+    };
+    try {
+      const { clientSecret, error } = await fetchPaymentIntentClientSecret();
+      if (error) {
+        console.log(error);
+      } else {
+        const { paymentIntent, error } = await confirmPayment(clientSecret, {
+          type: "card",
+          billingDetails: billingDetails,
+        });
+        if (error) {
+          console.log("Payment confirmation error", error);
+        } else if (paymentIntent) {
+          console.log("Success");
+        }
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
   const handleSubmit = async () => {
     order.push({
       paymentStatus: true,
@@ -42,15 +89,36 @@ const PaymentScreen = ({ route }) => {
 
     navigation.navigate("OrderScreen", { newOrderRef });
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Payment Screen</Text>
+      <CardField
+        postalCodeEnabled={true}
+        placeholder={{
+          number: "4242 4242 4242 4242",
+        }}
+        cardStyle={{
+          backgroundColor: "#FFFFFF",
+          textColor: "#000000",
+        }}
+        style={{
+          width: "100%",
+          height: 50,
+          marginVertical: 30,
+        }}
+        onCardChange={(cardDetails) => {
+          setCardDetails(cardDetails);
+        }}
+        onFocus={(focusedField) => {
+          console.log("focusField", focusedField);
+        }}
+      />
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
-          handleSubmit();
+          handlePayPress();
         }}
+        disabled={loading}
       >
         <Text style={styles.buttonText}>Pay</Text>
       </TouchableOpacity>
