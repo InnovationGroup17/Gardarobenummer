@@ -35,7 +35,6 @@ const PaymentScreen = ({ route }) => {
   ];
 
   const fetchPaymentIntentClientSecret = async () => {
-    console.log("order", order[0].totalPrice * 100);
     const response = await fetch(`${SERVER_URL}/payments/intents`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -54,7 +53,7 @@ const PaymentScreen = ({ route }) => {
       return;
     }
     const billingDetails = {
-      email: "test@test.dk",
+      email: "test@test.dk", //HARDCODED
     };
     try {
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
@@ -65,6 +64,7 @@ const PaymentScreen = ({ route }) => {
           type: "card",
           billingDetails: billingDetails,
         });
+        console.log("paymentIntent", paymentIntent);
         if (error) {
           console.log("Payment confirmation error", error);
         } else if (paymentIntent) {
@@ -76,7 +76,9 @@ const PaymentScreen = ({ route }) => {
     }
   };
 
-  const handleSubmit = async () => {
+  //NEED TO BE INTEGRATED INTO THE PAYMENT PROCESS
+  /**
+   * const handleSubmit = async () => {
     order.push({
       paymentStatus: true,
       payTime: timestamp(),
@@ -89,6 +91,8 @@ const PaymentScreen = ({ route }) => {
 
     navigation.navigate("OrderScreen", { newOrderRef });
   };
+   */ //END OF INTEGRATION
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Payment Screen</Text>
