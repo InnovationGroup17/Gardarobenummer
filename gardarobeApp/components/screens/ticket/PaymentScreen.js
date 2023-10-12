@@ -8,7 +8,6 @@ import { useNavigation } from "@react-navigation/native";
 import { push, ref, set } from "firebase/database";
 import { database } from "../../../database/firebaseConfig";
 import { timestamp } from "../../../utilites/timestamp";
-import { randomIdGenerator } from "../../../utilites/randomIdGenerator";
 import { useAuthListener } from "../../authenticate/RealTime";
 
 const PaymentScreen = ({ route }) => {
