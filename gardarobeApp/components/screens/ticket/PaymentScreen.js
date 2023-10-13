@@ -1,4 +1,4 @@
-//this page should show the order details
+//this page should show the order details and the payment form
 //when the user clicks on the pay button, the order should be saved in the Realtime firestore database
 //the user should be redirected to the OrderScreen
 
