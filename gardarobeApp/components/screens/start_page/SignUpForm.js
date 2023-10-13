@@ -13,6 +13,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
 import { realtimeDB } from "../../../database/firebaseConfig";
+import GlobalStyles from "../../../globalstyles/Globalstyles";
 
 function SignUpForm() {
   const navigation = useNavigation();
@@ -74,6 +75,9 @@ function SignUpForm() {
 
   return (
     <View>
+      <View style={GlobalStyles.goBackContainer}>
+        <Button title="Go Back" onPress={() => navigation.goBack()} />
+      </View>
       <Text style={styles.header}>Sign up</Text>
       <TextInput
         placeholder="email"
