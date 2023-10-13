@@ -1,12 +1,12 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import { View, Text } from "react-native";
+import React from "react";
 
-const hostStart = () => {
+const HostStart = () => {
   return (
     <View>
       <Text>hostStart</Text>
     </View>
-  )
-}
+  );
+};
 
-export default hostStart
+export default HostStart;
