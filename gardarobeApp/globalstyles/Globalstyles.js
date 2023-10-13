@@ -10,4 +10,5 @@ const GlobalStyles = StyleSheet.create({
     marginTop: 10,
   },
 });
+
 export default GlobalStyles;

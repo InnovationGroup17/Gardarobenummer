@@ -13,7 +13,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
 import { realtimeDB } from "../../../database/firebaseConfig";
-import GlobalStyles from "../../../globalstyles/Globalstyles";
+import GoBackButton from "../../GlobalComponents/GoBackButton";
 
 function SignUpForm() {
   const navigation = useNavigation();
@@ -75,9 +75,7 @@ function SignUpForm() {
 
   return (
     <View>
-      <View style={GlobalStyles.goBackContainer}>
-        <Button title="Go Back" onPress={() => navigation.goBack()} />
-      </View>
+      <GoBackButton />
       <Text style={styles.header}>Sign up</Text>
       <TextInput
         placeholder="email"
@@ -181,6 +179,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     width: 300,
+  },
+  button: {
+    backgroundColor: "white", // Set your desired background color here
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5, // Optional: add some border radius for rounded corners
+  },
+  buttonText: {
+    color: "#000", // Set your desired button text color here
+    fontSize: 16,
   },
 });
 

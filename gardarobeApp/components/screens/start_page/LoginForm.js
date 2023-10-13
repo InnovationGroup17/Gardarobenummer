@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Text, View, TextInput, StyleSheet } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native"; // Import the useNavigation hook
-import GlobalStyles from "../../../globalstyles/Globalstyles";
+import GoBackButton from "../../GlobalComponents/GoBackButton";
 
 function LoginForm() {
   const navigation = useNavigation(); // Use the hook to get the navigation object
@@ -25,9 +25,7 @@ function LoginForm() {
 
   return (
     <View>
-      <View style={GlobalStyles.goBackContainer}>
-        <Button title="Go Back" onPress={() => navigation.goBack()} />
-      </View>
+      <GoBackButton />
       <Text style={styles.header}>Log in</Text>
       <TextInput
         placeholder="email"
