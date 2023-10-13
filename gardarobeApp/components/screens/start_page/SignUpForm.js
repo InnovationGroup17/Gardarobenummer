@@ -12,7 +12,7 @@ import { Picker } from "@react-native-picker/picker";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
-import { database } from "../../../database/firebaseConfig";
+import { realtimeDB } from "../../../database/firebaseConfig";
 
 function SignUpForm() {
   const navigation = useNavigation();
@@ -38,12 +38,13 @@ function SignUpForm() {
       const user = userCredential.user;
 
       // Store additional user data in the Realtime Database
-      const usersRef = ref(database, "users/" + user.uid);
+      const usersRef = ref(realtimeDB, "users/" + user.uid);
       const userData = {
         email: user.email,
         displayName: displayName,
         gender: selectedGender,
         age: selectedAge,
+        type: "user",
       };
       console.log(userData);
       await set(usersRef, userData);

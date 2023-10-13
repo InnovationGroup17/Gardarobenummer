@@ -5,11 +5,9 @@ import { useNavigation } from '@react-navigation/native';  // Import the useNavi
 
 function LoginForm() {
     const navigation = useNavigation();  // Use the hook to get the navigation object
-
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);
-
     const auth = getAuth();
 
     const handleSubmit = async() => {

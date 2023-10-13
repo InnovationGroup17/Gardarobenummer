@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { push, ref, set } from "firebase/database";
-import { database } from "../../../database/firebaseConfig";
+import { realtimeDB } from "../../../database/firebaseConfig";
 import { timestamp } from "../../../utilites/timestamp";
 import { useAuthListener } from "../../authenticate/RealTime";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
@@ -89,7 +89,7 @@ const PaymentScreen = ({ route }) => {
       status: "readyToBeScanned",
     });
 
-    const ordersRef = ref(database, `orders/${user.uid}`);
+    const ordersRef = ref(realtimeDB, `orders/${user.uid}`);
     const newOrderRef = push(ordersRef);
     await set(newOrderRef, order);
 

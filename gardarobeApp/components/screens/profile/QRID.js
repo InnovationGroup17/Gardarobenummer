@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
 import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
-import { database } from "../../../database/firebaseConfig";
+import { realtimeDB } from "../../../database/firebaseConfig";
 
 export default function QRID() {
   const [user, setUser] = useState(null);
@@ -11,7 +11,7 @@ export default function QRID() {
   const [qrData, setQRData] = useState({}); // To store user data for the QR code
   //const [qrCodeKey, setQRCodeKey] = useState(""); Flyttet til QRCodeGenerator.js
   const auth = getAuth();
-  const db = database;
+  const db = realtimeDB;
 
   useEffect(() => {
     // Set up the real-time listener for Firebase Authentication

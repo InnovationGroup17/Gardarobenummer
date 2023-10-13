@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, ImageBackground, StyleSheet } from "react-native";
 import BackgroundGif from "../../../assets/gifs/ByRk.gif";
 import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
-import { database } from "../../../database/firebaseConfig";
+import { realtimeDB } from "../../../database/firebaseConfig";
 import { ref, onValue } from "firebase/database";
 import { useAuthListener } from "../../authenticate/RealTime";
 
@@ -14,7 +14,7 @@ const Order = ({ route }) => {
     const findOrder = () => {
       if (user) {
         const orderRef = ref(
-          database,
+          realtimeDB,
           `orders/${user.uid}/${route.params.newOrderRef.key}`
         );
         onValue(orderRef, (snapshot) => {
