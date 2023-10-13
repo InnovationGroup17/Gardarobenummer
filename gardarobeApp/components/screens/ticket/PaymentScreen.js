@@ -10,8 +10,12 @@ import { database } from "../../../database/firebaseConfig";
 import { timestamp } from "../../../utilites/timestamp";
 import { useAuthListener } from "../../authenticate/RealTime";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import { getMetroIPAddress } from "../../../utilites/getMetroIPAdress";
 
-const SERVER_URL = "http://192.168.1.105:5001";
+//DEVELOPMENT MODE
+const metroIP = getMetroIPAddress();
+const SERVER_URL = `http://${metroIP}:5001`;
+//DEVELOPMENT MODE
 
 const PaymentScreen = ({ route }) => {
   const [cardDetails, setCardDetails] = useState();
