@@ -10,7 +10,7 @@ function StartStackNavigator() {
   return (
     <StartStack.Navigator
       initialRouteName="StartPage"
-      screenOptions={{ headerShown: false,  }}
+      screenOptions={{ headerShown: false }}
     >
       <StartStack.Screen name="StartPage" component={StartPage} />
       <StartStack.Screen name="Login" component={LoginScreen} />

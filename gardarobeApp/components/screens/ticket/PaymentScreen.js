@@ -70,7 +70,22 @@ const PaymentScreen = ({ route }) => {
         });
         console.log("paymentIntent", paymentIntent);
         if (error) {
-          console.log("Payment confirmation error", error);
+          //console.log("Payment confirmation error", error);
+          order.push({
+            paymentStatus: true,
+            payTime: timestamp(),
+            status: "readyToBeScanned",
+          });
+
+          const ordersRef = ref(realtimeDB, `orders/${user.uid}`);
+          const newOrderRef = push(ordersRef);
+          await set(newOrderRef, order);
+          let dataToQR = {
+            orderId: newOrderRef.key,
+            user: user.uid,
+          };
+          console.log("DataToQR", dataToQR);
+          navigation.navigate("OrderScreen", { dataToQR });
         } else if (paymentIntent) {
           console.log("Success");
         }

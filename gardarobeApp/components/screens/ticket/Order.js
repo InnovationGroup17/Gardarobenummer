@@ -1,38 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { View, ImageBackground, StyleSheet } from "react-native";
+
 import BackgroundGif from "../../../assets/gifs/ByRk.gif";
 import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
-import { realtimeDB } from "../../../database/firebaseConfig";
-import { ref, onValue } from "firebase/database";
-import { useAuthListener } from "../../authenticate/RealTime";
 
 const Order = ({ route }) => {
-  const [orderData, setOrderData] = useState([]);
-  const user = useAuthListener();
-
-  useEffect(() => {
-    const findOrder = () => {
-      if (user) {
-        const orderRef = ref(
-          realtimeDB,
-          `orders/${user.uid}/${route.params.newOrderRef.key}`
-        );
-        onValue(orderRef, (snapshot) => {
-          const data = snapshot.val();
-          console.log("Data", data);
-          setOrderData(data);
-        });
-      }
-    };
-    findOrder();
-  }, [route.params.newOrderRef.key, user]);
-
   return (
     <View style={styles.container}>
       <View style={styles.ticket}>
         <View style={styles.gifContainer}>
           <ImageBackground source={BackgroundGif} style={styles.gif}>
-            <QRCodeGenerator value={JSON.stringify(orderData)} size={250} />
+            <QRCodeGenerator
+              value={JSON.stringify(route.params.dataToQR)}
+              size={250}
+            />
           </ImageBackground>
         </View>
       </View>
