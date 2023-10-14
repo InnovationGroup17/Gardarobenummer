@@ -38,79 +38,78 @@ const PaymentScreen = ({ route }) => {
     },
   ];
 
+  //call backend to create a payment intent and return the client secret
   const fetchPaymentIntentClientSecret = async () => {
     const response = await fetch(`${SERVER_URL}/payments/intents`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: order[0].totalPrice * 100 }),
+      body: JSON.stringify({
+        amount: order[0].totalPrice * 100, //converts amunt to xx,yy (e.g. amount = 100 => 100,00)
+      }),
     });
+    //Error handling
     if (!response.ok) {
       console.log("Error", response);
     }
+    //return the client secret
     const { clientSecret, error } = await response.json();
     return { clientSecret, error };
   };
 
+  //handle the payment process and save the order in the Realtime firestore database
   const handlePayPress = async () => {
+    //Check if the card details are complete
     if (!cardDetails?.complete) {
       Alert.alert("Please enter Complete card details");
       return;
     }
+    //additional billing details
     const billingDetails = {
-      email: "test@test.dk", //HARDCODED
+      email: user.email,
     };
+    //Try Catch block to handle the payment process
     try {
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
+
+      //Error handling for getting the client secret
       if (error) {
-        console.log(error);
+        console.log("Error Fetching: ", error);
       } else {
+        // Details to the confirmPayment method
         const { paymentIntent, error } = await confirmPayment(clientSecret, {
-          type: "card",
+          type: "Card",
+          paymentMethodType: "Card", // Add this line
           billingDetails: billingDetails,
         });
-        console.log("paymentIntent", paymentIntent);
+        //Error handling for the payment process
         if (error) {
-          //console.log("Payment confirmation error", error);
+          console.log("Error in payment: ", error);
+        } else if (paymentIntent) {
+          //Payment was successful (it is Uncaptured)
           order.push({
-            paymentStatus: true,
-            payTime: timestamp(),
-            status: "readyToBeScanned",
+            payTime: timestamp(), //save the time of the Uncaptured payment
+            status: "readyToBeScanned", //set the status of the order to readyToBeScanned
+            paymentId: paymentIntent.id, //save the paymentId from Stripe
           });
 
+          //save the order in the Realtime firestore database
           const ordersRef = ref(realtimeDB, `orders/${user.uid}`);
           const newOrderRef = push(ordersRef);
           await set(newOrderRef, order);
+
+          //navigate to the OrderScreen with the dataToQR object
           let dataToQR = {
             orderId: newOrderRef.key,
             user: user.uid,
           };
-          console.log("DataToQR", dataToQR);
           navigation.navigate("OrderScreen", { dataToQR });
-        } else if (paymentIntent) {
-          console.log("Success");
         }
       }
-    } catch (error) {
-      console.log("Error", error);
+    } catch (e) {
+      //Error handling for the whole process
+      console.log("Error", e);
     }
   };
-
-  //NEED TO BE INTEGRATED INTO THE PAYMENT PROCESS
-  /**
-   * const handleSubmit = async () => {
-    order.push({
-      paymentStatus: true,
-      payTime: timestamp(),
-      status: "readyToBeScanned",
-    });
-
-    const ordersRef = ref(realtimeDB, `orders/${user.uid}`);
-    const newOrderRef = push(ordersRef);
-    await set(newOrderRef, order);
-
-    navigation.navigate("OrderScreen", { newOrderRef });
-  };
-   */ //END OF INTEGRATION
 
   return (
     <View style={styles.container}>
