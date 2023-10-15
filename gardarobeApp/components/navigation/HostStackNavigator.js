@@ -1,6 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import hostStart from "../screens/host/HostStart";
+import hostStart from "../screens/host/hostStart";
 
 const StartStack = createStackNavigator();
 

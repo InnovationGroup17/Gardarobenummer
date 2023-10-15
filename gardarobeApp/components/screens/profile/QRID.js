@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
 import { realtimeDB } from "../../../database/firebaseConfig";
 
 export default function QRID() {
+  // Example usage
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [qrData, setQRData] = useState({}); // To store user data for the QR code
