@@ -11,6 +11,7 @@ import PaymentScreen from "../screens/ticket/PaymentScreen";
 import Order from "../screens/ticket/Order";
 import QrScanner from "../screens/ticket/QrScanner";
 import SelectWardrope from "../screens/ticket/selectWardrope";
+import OrderHistory from "../screens/ticket/OrderHistory";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ref, onValue } from "firebase/database";
 
@@ -59,6 +60,7 @@ function StackNavigator() {
         <Stack.Screen name={"Payment Screen"} component={PaymentScreen} />
         <Stack.Screen name={"Qr Scanner"} component={QrScanner} />
         <Stack.Screen name={"SelectWardrope"} component={SelectWardrope} />
+        <Stack.Screen name={"OrderHistory"} component={OrderHistory} />
       </Stack.Navigator>
     );
   } else if (userData === "host") {

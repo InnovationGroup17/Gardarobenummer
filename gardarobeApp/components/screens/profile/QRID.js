@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
 import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
 import { realtimeDB } from "../../../database/firebaseConfig";
+import { useNavigation } from "@react-navigation/native";
 
 export default function QRID() {
+  const navigation = useNavigation();
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null);
   const [qrData, setQRData] = useState({}); // To store user data for the QR code
@@ -100,6 +102,14 @@ export default function QRID() {
           <Text>Current Age: {userData.age}</Text>
         </>
       )}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate("OrderHistory");
+        }}
+      >
+        <Text style={{ color: "white" }}>Order History</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -112,5 +122,13 @@ const styles = StyleSheet.create({
     paddingTop: "5%",
     backgroundColor: "#ecf0f1",
     padding: 8,
+  },
+  button: {
+    width: 200,
+    height: 50,
+    backgroundColor: "blue",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 10,
   },
 });
