@@ -26,11 +26,12 @@ router.post("/intents", async (req, res) => {
 
 //router to update the paymentIntent to captured
 router.post("/capture", async (req, res) => {
+  console.log(req.body.paymentId);
   try {
     const paymentIntent = await stripe.paymentIntents.capture(
-      req.body.paymentID
+      req.body.paymentId
     );
-    res.json({ paymentIntent: paymentIntent, message: "Payment Captured" });
+    res.json({ paymentIntent: paymentIntent });
   } catch (e) {
     console.log(e);
     res.json({ error: e.message });
