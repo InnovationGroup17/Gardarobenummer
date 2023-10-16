@@ -17,7 +17,20 @@ router.post("/intents", async (req, res) => {
     });
     const clientSecret = paymentIntent.client_secret;
 
-    res.json({ clientSecret: clientSecret });
+    res.json({ clientSecret: clientSecret, message: "Payment Intent Created" });
+  } catch (e) {
+    console.log(e);
+    res.json({ error: e.message });
+  }
+});
+
+//router to update the paymentIntent to captured
+router.post("/capture", async (req, res) => {
+  try {
+    const paymentIntent = await stripe.paymentIntents.capture(
+      req.body.paymentID
+    );
+    res.json({ paymentIntent: paymentIntent, message: "Payment Captured" });
   } catch (e) {
     console.log(e);
     res.json({ error: e.message });
