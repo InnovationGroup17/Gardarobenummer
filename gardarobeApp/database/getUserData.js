@@ -1,10 +1,11 @@
 // Import necessary Firebase services from firebaseConfig.js
 import { auth, realtimeDB } from './firebaseConfig';
+import { get, ref } from 'firebase/database'; // Correct import for Realtime Database
 
 // Function to retrieve user data from Realtime Database
 async function getUserData() {
   const user = auth.currentUser;
-  
+
   if (user) {
     const userId = user.uid;
 
@@ -30,6 +31,7 @@ async function getUserData() {
 }
 
 export default getUserData;
+
 
 
 /*
