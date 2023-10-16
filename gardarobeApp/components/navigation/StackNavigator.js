@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useAuthListener } from "../authenticate/RealTime";
 import { realtimeDB } from "../../database/firebaseConfig";
-import HostStackNavigator from "../hostNavigation/HostStackNavigator";
 import TabNavigator from "./TabNavigator";
 import QRID from "../screens/profile/QRID";
 import ProfileScreen from "../screens/profile/ProfileScreen";

@@ -27,7 +27,7 @@ function HostTabNavigator() {
         name="HostClientQR"
         component={HostClientQR}
         options={{
-          tabBarIcon: getTabBarIcon("map"),
+          tabBarIcon: getTabBarIcon("camera"),
           headerShown: false,
         }}
       />
