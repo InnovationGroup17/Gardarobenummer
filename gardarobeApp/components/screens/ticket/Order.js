@@ -12,13 +12,14 @@ import { useAuthListener } from "../../authenticate/RealTime";
 import { realtimeDB } from "../../../database/firebaseConfig";
 import { ref, get } from "firebase/database";
 import { getMetroIPAddress } from "../../../utilites/getMetroIPAdress";
-
+import { useNavigation } from "@react-navigation/native";
 //DEVELOPMENT MODE
 const metroIP = getMetroIPAddress();
 const SERVER_URL = `http://${metroIP}:5001`;
 //DEVELOPMENT MODE
 
 const Order = ({ route }) => {
+  const navigation = useNavigation();
   const user = useAuthListener(); //can be used to check that the user is logged in and are the same as on the order
 
   const handlePress = async () => {
@@ -41,6 +42,7 @@ const Order = ({ route }) => {
       }),
     });
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.ticket}>
@@ -54,15 +56,24 @@ const Order = ({ route }) => {
         </View>
         <View>
           <Text style={styles.ticketText}>Ticket</Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              handlePress();
-            }}
-          >
-            <Text style={styles.buttonText}>Knap</Text>
-          </TouchableOpacity>
         </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.popToTop(); //Back to the home screen
+          }}
+        >
+          <Text style={styles.buttonText}>Home</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            handlePress();
+          }}
+        >
+          <Text style={styles.buttonText}>Test af sucess</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -99,6 +110,17 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   ticketText: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  button: {
+    backgroundColor: "red",
+    padding: 20,
+    borderRadius: 10,
+    margin: 20,
+  },
+  buttonText: {
+    color: "#fff",
     fontSize: 20,
     fontWeight: "bold",
   },
