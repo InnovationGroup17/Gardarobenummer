@@ -16,19 +16,5 @@ function GoBackButton() {
     </View>
   );
 }
-/*
-const GoBackButton = ({ navigation }) => {
-  return (
-    <View style={GoBackButtonStyles.buttonContainer}>
-      <TouchableOpacity
-        style={GoBackButtonStyles.button}
-        onPress={() => navigation.goBack()}
-      >
-        <Text style={GoBackButtonStyles.buttonText}>Go Back</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
 
-*/
 export default GoBackButton;
