@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
 import { realtimeDB } from "../../../database/firebaseConfig";
 import { useNavigation } from "@react-navigation/native";
