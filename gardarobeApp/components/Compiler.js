@@ -14,6 +14,8 @@ import MapScreen from "./stackComponents/MapScreen";
 import TicketNavigation from "./ticket/TicketNavigation";
 import HistoryScreen from "./HistoryScreen";
 import PaymentScreen from "./PaymentScreen";
+import GroupScreen from "./GroupScreen";
+import FriendsScreen from "./FriendsScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -66,6 +68,20 @@ function HomeTabs() {
         component={PaymentScreen}
         options={{
           tabBarIcon: getTabBarIcon("terminal"),
+        }}
+      />
+        <Tab.Screen
+        name="GroupScreen"
+        component={GroupScreen}
+        options={{
+          tabBarIcon: getTabBarIcon("users"),
+        }}
+      />
+      <Tab.Screen
+        name="FriendsScreen"
+        component={FriendsScreen}
+        options={{
+          tabBarIcon: getTabBarIcon("share"),
         }}
       />
     </Tab.Navigator>

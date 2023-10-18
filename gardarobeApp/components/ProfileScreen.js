@@ -49,6 +49,16 @@ const auth = getAuth();
           // Navigation til vores Payment Screen
           navigation.navigate("Payment Screen");
         }} />
+        <Button title="Share with Friends"
+        onPress={() => {
+          // Navigation til vores Friends Screen
+          navigation.navigate("Friends Screen");
+        }} />
+        <Button title="My Groups"
+        onPress={() => {
+          // Navigation til vores Group Screen
+          navigation.navigate("Group Screen");
+        }} />
     </View>
   );
 }
