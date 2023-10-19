@@ -38,7 +38,6 @@ export default getUserData;
 Denne kode kan bruges til at hente brugeren, som er logget inds data i andre filer
 import getUserData from './getUserData';
 
-import getUserData from './getUserData';
 
 // Example usage
 async function main() {

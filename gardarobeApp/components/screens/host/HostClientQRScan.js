@@ -6,37 +6,40 @@ import { getAuth } from "@firebase/auth";
 import { getPermisionBarCodeScanner } from "../../../utilites/getPermisionBarCodeScanner";
 import { fetchFirestoreData } from "../../../database/firestoreApi";
 import { useNavigation } from "@react-navigation/native";
+import VerifyOrder from "../../../database/verifyOrder";
 
 // Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
 const HostClientQR = () => {
-  const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [firestoreData, setFirestoreData] = useState(null);
-  const collectionName = "Bars";
+  
 
   useEffect(() => {
     setHasPermission(getPermisionBarCodeScanner());
 
     const fetchData = async () => {
       try {
-        const data = await fetchFirestoreData(collectionName);
-        setFirestoreData(data);
+       
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, [collectionName]);
+  }, []);
 
-  // Metode til at håndtere scanninger af QR koder og lave en ticket med dataen fra QR koden
+  // Metode til at håndtere scanninger af QR koder til håndtering af order data
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
-    let user = getAuth().currentUser;
     try {
-      let parsedData = JSON.parse(data);
-      // Log the scanned data to the console
-      console.log("Scanned Data:", parsedData);
+      VerifyOrder(data)
+      const parsedData = JSON.parse(data); // Parse the data as JSON
+      const user = parsedData.user;
+      const order = parsedData.orderId;
+      // console.log("user", user);
+      // console.log("order", order);
+     
+      alert(`Bar code with user ID ${user} has been scanned!`);
+      
   
       // You can continue to use the parsed data as needed in your application
     } catch (error) {

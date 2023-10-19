@@ -102,6 +102,7 @@ const PaymentScreen = ({ route }) => {
             orderId: newOrderRef.key,
             user: user.uid,
           };
+          console.log("dataToQR", dataToQR);
           navigation.navigate("OrderScreen", { dataToQR });
         }
       }
