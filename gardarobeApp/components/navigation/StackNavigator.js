@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useAuthListener } from "../authenticate/RealTime";
 import { realtimeDB } from "../../database/firebaseConfig";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { ref, onValue } from "firebase/database";
 import TabNavigator from "./TabNavigator";
 import QRID from "../screens/profile/QRID";
 import ProfileScreen from "../screens/profile/ProfileScreen";
@@ -11,8 +13,6 @@ import Order from "../screens/ticket/Order";
 import QrScanner from "../screens/ticket/QrScanner";
 import SelectWardrope from "../screens/ticket/selectWardrope";
 import OrderHistory from "../screens/ticket/OrderHistory";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { ref, onValue } from "firebase/database";
 import HostStart from "../screens/host/HostStart";
 import HostTabNavigator from "../hostNavigation/HostTabNavigator";
 
@@ -66,9 +66,7 @@ function StackNavigator() {
     );
   } else if (userData === "host") {
     return (
-      <Stack.Navigator
-        initialRouteName="HostTabNavigator"
-      >
+      <Stack.Navigator initialRouteName="HostTabNavigator">
         <Stack.Screen
           name="HostTabNavigator"
           component={HostTabNavigator}
