@@ -30,7 +30,6 @@ const SelectWardrope = ({ route }) => {
   const [firestoreData, setFirestoreData] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
-  const [userData, setUserData] = useState();
   const collectionName = "WardrobeItem";
   const [BarData] = useState(route.params.BarData);
   const user = useAuthListener();
@@ -86,39 +85,6 @@ const SelectWardrope = ({ route }) => {
     setTotalItems(totals.items);
   };
 
-  /*
-  const createStripeCustomer = async () => {
-    //get user information from the database
-    const userRef = ref(realtimeDB, `users/${user.uid}`);
-    const snapshot = await get(userRef);
-    const snapshotValue = await snapshot.val();
-    console.log("snapshotValue", snapshotValue);
-    setUserData(snapshotValue);
-
-    console.log("userData", userData);
-
-    try {
-      if (userData.stripeId) {
-        return userData.stripeId;
-      }
-
-      if (!userData.stripeId) {
-        //Create a new customer with backend
-        const response = await fetch(`${SERVER_URL}/customers/create`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: userData.email,
-            name: userData.displayName,
-          }),
-        });
-        return response.json();
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-*/
   // Handle confirm
   const handleConfirm = async () => {
     const selectedWardrobes = firestoreData.filter(

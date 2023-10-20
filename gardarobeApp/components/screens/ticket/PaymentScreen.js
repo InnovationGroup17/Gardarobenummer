@@ -1,15 +1,23 @@
-//this page should show the order details and the payment form
-//when the user clicks on the pay button, the order should be saved in the Realtime firestore database
-//the user should be redirected to the OrderScreen
-
+/*
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+  Button,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { get, push, ref, set } from "firebase/database";
 import { realtimeDB } from "../../../database/firebaseConfig";
 import { timestamp } from "../../../utilites/timestamp";
-import { useAuthListener } from "../../authenticate/RealTime";
-import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
+import {
+  CardField,
+  PaymentIntent,
+  useConfirmPayment,
+  useStripe,
+} from "@stripe/stripe-react-native";
 import { getMetroIPAddress } from "../../../utilites/getMetroIPAdress";
 import getUserData from "../../../utilites/firebase/realtime/getUserData";
 
@@ -23,6 +31,10 @@ const PaymentScreen = ({ route }) => {
   const [cardDetails, setCardDetails] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const { confirmPayment, loading } = useConfirmPayment();
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const [sheetLoading, setSheetLoading] = useState(false);
+  const [isPaymentSheetInitialized, setIsPaymentSheetInitialized] =
+    useState(false);
   const navigation = useNavigation();
   const order = [
     {
@@ -42,9 +54,18 @@ const PaymentScreen = ({ route }) => {
 
   useEffect(() => {
     async function getUser() {
-      const user = await getUserData();
-      setUserDetails(user);
-      setIsLoading(false);
+      try {
+        const user = await getUserData();
+        setUserDetails(user);
+        if (user?.data?.stripeId) {
+          initializePaymentSheet();
+          setSheetLoading(true);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      } finally {
+        setIsLoading(false);
+      }
     }
     getUser();
   }, []);
@@ -59,13 +80,72 @@ const PaymentScreen = ({ route }) => {
         customer: userDetails.data.stripeId,
       }),
     });
+
     //Error handling
     if (!response.ok) {
       console.log("Error", response);
     }
+
     //return the client secret
     const { clientSecret, error } = await response.json();
     return { clientSecret, error };
+  };
+
+  const fetchPaymentSheetParams = async () => {
+    // Wait for userDetails.data.stripeId to be available
+    while (!userDetails?.data?.stripeId) {
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Wait for 1 second before checking again
+    }
+    console.log("stripeId", userDetails.data.stripeId);
+
+    const response = await fetch(`${SERVER_URL}/payments/payment-sheet`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: order[0].totalPrice * 100,
+        customer: userDetails.data.stripeId,
+      }),
+    });
+
+    const { paymentIntent, ephemeralKey, customer } = await response.json();
+    return { paymentIntent, ephemeralKey, customer };
+  };
+
+  const initializePaymentSheet = async () => {
+    const { paymentIntent, ephemeralKey, customer, publishableKey } =
+      await fetchPaymentSheetParams();
+
+    console.log("publishableKey", paymentIntent.id);
+
+    const { error } = await initPaymentSheet({
+      merchantDisplayName: "Example, Inc.",
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+      allowsDelayedPaymentMethods: true,
+      defaultBillingDetails: {
+        name: "Jane Doe",
+      },
+    });
+    if (!error) {
+      setIsPaymentSheetInitialized(true);
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    console.log("hej", isPaymentSheetInitialized);
+    if (isPaymentSheetInitialized === false) {
+      Alert.alert("Error", "Payment sheet is not initialized yet.");
+      return;
+    }
+
+    const { error } = await presentPaymentSheet();
+
+    if (error) {
+      console.log("Error in payment: ", error.message);
+    } else {
+      Alert.alert("Success", "Your order is confirmed!");
+    }
   };
 
   //handle the payment process and save the order in the Realtime firestore database
@@ -156,6 +236,11 @@ const PaymentScreen = ({ route }) => {
           >
             <Text style={styles.buttonText}>Pay</Text>
           </TouchableOpacity>
+          <Button
+            disabled={!isPaymentSheetInitialized}
+            title="Open Sheet"
+            onPress={openPaymentSheet}
+          />
         </>
       )}
     </View>
@@ -184,5 +269,150 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     textAlign: "center",
+  },
+});
+*/
+
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Alert, Button } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { ref, push, set } from "firebase/database";
+import { realtimeDB } from "../../../database/firebaseConfig";
+import { timestamp } from "../../../utilites/timestamp";
+import { useStripe } from "@stripe/stripe-react-native";
+import { getMetroIPAddress } from "../../../utilites/getMetroIPAdress";
+import getUserData from "../../../utilites/firebase/realtime/getUserData";
+
+// DEVELOPMENT MODE
+const metroIP = getMetroIPAddress();
+const SERVER_URL = `http://${metroIP}:5001`;
+// DEVELOPMENT MODE
+
+const PaymentScreen = ({ route }) => {
+  const [userDetails, setUserDetails] = useState({ uid: null, data: null });
+  const [isPaymentSheetInitialized, setIsPaymentSheetInitialized] =
+    useState(false);
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
+  const navigation = useNavigation();
+  const order = [
+    {
+      BarData: {
+        barId: route.params.OrderData.BarData.id.id,
+        barName: route.params.OrderData.BarData.id.title,
+        description: route.params.OrderData.BarData.id.description,
+        location: route.params.OrderData.BarData.id.location,
+      },
+      user: route.params.OrderData.user,
+      wardrobe: route.params.OrderData.selectedWardrobes,
+      ticketTime: route.params.OrderData.ticketTime,
+      totalPrice: route.params.OrderData.totalPrice,
+      totalItems: route.params.OrderData.totalItems,
+    },
+  ];
+
+  useEffect(() => {
+    async function getUser() {
+      try {
+        const user = await getUserData();
+        setUserDetails(user);
+
+        // Initialize payment sheet after setting userDetails and ensuring stripeId is available
+        if (user?.data?.stripeId) {
+          initializePaymentSheet(user.data.stripeId, order[0].totalPrice);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+    getUser();
+  }, []);
+  const fetchPaymentSheetParams = async (id, totalPrice) => {
+    console.log("Body", id);
+    console.log("Body", totalPrice * 100);
+    const response = await fetch(`${SERVER_URL}/payments/payment-sheet`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount: totalPrice * 100,
+        customer: id,
+      }),
+    });
+
+    const { paymentIntent, ephemeralKey, customer } = await response.json();
+    return { paymentIntent, ephemeralKey, customer };
+  };
+
+  const initializePaymentSheet = async (id, totalPrice) => {
+    const { paymentIntent, ephemeralKey, customer } =
+      await fetchPaymentSheetParams(id, totalPrice);
+
+    const { error } = await initPaymentSheet({
+      merchantDisplayName: "Example, Inc.",
+      customerId: customer,
+      customerEphemeralKeySecret: ephemeralKey,
+      paymentIntentClientSecret: paymentIntent,
+      allowsDelayedPaymentMethods: true,
+      defaultBillingDetails: {
+        name: "Jane Doe",
+      },
+    });
+    console.log("Error", error);
+    if (!error) {
+      setIsPaymentSheetInitialized(true);
+    }
+  };
+
+  const openPaymentSheet = async () => {
+    const { error } = await presentPaymentSheet();
+
+    if (error) {
+      Alert.alert(`Error code: ${error.code}`, error.message);
+    } else {
+      Alert.alert("Success", "Your order is confirmed!");
+      //Payment was successful (it is Uncaptured)
+      order.push({
+        payTime: timestamp(), //save the time of the Uncaptured payment
+        status: "readyToBeScanned", //set the status of the order to readyToBeScanned
+        paymentId: paymentIntent.id, //save the paymentId from Stripe
+      });
+
+      //save the order in the Realtime firestore database
+      const ordersRef = ref(realtimeDB, `orders/${userDetails.uid}`);
+      const newOrderRef = push(ordersRef);
+      await set(newOrderRef, order);
+
+      //navigate to the OrderScreen with the dataToQR object
+      let dataToQR = {
+        orderId: newOrderRef.key,
+        user: userDetails.uid,
+      };
+      navigation.navigate("OrderScreen", { dataToQR });
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Payment Screen</Text>
+      <Button
+        disabled={!isPaymentSheetInitialized}
+        title="Pay"
+        onPress={openPaymentSheet}
+      />
+    </View>
+  );
+};
+
+export default PaymentScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 20,
   },
 });
