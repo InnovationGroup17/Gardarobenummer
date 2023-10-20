@@ -12,8 +12,17 @@ import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { timestamp } from "../../../utilites/timestamp";
-import { fetchFirestoreData } from "../../../database/firestoreApi";
+import { fetchFirestoreData } from "../../../utilites/firebase/firestore/firestoreApi";
 import { useAuthListener } from "../../authenticate/RealTime";
+
+import { getMetroIPAddress } from "../../../utilites/getMetroIPAdress";
+import { calculateTotalUtil } from "../../../utilites/calculateTotalUtil";
+import { createStripeCustomer } from "../../../utilites/stripe/createCustomer";
+
+//DEVELOPMENT MODE
+const metroIP = getMetroIPAddress();
+const SERVER_URL = `http://${metroIP}:5001`;
+//DEVELOPMENT MODE
 
 const SelectWardrope = ({ route }) => {
   const navigation = useNavigation();
@@ -21,6 +30,7 @@ const SelectWardrope = ({ route }) => {
   const [firestoreData, setFirestoreData] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
+  const [userData, setUserData] = useState();
   const collectionName = "WardrobeItem";
   const [BarData] = useState(route.params.BarData);
   const user = useAuthListener();
@@ -30,32 +40,18 @@ const SelectWardrope = ({ route }) => {
       try {
         const data = await fetchFirestoreData(collectionName);
         setFirestoreData(data);
+
+        // Calculate total price and total items
+        const totals = calculateTotalUtil(data);
+        setTotalPrice(totals.price);
+        setTotalItems(totals.items);
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchData();
-    calculateTotal();
   }, [isFocused, collectionName]);
-
-  // Calculate total price and total items
-  calculateTotal = () => {
-    let price = 0;
-    let items = 0;
-    firestoreData.forEach((wardrobe) => {
-      price += wardrobe.price * wardrobe.amount;
-      items += wardrobe.amount;
-
-      if (wardrobe.amount > 0) {
-        wardrobe.selected = true;
-      } else {
-        wardrobe.selected = false;
-      }
-    });
-    setTotalPrice(price);
-    setTotalItems(items);
-  };
 
   // Handle select wardrobe
   const handleSelect = (wardrobe) => {
@@ -67,7 +63,11 @@ const SelectWardrope = ({ route }) => {
       return item;
     });
     setFirestoreData(updatedWardrobeList);
-    calculateTotal();
+    setFirestoreData(updatedWardrobeList);
+    // Calculate total price and total items
+    const totals = calculateTotalUtil(updatedWardrobeList);
+    setTotalPrice(totals.price);
+    setTotalItems(totals.items);
   };
 
   // Handle amount change
@@ -80,9 +80,45 @@ const SelectWardrope = ({ route }) => {
     });
 
     setFirestoreData(updatedWardrobeList);
-    calculateTotal();
+    // Calculate total price and total items
+    const totals = calculateTotalUtil(updatedWardrobeList);
+    setTotalPrice(totals.price);
+    setTotalItems(totals.items);
   };
 
+  /*
+  const createStripeCustomer = async () => {
+    //get user information from the database
+    const userRef = ref(realtimeDB, `users/${user.uid}`);
+    const snapshot = await get(userRef);
+    const snapshotValue = await snapshot.val();
+    console.log("snapshotValue", snapshotValue);
+    setUserData(snapshotValue);
+
+    console.log("userData", userData);
+
+    try {
+      if (userData.stripeId) {
+        return userData.stripeId;
+      }
+
+      if (!userData.stripeId) {
+        //Create a new customer with backend
+        const response = await fetch(`${SERVER_URL}/customers/create`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: userData.email,
+            name: userData.displayName,
+          }),
+        });
+        return response.json();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+*/
   // Handle confirm
   const handleConfirm = async () => {
     const selectedWardrobes = firestoreData.filter(
@@ -93,6 +129,9 @@ const SelectWardrope = ({ route }) => {
       Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
       return;
     }
+
+    // Create a new customer with backend
+    createStripeCustomer(user);
 
     //ORDER DATA
     const OrderData = {
