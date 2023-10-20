@@ -5,12 +5,13 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { push, ref, set } from "firebase/database";
+import { get, push, ref, set } from "firebase/database";
 import { realtimeDB } from "../../../database/firebaseConfig";
 import { timestamp } from "../../../utilites/timestamp";
 import { useAuthListener } from "../../authenticate/RealTime";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
 import { getMetroIPAddress } from "../../../utilites/getMetroIPAdress";
+import getUserData from "../../../utilites/firebase/realtime/getUserData";
 
 //DEVELOPMENT MODE
 const metroIP = getMetroIPAddress();
@@ -18,9 +19,10 @@ const SERVER_URL = `http://${metroIP}:5001`;
 //DEVELOPMENT MODE
 
 const PaymentScreen = ({ route }) => {
+  const [userDetails, setUserDetails] = useState({ uid: null, data: null });
   const [cardDetails, setCardDetails] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const { confirmPayment, loading } = useConfirmPayment();
-  const user = useAuthListener();
   const navigation = useNavigation();
   const order = [
     {
@@ -38,6 +40,15 @@ const PaymentScreen = ({ route }) => {
     },
   ];
 
+  useEffect(() => {
+    async function getUser() {
+      const user = await getUserData();
+      setUserDetails(user);
+      setIsLoading(false);
+    }
+    getUser();
+  }, []);
+
   //call backend to create a payment intent and return the client secret
   const fetchPaymentIntentClientSecret = async () => {
     const response = await fetch(`${SERVER_URL}/payments/intents`, {
@@ -45,6 +56,7 @@ const PaymentScreen = ({ route }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         amount: order[0].totalPrice * 100, //converts amunt to xx,yy (e.g. amount = 100 => 100,00)
+        customer: userDetails.data.stripeId,
       }),
     });
     //Error handling
@@ -64,9 +76,7 @@ const PaymentScreen = ({ route }) => {
       return;
     }
     //additional billing details
-    const billingDetails = {
-      email: user.email,
-    };
+    const billingDetails = {};
     //Try Catch block to handle the payment process
     try {
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
@@ -93,14 +103,14 @@ const PaymentScreen = ({ route }) => {
           });
 
           //save the order in the Realtime firestore database
-          const ordersRef = ref(realtimeDB, `orders/${user.uid}`);
+          const ordersRef = ref(realtimeDB, `orders/${userDetails.uid}`);
           const newOrderRef = push(ordersRef);
           await set(newOrderRef, order);
 
           //navigate to the OrderScreen with the dataToQR object
           let dataToQR = {
             orderId: newOrderRef.key,
-            user: user.uid,
+            user: userDetails.uid,
           };
           navigation.navigate("OrderScreen", { dataToQR });
         }
@@ -113,37 +123,43 @@ const PaymentScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Payment Screen</Text>
-      <CardField
-        postalCodeEnabled={true}
-        placeholder={{
-          number: "4242 4242 4242 4242",
-        }}
-        cardStyle={{
-          backgroundColor: "#FFFFFF",
-          textColor: "#000000",
-        }}
-        style={{
-          width: "100%",
-          height: 50,
-          marginVertical: 30,
-        }}
-        onCardChange={(cardDetails) => {
-          setCardDetails(cardDetails);
-        }}
-        onFocus={(focusedField) => {
-          console.log("focusField", focusedField);
-        }}
-      />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          handlePayPress();
-        }}
-        disabled={loading}
-      >
-        <Text style={styles.buttonText}>Pay</Text>
-      </TouchableOpacity>
+      {isLoading ? (
+        <Text>Loading...</Text>
+      ) : (
+        <>
+          <Text style={styles.text}>Payment Screen</Text>
+          <CardField
+            postalCodeEnabled={true}
+            placeholder={{
+              number: "4242 4242 4242 4242",
+            }}
+            cardStyle={{
+              backgroundColor: "#FFFFFF",
+              textColor: "#000000",
+            }}
+            style={{
+              width: "100%",
+              height: 50,
+              marginVertical: 30,
+            }}
+            onCardChange={(cardDetails) => {
+              setCardDetails(cardDetails);
+            }}
+            onFocus={(focusedField) => {
+              console.log("focusField", focusedField);
+            }}
+          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              handlePayPress();
+            }}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>Pay</Text>
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
