@@ -75,8 +75,7 @@ const PaymentScreen = ({ route }) => {
       Alert.alert("Please enter Complete card details");
       return;
     }
-    //additional billing details
-    const billingDetails = {};
+
     //Try Catch block to handle the payment process
     try {
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
@@ -89,7 +88,6 @@ const PaymentScreen = ({ route }) => {
         const { paymentIntent, error } = await confirmPayment(clientSecret, {
           type: "Card",
           paymentMethodType: "Card", // Add this line
-          billingDetails: billingDetails,
         });
         //Error handling for the payment process
         if (error) {
