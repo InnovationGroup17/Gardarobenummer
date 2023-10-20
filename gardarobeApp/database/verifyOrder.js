@@ -1,39 +1,73 @@
 //Denne kode har til formål at sikre at en ordre bliver registreret i den korrekte bar
 
 // Import necessary Firebase services from firebaseConfig.js
-import { get, ref } from "firebase/database"; // Correct import for Realtime Database
+import { get, ref, set, update } from "firebase/database"; // Correct import for Realtime Database
 import { auth, realtimeDB } from "./firebaseConfig"; // Import necessary Firebase services
 
 async function checkIfUserIsHost() {
-  // Step 1: Get the User ID from Firebase Authentication
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
-    throw new Error("User is not logged in.");
-  }
-  const userId = currentUser.uid;
-  // Step 2: Locate the "users" table in the Realtime Database
-  const usersRef = ref(realtimeDB, "users/" + userId);
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("User is not authenticated");
+    }
+    const userId = currentUser.uid;
+    const usersRef = ref(realtimeDB, "users/" + userId);
+    const userSnapshot = await get(usersRef);
+    const userData = userSnapshot.val();
 
-  // Step 3: Find the user's data using their User ID
-  const userSnapshot = await get(usersRef);
-
-  // Step 4: Check if the "type" attribute is "host"
-  const userData = userSnapshot.val();
-  if (userData && userData.type === "host") {
-    // Step 5: If the user is a host, get the User ID
-    return userId;
-  } else {
-    // Step 6: If the user is not a host, throw an error
-    throw new Error("User is not a host.");
+    if (userData && userData.type === "host") {
+      return userId;
+    } else {
+      throw new Error("User is not a host");
+    }
+  } catch (error) {
+    console.error("Error in checkIfUserIsHost:", error);
+    throw error; // Re-throw the error to be handled by the caller
   }
 }
 
 //Get order data from the Realtime Database
 async function getOrderData(data) {
-  const orderRef = ref(realtimeDB, "orders/" + data.user + "/" + data.orderId);
-  const orderSnapshot = await get(orderRef);
-  const orderData = orderSnapshot.val();
-  return orderData;
+  try {
+    const orderRef = ref(realtimeDB, "orders/" + data.user + "/" + data.orderId);
+    const orderSnapshot = await get(orderRef);
+    const orderData = orderSnapshot.val();
+    return orderData;
+  } catch (error) {
+    console.error("Error in getOrderData:", error);
+    throw error; // Re-throw the error to be handled by the caller
+  }
+}
+
+async function UpdateOrderToScanned(data) {
+  try {
+    const orderData = await getOrderData(data);
+    const status = orderData[1].status;
+    console.log("orderData:", status);
+    
+
+    
+      if (orderData[1].status === "readyToBeScanned") {
+        //update status to scanned in realtime database
+        const updateStatus = ref(realtimeDB, "orders/" + data.user + "/" + data.orderId + "/1");
+        const updateData = {
+          payTime: orderData[1].payTime,
+          paymentId: orderData[1].paymentId,
+          status: "OrderScannedByHost",
+        };
+        await update(updateStatus, updateData);
+      
+      } else {error}
+    
+
+    // Update the data in the database
+    //await set(orderRef, orderData);
+
+    return status;
+  } catch (error) {
+    console.error("Error in UpdateOrderToScanned:", error);
+    throw error; // Re-throw the error to be handled by the caller
+  }
 }
 
 // Function to retrieve user data from Realtime Database
@@ -44,18 +78,18 @@ async function VerifyOrder(data) {
   console.log("verifyOrder:", data);
 
   try {
-    const  orderData = await getOrderData(data);
+    const orderData = await getOrderData(data);
     const userId = await checkIfUserIsHost(); // Call the function and wait for the result
+    const checkStatus = await UpdateOrderToScanned(data);
     const barIDFromOrder = orderData[0].BarData.barId;
-    
+  
+    console.log("checkStatus:", checkStatus);
     if (userId === barIDFromOrder) {
       console.log("User is a host");
       console.log("Order is from this bar");
       console.log("Order is verified");
-      status = true;
-      return status;
+      return status = true;
     }
-
   } catch (error) {
     console.error(error.message);
     // Handle the error if the user is not a host

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { getAuth, signOut, onAuthStateChanged } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
+import { useNavigation } from "@react-navigation/native"; // Import the useNavigation hook
 
 export default function QRID() {
   const [user, setUser] = useState(null);
   const [userData, setUserData] = useState(null); // To store user data from the database
+  const navigation = useNavigation(); // Use the hook to get the navigation object
   const auth = getAuth();
   const db = getDatabase();
 
@@ -56,6 +58,10 @@ export default function QRID() {
         </>
       )}
       <Button title="Logout" onPress={handleLogOut} />
+      <Button
+        title="Edit Profile"
+        onPress={() => navigation.navigate("Edit Profile")}
+      />
     </View>
   );
 }
