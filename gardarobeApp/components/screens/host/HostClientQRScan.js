@@ -4,7 +4,7 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { timestamp } from "../../../utilites/timestamp";
 import { getAuth } from "@firebase/auth";
 import { getPermisionBarCodeScanner } from "../../../utilites/getPermisionBarCodeScanner";
-import { fetchFirestoreData } from "../../../database/firestoreApi";
+import { fetchFirestoreData } from "../../../utilites/firebase/firestore/firestoreApi";
 import { useNavigation } from "@react-navigation/native";
 
 // Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
@@ -37,14 +37,13 @@ const HostClientQR = () => {
       let parsedData = JSON.parse(data);
       // Log the scanned data to the console
       console.log("Scanned Data:", parsedData);
-  
+
       // You can continue to use the parsed data as needed in your application
     } catch (error) {
       console.error("Error parsing JSON:", error);
       // Handle the error or provide feedback to the user
     }
   };
-  
 
   // Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette
   if (hasPermission === null) {

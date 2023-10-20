@@ -4,7 +4,7 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { timestamp } from "../../../utilites/timestamp";
 import { getAuth } from "@firebase/auth";
 import { getPermisionBarCodeScanner } from "../../../utilites/getPermisionBarCodeScanner";
-import { fetchFirestoreData } from "../../../database/firestoreApi";
+import { fetchFirestoreData } from "../../../utilites/firebase/firestore/firestoreApi";
 import { useNavigation } from "@react-navigation/native";
 
 // Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
