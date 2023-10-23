@@ -1,3 +1,4 @@
+//Indhenter de relevante elementer
 import React, { useState } from 'react';
 import { View, Text, Button } from 'react-native';
 import FriendsScreen from "./FriendsScreen";
@@ -5,9 +6,13 @@ import { useNavigation } from '@react-navigation/native';
 import { dataGroups } from './historyData';
 
 function GroupScreen({ route }) {
-  const [myGroups, setMyGroups] = useState([]); // State variable for storing groups
+    //Opretter et tomt array, til at gemme data til grupperne, somer valgt tidligere
+  const [myGroups, setMyGroups] = useState([]); 
+
+  //Indhenter vores navigationselement
   const navigation = useNavigation();
 
+  //Hvis der ikke er nogen valgte venner, navigers der tilbage til FriendsScreen 
   if (!route.params || !route.params.selectedItems) {
     alert("You have not chosen any friends");
     navigation.navigate("FriendsScreen");
@@ -17,23 +22,26 @@ function GroupScreen({ route }) {
   const selectedItems = route.params.selectedItems;
   console.log(selectedItems);
 
+  //Tjekker om der ikke er nogle venner, hvis brugeren tilgår GroupScreen direkte
   if (selectedItems.length === 0) {
     alert("You have not chosen any friends");
     navigation.navigate("FriendsScreen");
     return null;
   }
 
-  // Function to create a new group with the selected items
+  // Funktion til at oprette en ny gruppe med de valgte venner
   const createGroup = () => {
     const newGroup = {
-      name: "My Best Friends", // You can customize the group name
+      name: "My Best Friends",
       members: selectedItems,
     };
 
+    //Alert for at vise brugeren, at gruppen er oprettet
     setMyGroups([...myGroups, newGroup]);
-    alert("New group created!"); // Optional alert to confirm group creation
+    alert("New group created!"); 
   };
-  
+
+  //Styling af Group Screen 
   return (
     <View style={{ flex: 1, padding: 16, backgroundColor: '#fff' }}>
       <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 12 }}>Selected Items:</Text>
