@@ -55,6 +55,7 @@ const PaymentScreen = ({ route }) => {
     return { clientSecret, error };
   };
 
+
   //handle the payment process and save the order in the Realtime firestore database
   const handlePayPress = async () => {
     //Check if the card details are complete
@@ -70,7 +71,6 @@ const PaymentScreen = ({ route }) => {
     //Try Catch block to handle the payment process
     try {
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
-
       //Error handling for getting the client secret
       if (error) {
         console.log("Error Fetching: ", error);
@@ -81,6 +81,7 @@ const PaymentScreen = ({ route }) => {
           paymentMethodType: "Card",
           billingDetails: billingDetails,
         });
+        
         //Error handling for the payment process
         if (error) {
           console.log("Error in payment: ", error);
