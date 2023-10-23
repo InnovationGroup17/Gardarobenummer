@@ -10,20 +10,21 @@ import { useAuthListener } from "../../authenticate/RealTime";
 import { realtimeDB } from "../../../database/firebaseConfig";
 import { ref, onValue } from "firebase/database";
 
+//Order history component
 const OrderHistory = () => {
   const user = useAuthListener();
   const [orders, setOrders] = useState([]);
-  const [expandedOrderId, setExpandedOrderId] = useState(null); // New state
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
 
+  // Fetch orders from the database as the component mounts
   useEffect(() => {
-    //if user
     if (user) {
       //Fetch orders from the Firebase Realtime Database
       const orderRef = ref(realtimeDB, `orders/${user.uid}`);
       //get the orders from the database
       const unsubscribe = onValue(orderRef, (snapshot) => {
         const allOrders = snapshot.val();
-        //if there are orders
+
         if (allOrders) {
           //sort the orders by status and time and map them to an array
           const sortedOrders = Object.entries(allOrders)
@@ -31,6 +32,7 @@ const OrderHistory = () => {
               const timeA = new Date(orderA[0].ticketTime).getTime();
               const timeB = new Date(orderB[0].ticketTime).getTime();
               if (
+                // Sort by status first (active orders first)
                 orderA[1].status === "active" &&
                 orderB[1].status !== "active"
               ) {
@@ -41,6 +43,7 @@ const OrderHistory = () => {
               ) {
                 return 1;
               } else {
+                // Sort by time if status is the same
                 return timeB - timeA;
               }
             })
@@ -68,6 +71,8 @@ const OrderHistory = () => {
   };
 
   return (
+    // Render the orders as a FlatList with a TouchableOpacity
+    //Should be looked at regarding the styling and relevant information
     <FlatList
       data={orders}
       renderItem={({ item }) => (
@@ -94,6 +99,8 @@ const OrderHistory = () => {
   );
 };
 
+export default OrderHistory;
+
 const styles = StyleSheet.create({
   orderContainer: {
     padding: 10,
@@ -106,5 +113,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
-export default OrderHistory;
