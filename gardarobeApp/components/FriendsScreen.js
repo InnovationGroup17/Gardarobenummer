@@ -7,11 +7,11 @@ function FriendsScreen() {
 
   //Indsæt fiktiv database 
   const [data, setData] = useState([
-    { id: 1, name: 'Item 1', selected: false },
-    { id: 2, name: 'Item 2', selected: false },
-    { id: 3, name: 'Item 3', selected: false },
-    { id: 4, name: 'Item 4', selected: false },
-    { id: 5, name: 'Item 5', selected: false },
+    { id: 1, name: 'Anna', selected: false },
+    { id: 2, name: 'Tobias', selected: false },
+    { id: 3, name: 'Emil', selected: false },
+    { id: 4, name: 'Kasper', selected: false },
+    { id: 5, name: 'Anders', selected: false },
   ]);
 
   const [searchQuery, setSearchQuery] = useState('');
