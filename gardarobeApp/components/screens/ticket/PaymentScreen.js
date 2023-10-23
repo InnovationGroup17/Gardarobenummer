@@ -38,12 +38,7 @@ const PaymentScreen = ({ route }) => {
   const navigation = useNavigation();
   const order = [
     {
-      BarData: {
-        barId: route.params.OrderData.BarData.id.id,
-        barName: route.params.OrderData.BarData.id.title,
-        description: route.params.OrderData.BarData.id.description,
-        location: route.params.OrderData.BarData.id.location,
-      },
+      barId: route.params.OrderData.BarData.id.id,
       user: route.params.OrderData.user,
       wardrobe: route.params.OrderData.selectedWardrobes,
       ticketTime: route.params.OrderData.ticketTime,
