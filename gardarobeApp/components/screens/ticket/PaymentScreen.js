@@ -55,7 +55,6 @@ const PaymentScreen = ({ route }) => {
     return { clientSecret, error };
   };
 
-
   //handle the payment process and save the order in the Realtime firestore database
   const handlePayPress = async () => {
     //Check if the card details are complete
@@ -81,7 +80,7 @@ const PaymentScreen = ({ route }) => {
           paymentMethodType: "Card",
           billingDetails: billingDetails,
         });
-        
+
         //Error handling for the payment process
         if (error) {
           console.log("Error in payment: ", error);
@@ -151,6 +150,7 @@ const PaymentScreen = ({ route }) => {
 
 export default PaymentScreen;
 
+//Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
