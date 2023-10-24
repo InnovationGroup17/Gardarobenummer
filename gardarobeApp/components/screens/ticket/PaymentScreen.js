@@ -1,8 +1,4 @@
-//this page should show the order details and the payment form
-//when the user clicks on the pay button, the order should be saved in the Realtime firestore database
-//the user should be redirected to the OrderScreen
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { push, ref, set } from "firebase/database";
@@ -17,6 +13,7 @@ const metroIP = getMetroIPAddress();
 const SERVER_URL = `http://${metroIP}:5001`;
 //DEVELOPMENT MODE
 
+//PaymentScreen-komponentet
 const PaymentScreen = ({ route }) => {
   const [cardDetails, setCardDetails] = useState();
   const { confirmPayment, loading } = useConfirmPayment();
@@ -25,6 +22,7 @@ const PaymentScreen = ({ route }) => {
   const order = [
     {
       BarData: {
+        //Bør opdateres så det kun er id på baren
         barId: route.params.OrderData.BarData.id.id,
         barName: route.params.OrderData.BarData.id.title,
         description: route.params.OrderData.BarData.id.description,
@@ -51,6 +49,7 @@ const PaymentScreen = ({ route }) => {
     if (!response.ok) {
       console.log("Error", response);
     }
+
     //return the client secret
     const { clientSecret, error } = await response.json();
     return { clientSecret, error };
@@ -67,10 +66,10 @@ const PaymentScreen = ({ route }) => {
     const billingDetails = {
       email: user.email,
     };
+
     //Try Catch block to handle the payment process
     try {
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
-
       //Error handling for getting the client secret
       if (error) {
         console.log("Error Fetching: ", error);
@@ -78,14 +77,15 @@ const PaymentScreen = ({ route }) => {
         // Details to the confirmPayment method
         const { paymentIntent, error } = await confirmPayment(clientSecret, {
           type: "Card",
-          paymentMethodType: "Card", // Add this line
+          paymentMethodType: "Card",
           billingDetails: billingDetails,
         });
+
         //Error handling for the payment process
         if (error) {
           console.log("Error in payment: ", error);
         } else if (paymentIntent) {
-          //Payment was successful (it is Uncaptured)
+          //Payment was successfull (it is Uncaptured as wanted)
           order.push({
             payTime: timestamp(), //save the time of the Uncaptured payment
             status: "readyToBeScanned", //set the status of the order to readyToBeScanned
@@ -102,7 +102,6 @@ const PaymentScreen = ({ route }) => {
             orderId: newOrderRef.key,
             user: user.uid,
           };
-          console.log("dataToQR", dataToQR);
           navigation.navigate("OrderScreen", { dataToQR });
         }
       }
@@ -151,6 +150,7 @@ const PaymentScreen = ({ route }) => {
 
 export default PaymentScreen;
 
+//Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,
