@@ -10,7 +10,7 @@ import MapScreen from "../screens/map/MapScreen";
 import PaymentScreen from "../screens/ticket/PaymentScreen";
 import Order from "../screens/ticket/Order";
 import QrScanner from "../screens/ticket/QrScanner";
-import SelectWardrope from "../screens/ticket/selectWardrope";
+import SelectWardrope from "../screens/ticket/SelectWardrope";
 import OrderHistory from "../screens/ticket/OrderHistory";
 import HostStart from "../screens/host/HostStart";
 import HostClientQR from "../screens/host/HostClientQRScan";

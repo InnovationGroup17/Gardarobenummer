@@ -1,7 +1,7 @@
 import { ref, get } from "firebase/database";
 import { realtimeDB } from "../../database/firebaseConfig";
 import { getMetroIPAddress } from "../getMetroIPAdress";
-import { updateUserInfo } from "../firebase/realtime/updateUserInfo";
+import { updateUserInfo } from "../../utilities/firebase/realtime/updateUserInfo";
 
 //DEVELOPMENT MODE
 const metroIP = getMetroIPAddress();

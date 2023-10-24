@@ -5,6 +5,7 @@ const stripe = Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2023-08-16",
 });
 
+/*
 //Router Endpoint
 router.post("/intents", async (req, res) => {
   console.log(req.body);
@@ -34,6 +35,7 @@ router.post("/intents", async (req, res) => {
     res.json({ error: e.message });
   }
 });
+*/
 
 //router to update the paymentIntent to captured
 router.post("/capture", async (req, res) => {
@@ -50,6 +52,7 @@ router.post("/capture", async (req, res) => {
 });
 
 router.post("/payment-sheet", async (req, res) => {
+  console.log("Req body: ", req.body);
   try {
     // Use an existing Customer ID if this is a returning customer.
     const ephemeralKey = await stripe.ephemeralKeys.create(
@@ -67,7 +70,10 @@ router.post("/payment-sheet", async (req, res) => {
       capture_method: "manual",
     });
 
+    console.log("Payment Intent: ", paymentIntent);
+
     res.json({
+      paymentId: paymentIntent.id,
       paymentIntent: paymentIntent.client_secret,
       ephemeralKey: ephemeralKey.secret,
       customer: req.body.customer,

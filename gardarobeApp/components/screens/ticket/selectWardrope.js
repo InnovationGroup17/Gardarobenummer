@@ -11,13 +11,13 @@ import { CheckBox } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { timestamp } from "../../../utilites/timestamp";
-import { fetchFirestoreData } from "../../../utilites/firebase/firestore/firestoreApi";
+import { timestamp } from "../../../utilities/timestamp";
+import { fetchFirestoreData } from "../../../utilities/firebase/firestore/firestoreApi";
 import { useAuthListener } from "../../authenticate/RealTime";
 
-import { getMetroIPAddress } from "../../../utilites/getMetroIPAdress";
-import { calculateTotalUtil } from "../../../utilites/calculateTotalUtil";
-import { createStripeCustomer } from "../../../utilites/stripe/createCustomer";
+import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
+import { calculateTotalUtil } from "../../../utilities/calculateTotalUtil";
+import { createStripeCustomer } from "../../../utilities/stripe/createCustomer";
 
 //DEVELOPMENT MODE
 const metroIP = getMetroIPAddress();
