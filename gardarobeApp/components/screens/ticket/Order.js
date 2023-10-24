@@ -7,11 +7,11 @@ import {
   StyleSheet,
 } from "react-native";
 import BackgroundGif from "../../../assets/gifs/ByRk.gif";
-import QRCodeGenerator from "../../../utilites/QRCodeGenerator";
+import QRCodeGenerator from "../../../utilities/QRCodeGenerator";
 import { useAuthListener } from "../../authenticate/RealTime";
 import { realtimeDB } from "../../../database/firebaseConfig";
 import { ref, get } from "firebase/database";
-import { getMetroIPAddress } from "../../../utilites/getMetroIPAdress";
+import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
 import { useNavigation } from "@react-navigation/native";
 
 //DEVELOPMENT MODE

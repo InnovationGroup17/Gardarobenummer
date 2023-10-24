@@ -26,6 +26,7 @@ const metroIP = getMetroIPAddress();
 const SERVER_URL = `http://${metroIP}:5001`;
 //DEVELOPMENT MODE
 
+//PaymentScreen-komponentet
 const PaymentScreen = ({ route }) => {
   const [userDetails, setUserDetails] = useState({ uid: null, data: null });
   const [cardDetails, setCardDetails] = useState();
@@ -154,7 +155,6 @@ const PaymentScreen = ({ route }) => {
     //Try Catch block to handle the payment process
     try {
       const { clientSecret, error } = await fetchPaymentIntentClientSecret();
-
       //Error handling for getting the client secret
       if (error) {
         console.log("Error Fetching: ", error);
@@ -164,11 +164,12 @@ const PaymentScreen = ({ route }) => {
           type: "Card",
           paymentMethodType: "Card", // Add this line
         });
+
         //Error handling for the payment process
         if (error) {
           console.log("Error in payment: ", error);
         } else if (paymentIntent) {
-          //Payment was successful (it is Uncaptured)
+          //Payment was successfull (it is Uncaptured as wanted)
           order.push({
             payTime: timestamp(), //save the time of the Uncaptured payment
             status: "readyToBeScanned", //set the status of the order to readyToBeScanned
@@ -244,6 +245,7 @@ const PaymentScreen = ({ route }) => {
 
 export default PaymentScreen;
 
+//Styling
 const styles = StyleSheet.create({
   container: {
     flex: 1,

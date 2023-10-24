@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
-import { timestamp } from "../../../utilites/timestamp";
+import { timestamp } from "../../../utilities/timestamp";
 import { getAuth } from "@firebase/auth";
 import { getPermisionBarCodeScanner } from "../../../utilites/getPermisionBarCodeScanner";
 import { fetchFirestoreData } from "../../../utilites/firebase/firestore/firestoreApi";

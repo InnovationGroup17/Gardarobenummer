@@ -1,59 +1,71 @@
 import React, { useState, useEffect } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
+
 import { timestamp } from "../../../utilites/timestamp";
 import { getAuth } from "@firebase/auth";
 import { getPermisionBarCodeScanner } from "../../../utilites/getPermisionBarCodeScanner";
 import { fetchFirestoreData } from "../../../utilites/firebase/firestore/firestoreApi";
 import { useNavigation } from "@react-navigation/native";
 
-// Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
+import { getPermisionBarCodeScanner } from "../../../utilities/getPermisionBarCodeScanner";
+import VerifyOrder from "../../../utilities/verifyOrder";
+import { useNavigation } from "@react-navigation/native"; // Importer brugen af useNavigation-hooket
+
+
+// QR-scannerkomponent, der bruger BarCodeScanner-komponenten fra expo
 const HostClientQR = () => {
-  const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [firestoreData, setFirestoreData] = useState(null);
-  const collectionName = "Bars";
+  const navigation = useNavigation(); // Brug hooket til at hente navigationsobjektet
 
   useEffect(() => {
-    setHasPermission(getPermisionBarCodeScanner());
+    setHasPermission(getPermisionBarCodeScanner()); // Få tilladelse til at bruge stregkodescanneren
 
     const fetchData = async () => {
       try {
-        const data = await fetchFirestoreData(collectionName);
-        setFirestoreData(data);
+        // Hent data (i øjeblikket en tom funktion, kan bruges til datahentning)
       } catch (error) {
-        console.error(error);
+        console.error(error); // Log eventuelle fejl, der opstår under datahentning
       }
     };
-    fetchData();
-  }, [collectionName]);
+    fetchData(); // Kald fetchData-funktionen, når komponenten monteres
+  }, []);
 
-  // Metode til at håndtere scanninger af QR koder og lave en ticket med dataen fra QR koden
-  const handleBarCodeScanned = ({ data }) => {
-    setScanned(true);
-    let user = getAuth().currentUser;
+  // Metode til at håndtere scanninger af QR-koder til håndtering af ordredata
+  const handleBarCodeScanned = async ({ data }) => {
+    setScanned(true); // Marker stregkoden som scannet
+
     try {
-      let parsedData = JSON.parse(data);
-      // Log the scanned data to the console
-      console.log("Scanned Data:", parsedData);
+      const status = await VerifyOrder(data); // Verificer de scannede ordredata
+      const parsedData = JSON.parse(data); // Analyser de scannede data som JSON
+      const user = parsedData.user;
+      const order = parsedData.orderId;
 
-      // You can continue to use the parsed data as needed in your application
+      console.log("status", status); // Log status for ordreverifikation
+
+      if (status === true) {
+        navigation.navigate("HostHangerQRScan", data); // Navigér til skærmen "HostHangerQRScan", hvis ordren er verificeret
+      } else error; // Ellers kast en fejl
+
+      alert(`Stregkode med bruger-ID ${user} og ${order} er blevet scannet!`); // Vis en meddelelse med bruger- og ordredetaljer
+
+      // Du kan fortsætte med at bruge de analyserede data efter behov i din applikation
     } catch (error) {
-      console.error("Error parsing JSON:", error);
-      // Handle the error or provide feedback to the user
+      console.error("Fejl ved analyse af JSON:", error); // Log en fejl, hvis JSON-analysen mislykkes
+      // Håndter fejlen eller giv brugeren feedback
     }
   };
 
-  // Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette
+  // Hvis der ikke er givet tilladelse til kameraet, så returneres en tekst, der informerer herom
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Anmoder om kameratilladelse</Text>;
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>Ingen adgang til kameraet</Text>;
   }
 
-  // Hvis der er givet adgang til kameraet, så returneres BarCodeScanner komponenten fra expo
+  // Hvis der er givet adgang til kameraet, så returneres BarCodeScanner-komponenten fra expo
   return (
     <View style={styles.constainer}>
       <BarCodeScanner
@@ -61,7 +73,10 @@ const HostClientQR = () => {
         style={styles.scanner}
       />
       {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
+        <Button
+          title={"Tryk for at scanne igen"}
+          onPress={() => setScanned(false)}
+        />
       )}
     </View>
   );
