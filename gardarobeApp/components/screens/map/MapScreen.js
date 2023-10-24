@@ -5,7 +5,7 @@ import * as Location from "expo-location";
 import { fetchFirestoreData } from "../../../database/firestoreApi";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import { timestamp } from "../../../utilites/timestamp";
+import { timestamp } from "../../../utilities/timestamp";
 
 export default function MapScreen() {
   const navigation = useNavigation();

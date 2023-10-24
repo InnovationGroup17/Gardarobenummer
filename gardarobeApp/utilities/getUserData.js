@@ -1,5 +1,5 @@
 // Import necessary Firebase services from firebaseConfig.js
-import { auth, realtimeDB } from './firebaseConfig';
+import { auth, realtimeDB } from '../database/firebaseConfig';
 import { get, ref } from 'firebase/database'; // Correct import for Realtime Database
 
 // Function to retrieve user data from Realtime Database

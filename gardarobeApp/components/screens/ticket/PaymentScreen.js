@@ -7,10 +7,10 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { push, ref, set } from "firebase/database";
 import { realtimeDB } from "../../../database/firebaseConfig";
-import { timestamp } from "../../../utilites/timestamp";
+import { timestamp } from "../../../utilities/timestamp";
 import { useAuthListener } from "../../authenticate/RealTime";
 import { CardField, useConfirmPayment } from "@stripe/stripe-react-native";
-import { getMetroIPAddress } from "../../../utilites/getMetroIPAdress";
+import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
 
 //DEVELOPMENT MODE
 const metroIP = getMetroIPAddress();

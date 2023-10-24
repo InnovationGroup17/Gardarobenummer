@@ -11,7 +11,7 @@ import { CheckBox } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { timestamp } from "../../../utilites/timestamp";
+import { timestamp } from "../../../utilities/timestamp";
 import { fetchFirestoreData } from "../../../database/firestoreApi";
 import { useAuthListener } from "../../authenticate/RealTime";
 

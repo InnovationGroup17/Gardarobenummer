@@ -4,7 +4,7 @@ import React from "react";
 const HostStart = () => {
   return (
     <View>
-      <Text>hostStart</Text>
+      <Text>Scan QR koden. Scan derefter bøjlen</Text>
     </View>
   );
 };
