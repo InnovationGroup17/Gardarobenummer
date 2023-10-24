@@ -46,6 +46,7 @@ function SignUpForm() {
         gender: selectedGender,
         age: selectedAge,
         type: "user",
+        stripeId: "",
       };
       console.log(userData);
       await set(usersRef, userData);

@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const paymentRouter = require("./routers/paymentRouter");
+const customerRouter = require("./routers/customerRouter");
 const ip = require("ip");
 const cors = require("cors");
 
@@ -17,6 +18,7 @@ const SERVER_URL = isDevMode
 app.use(bodyParser.json());
 app.use(cors());
 app.use("/payments", paymentRouter);
+app.use("/customers", customerRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

@@ -3,8 +3,8 @@ import { Button, StyleSheet, Text, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { timestamp } from "../../../utilities/timestamp";
 import { getAuth } from "@firebase/auth";
-import { getPermisionBarCodeScanner } from "../../../utilities/getPermisionBarCodeScanner";
-import { fetchFirestoreData } from "../../../database/firestoreApi";
+import { getPermisionBarCodeScanner } from "../../../utilites/getPermisionBarCodeScanner";
+import { fetchFirestoreData } from "../../../utilites/firebase/firestore/firestoreApi";
 import { useNavigation } from "@react-navigation/native";
 
 // Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
