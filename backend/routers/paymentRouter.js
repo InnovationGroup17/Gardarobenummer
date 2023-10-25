@@ -68,6 +68,10 @@ router.post("/payment-sheet", async (req, res) => {
         enabled: true,
       },
       capture_method: "manual",
+      description: "test",
+      metadata: {
+        data: "",
+      },
     });
 
     console.log("Payment Intent: ", paymentIntent);
