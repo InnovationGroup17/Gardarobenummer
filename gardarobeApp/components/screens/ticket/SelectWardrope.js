@@ -97,7 +97,7 @@ const SelectWardrope = ({ route }) => {
     }
 
     // Create a new customer with backend
-    createStripeCustomer(user);
+    await createStripeCustomer(user);
 
     //ORDER DATA
     const OrderData = {
