@@ -41,11 +41,11 @@ function SignUpForm() {
       // Store additional user data in the Realtime Database
       const usersRef = ref(realtimeDB, "users/" + user.uid);
       const userData = {
-        email: user.email,
         displayName: displayName,
         gender: selectedGender,
         age: selectedAge,
         type: "user",
+        stripeId: "",
       };
       console.log(userData);
       await set(usersRef, userData);

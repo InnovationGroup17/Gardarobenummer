@@ -13,6 +13,7 @@ import { realtimeDB } from "../../../database/firebaseConfig";
 import { ref, get } from "firebase/database";
 import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
 import { useNavigation } from "@react-navigation/native";
+
 //DEVELOPMENT MODE
 const metroIP = getMetroIPAddress();
 const SERVER_URL = `http://${metroIP}:5001`;
@@ -22,6 +23,7 @@ const Order = ({ route }) => {
   const navigation = useNavigation();
   const user = useAuthListener(); //can be used to check that the user is logged in and are the same as on the order
 
+  //NEED TO ME UPDATED LATER. IT WORKS FOR NOW
   const handlePress = async () => {
     //Getting the order from the database
     const orderRef = ref(
@@ -33,6 +35,7 @@ const Order = ({ route }) => {
     const snapshot = await get(orderRef);
     const paymentId = snapshot.val()[1].paymentId;
 
+    //SHOULD BE MOVED. This is just for testing. IT SHOULD BE MOVED TO AFTER THE HOST HAS ACCEPTED THE ORDER
     //calling the backend to capture the payment
     await fetch(`${SERVER_URL}/payments/capture`, {
       method: "POST",
@@ -41,6 +44,7 @@ const Order = ({ route }) => {
         paymentId: paymentId,
       }),
     });
+    //SHOULD BE MOVED
   };
 
   return (

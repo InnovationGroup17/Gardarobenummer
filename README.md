@@ -3,6 +3,14 @@ Af en eller anden årsag skiftes forbugstavet på følgende filer ikke til stort
 
 I filstien "Gardarobenummer-main/gardarobeApp/components/screens/ticket/selectWardrope.js" skal denne fil ændres til SelectWardrope.js
 
+
+The frontend is located in the gardarobeApp
+
+We use dotenv to store keys and other stuff. This is not uploaded to github
+
+To test payment use card number: 4242 4242 4242 4242 and then any valid information on the rest.
+
+
 I filstien "Gardarobenummer-main/gardarobeApp/components/screens/host/hostStart.js" skal denne fil ændres til HostStart.js
 
 Emil har lavet følgende views og filer til denne opgave. De vigtigste tre som er beskrevet i opgaven er øverst:
@@ -13,3 +21,4 @@ Gardarobenummer-main/gardarobeApp/components/screens/profile/EditProfile.js
 Gardarobenummer-main/gardarobeApp/components/screens/host/HostHangerQRScan.js
 Gardarobenummer-main/gardarobeApp/components/screens/host/hostStart.js
 Gardarobenummer-main/gardarobeApp/components/hostNavigation/HostTabNavigator.js
+

@@ -1,5 +1,5 @@
 import { collection, getDocs } from "firebase/firestore";
-import { firestore } from "./firebaseConfig"; // Import the Firestore configuration
+import { firestore } from "../../../database/firebaseConfig"; // Import the Firestore configuration
 
 // Function to fetch data from Firestore by collection name
 export const fetchFirestoreData = async (collectionName) => {
