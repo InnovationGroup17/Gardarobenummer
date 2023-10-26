@@ -7,6 +7,7 @@ import {
   FlatList,
   Alert,
 } from "react-native";
+import Loading from "../../GlobalComponents/loading/Loading";
 import { CheckBox } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
@@ -24,6 +25,7 @@ const SERVER_URL = `http://${metroIP}:5001`;
 //DEVELOPMENT MODE
 
 const SelectWardrope = ({ route }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [firestoreData, setFirestoreData] = useState([]);
@@ -43,6 +45,7 @@ const SelectWardrope = ({ route }) => {
         const totals = calculateTotalUtil(data);
         setTotalPrice(totals.price);
         setTotalItems(totals.items);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -142,6 +145,10 @@ const SelectWardrope = ({ route }) => {
       </View>
     );
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <View style={styles.container}>
