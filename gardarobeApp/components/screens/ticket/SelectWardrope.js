@@ -7,15 +7,25 @@ import {
   FlatList,
   Alert,
 } from "react-native";
+import Loading from "../../GlobalComponents/loading/Loading";
 import { CheckBox } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { timestamp } from "../../../utilities/timestamp";
-import { fetchFirestoreData } from "../../../database/firestoreApi";
+import { fetchFirestoreData } from "../../../utilities/firebase/firestore/firestoreApi";
 import { useAuthListener } from "../../authenticate/RealTime";
+import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
+import { calculateTotalUtil } from "../../../utilities/calculateTotalUtil";
+import { createStripeCustomer } from "../../../utilities/stripe/createCustomer";
+
+//DEVELOPMENT MODE
+const metroIP = getMetroIPAddress();
+const SERVER_URL = `http://${metroIP}:5001`;
+//DEVELOPMENT MODE
 
 const SelectWardrope = ({ route }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [firestoreData, setFirestoreData] = useState([]);
@@ -30,32 +40,19 @@ const SelectWardrope = ({ route }) => {
       try {
         const data = await fetchFirestoreData(collectionName);
         setFirestoreData(data);
+
+        // Calculate total price and total items
+        const totals = calculateTotalUtil(data);
+        setTotalPrice(totals.price);
+        setTotalItems(totals.items);
+        setIsLoading(false);
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchData();
-    calculateTotal();
   }, [isFocused, collectionName]);
-
-  // Calculate total price and total items
-  calculateTotal = () => {
-    let price = 0;
-    let items = 0;
-    firestoreData.forEach((wardrobe) => {
-      price += wardrobe.price * wardrobe.amount;
-      items += wardrobe.amount;
-
-      if (wardrobe.amount > 0) {
-        wardrobe.selected = true;
-      } else {
-        wardrobe.selected = false;
-      }
-    });
-    setTotalPrice(price);
-    setTotalItems(items);
-  };
 
   // Handle select wardrobe
   const handleSelect = (wardrobe) => {
@@ -67,7 +64,11 @@ const SelectWardrope = ({ route }) => {
       return item;
     });
     setFirestoreData(updatedWardrobeList);
-    calculateTotal();
+    setFirestoreData(updatedWardrobeList);
+    // Calculate total price and total items
+    const totals = calculateTotalUtil(updatedWardrobeList);
+    setTotalPrice(totals.price);
+    setTotalItems(totals.items);
   };
 
   // Handle amount change
@@ -80,7 +81,10 @@ const SelectWardrope = ({ route }) => {
     });
 
     setFirestoreData(updatedWardrobeList);
-    calculateTotal();
+    // Calculate total price and total items
+    const totals = calculateTotalUtil(updatedWardrobeList);
+    setTotalPrice(totals.price);
+    setTotalItems(totals.items);
   };
 
   // Handle confirm
@@ -93,6 +97,9 @@ const SelectWardrope = ({ route }) => {
       Alert.alert("Fejl", "Du skal vælge mindst en garderobe");
       return;
     }
+
+    // Create a new customer with backend if the user doesn't have a stripeId
+    await createStripeCustomer(user);
 
     //ORDER DATA
     const OrderData = {
@@ -138,6 +145,10 @@ const SelectWardrope = ({ route }) => {
       </View>
     );
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <View style={styles.container}>

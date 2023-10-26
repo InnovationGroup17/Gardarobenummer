@@ -5,11 +5,12 @@ import { ref, get, set } from "firebase/database";
 import { realtimeDB } from "../../../database/firebaseConfig";
 import { useNavigation } from "@react-navigation/native"; // Import the useNavigation hook
 
-
 function EditProfile() {
   const [displayName, setDisplayName] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedAge, setSelectedAge] = useState("");
+  const [type, setType] = useState("user");
+  const [stripeId, setStripeId] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const navigation = useNavigation(); // Use the hook to get the navigation object
 
@@ -23,10 +24,11 @@ function EditProfile() {
       get(usersRef).then((snapshot) => {
         if (snapshot.exists()) {
           const userData = snapshot.val();
+          console.log("userData", userData);
           setDisplayName(userData.displayName);
-          setEmail(userData.email);
           setSelectedGender(userData.gender);
           setSelectedAge(userData.age);
+          setStripeId(userData.stripeId);
         }
       });
     }
@@ -41,7 +43,8 @@ function EditProfile() {
           displayName: displayName,
           gender: selectedGender,
           age: selectedAge,
-          type: "user",
+          type: type,
+          stripeId: stripeId,
         };
 
         await set(usersRef, userData);

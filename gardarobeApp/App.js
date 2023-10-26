@@ -4,7 +4,6 @@ import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { STRIPE_PUBLISHABLE_KEY } from "@env";
-import PaymentStripe from "./components/screens/ticket/Stripe";
 
 import Compiler from "./components/Compiler";
 
