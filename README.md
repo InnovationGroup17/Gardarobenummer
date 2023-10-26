@@ -1,17 +1,9 @@
-VIGTIGT:
-Af en eller anden årsag skiftes forbugstavet på følgende filer ikke til stort som angivet før der pushes til GitHUb. Dette betyder at når følgende filer dette projekt pulles, så skal forbogstavet i følgende filer ændres til stort for at applikationen fungerer:
-
-I filstien "Gardarobenummer-main/gardarobeApp/components/screens/ticket/selectWardrope.js" skal denne fil ændres til SelectWardrope.js
-
-
 The frontend is located in the gardarobeApp
 
 We use dotenv to store keys and other stuff. This is not uploaded to github
 
 To test payment use card number: 4242 4242 4242 4242 and then any valid information on the rest.
 
-
-I filstien "Gardarobenummer-main/gardarobeApp/components/screens/host/hostStart.js" skal denne fil ændres til HostStart.js
 
 Emil har lavet følgende views og filer til denne opgave. De vigtigste tre som er beskrevet i opgaven er øverst:
 Gardarobenummer-main/gardarobeApp/components/screens/host/HostClientQRScan.js
