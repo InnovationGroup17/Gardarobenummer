@@ -2,7 +2,6 @@ import { useState } from "react";
 import { ref, get } from "firebase/database";
 import { realtimeDB } from "../../database/firebaseConfig";
 import { getMetroIPAddress } from "../getMetroIPAdress";
-import { useAuthListener } from "../../components/authenticate/RealTime";
 import { updateUserInfo } from "../../utilities/firebase/realtime/updateUserInfo";
 
 //DEVELOPMENT MODE
