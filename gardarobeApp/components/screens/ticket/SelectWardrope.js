@@ -14,7 +14,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { timestamp } from "../../../utilities/timestamp";
 import { fetchFirestoreData } from "../../../utilities/firebase/firestore/firestoreApi";
 import { useAuthListener } from "../../authenticate/RealTime";
-
 import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
 import { calculateTotalUtil } from "../../../utilities/calculateTotalUtil";
 import { createStripeCustomer } from "../../../utilities/stripe/createCustomer";
@@ -96,7 +95,7 @@ const SelectWardrope = ({ route }) => {
       return;
     }
 
-    // Create a new customer with backend
+    // Create a new customer with backend if the user doesn't have a stripeId
     await createStripeCustomer(user);
 
     //ORDER DATA

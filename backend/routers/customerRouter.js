@@ -7,6 +7,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY, {
 //Router Endpoint
 //Create a new customer
 router.post("/create", async (req, res) => {
+  console.log(req.body);
   try {
     //check if the request body contains the email and name
     if (!req.body.email || !req.body.name) {

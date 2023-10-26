@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { ref, get } from "firebase/database";
 import { realtimeDB } from "../../database/firebaseConfig";
 import { getMetroIPAddress } from "../getMetroIPAdress";
+import { useAuthListener } from "../../components/authenticate/RealTime";
 import { updateUserInfo } from "../../utilities/firebase/realtime/updateUserInfo";
 
 //DEVELOPMENT MODE
@@ -20,13 +22,12 @@ export const createStripeCustomer = async (user) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: userData.email,
+          email: user.email,
           name: userData.displayName,
         }),
       });
 
       const stripeId = await response.json();
-      console.log("Updating user info in firebase", stripeId);
 
       await updateUserInfo(user.uid, { stripeId: stripeId.customer.id });
       console.log("success");

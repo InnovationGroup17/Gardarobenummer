@@ -6,8 +6,10 @@ import { fetchFirestoreData } from "../../../utilities/firebase/firestore/firest
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { timestamp } from "../../../utilities/timestamp";
+import Loading from "../../GlobalComponents/loading/Loading";
 
 export default function MapScreen() {
+  const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
   const [initialRegion, setInitialRegion] = useState(null);
   const [locationOfInterest, setLocationOfInterest] = useState([]); // Store the locations of interest
@@ -62,6 +64,7 @@ export default function MapScreen() {
         }
         // Set the locationOfInterest state
         setLocationOfInterest(interestLocations);
+        setIsLoading(false); // Hide the loading screen after data is fetched
       } catch (error) {
         console.error("Error fetching data from Firestore:", error);
       }
@@ -82,6 +85,10 @@ export default function MapScreen() {
     };
     navigation.navigate("SelectWardrope", { BarData });
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <View style={styles.container}>
