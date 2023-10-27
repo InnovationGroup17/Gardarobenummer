@@ -31,18 +31,16 @@ router.post("/payment-sheet", async (req, res) => {
       amount: req.body.amount,
       currency: "dkk",
       customer: req.body.customer,
-      // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
       automatic_payment_methods: {
         enabled: true,
       },
+      payment_method_configuration: "pmc_1O2w9pAu5ko6Dm7GtscKy8YE",
       capture_method: "manual",
-      description: "test",
-      metadata: {
-        data: "",
-      },
     });
+    console.log("paymentIntent: ", paymentIntent);
 
     res.json({
+      paymentIntentInfo: paymentIntent,
       paymentId: paymentIntent.id,
       paymentIntent: paymentIntent.client_secret,
       ephemeralKey: ephemeralKey.secret,

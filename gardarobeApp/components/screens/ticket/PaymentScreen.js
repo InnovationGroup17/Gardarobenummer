@@ -59,8 +59,14 @@ const PaymentScreen = ({ route }) => {
       }),
     });
 
-    const { paymentId, paymentIntent, ephemeralKey, customer } =
-      await response.json();
+    const {
+      paymentIntentInfo,
+      paymentId,
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    } = await response.json();
+    console.log("paymentIntentInfo: ", paymentIntentInfo.payment_method_options);
     return { paymentId, paymentIntent, ephemeralKey, customer };
   };
 
