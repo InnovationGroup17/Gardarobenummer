@@ -14,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ref, set } from "firebase/database";
 import { realtimeDB } from "../../../database/firebaseConfig";
 import GoBackButton from "../../GlobalComponents/GoBackButton";
+import { timestamp } from "../../../utilities/timestamp";
 
 function SignUpForm() {
   const navigation = useNavigation();
@@ -46,6 +47,7 @@ function SignUpForm() {
         age: selectedAge,
         type: "user",
         stripeId: "",
+        createdAt: timestamp(),
       };
       console.log(userData);
       await set(usersRef, userData);
