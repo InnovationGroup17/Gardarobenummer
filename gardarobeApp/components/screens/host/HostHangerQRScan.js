@@ -26,7 +26,7 @@ const HostClientQR = () => {
   // Metode til at håndtere scanninger af QR-koder til håndtering af ordredata
   const handleBarCodeScanned = async ({ data }) => {
     setScanned(true); // Marker stregkoden som scannet
-
+    console.log(data)
     try {
       
       // if (status === true) {

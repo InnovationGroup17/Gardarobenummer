@@ -28,6 +28,7 @@ const PaymentScreen = ({ route }) => {
       ticketTime: route.params.OrderData.ticketTime,
       totalPrice: route.params.OrderData.totalPrice,
       totalItems: route.params.OrderData.totalItems,
+      hangarNumber:""
     },
   ];
 
