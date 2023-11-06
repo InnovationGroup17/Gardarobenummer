@@ -62,7 +62,7 @@ async function VerifyOrder(data) {
 
   try {
     const orderData = await GetOrderData(data);
-    const userId = await CheckIfUserIsHost; // Kald funktionen og vent på resultatet
+    const userId = await CheckIfUserIsHost(); // Kald funktionen og vent på resultatet
     const barIDFromOrder = orderData[0].barId;
 
    
