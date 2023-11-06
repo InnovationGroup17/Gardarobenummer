@@ -83,8 +83,10 @@ async function VerifyOrder(data) {
   try {
     const orderData = await GetOrderData(data);
     const userId = await CheckIfUserIsHost(); // Kald funktionen og vent på resultatet
-    const barIDFromOrder = orderData[0].BarData.barId;
+    const barIDFromOrder = orderData[0].barId;
 
+   
+    
     if (userId === barIDFromOrder) {
       const checkStatus = await UpdateOrderToScanned(data);
       console.log("Brugeren er en vært");
