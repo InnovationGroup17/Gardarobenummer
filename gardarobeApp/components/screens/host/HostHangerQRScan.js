@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { getPermisionBarCodeScanner } from "../../../utilities/getPermisionBarCodeScanner";
-import VerifyOrder from "../../../utilities/verifyOrder";
-import { useNavigation } from "@react-navigation/native"; // Importer brugen af useNavigation-hooket
+import { useRoute } from "@react-navigation/native";
+import reserveHangar from "../../../utilities/reserveHanger";
+import { set } from "firebase/database";
 
 // QR-scannerkomponent, der bruger BarCodeScanner-komponenten fra expo
 const HostClientQR = () => {
+  const route = useRoute();
+  const orderData = route.params;
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -25,16 +28,17 @@ const HostClientQR = () => {
 
   // Metode til at håndtere scanninger af QR-koder til håndtering af ordredata
   const handleBarCodeScanned = async ({ data }) => {
+    if (data === orderData) {
+      console.log("data:", data);
+      console.log("orderdata:", orderData);
+      setScanned(true); // Marker stregkoden som scannet
+      return alert("Du har scannet den forkerte QR kode");
+    }
+    await reserveHangar(data, orderData);
     setScanned(true); // Marker stregkoden som scannet
-    console.log(data)
+    //console.log("data:", data);
+
     try {
-      
-      // if (status === true) {
-      //   navigation.navigate("HostHangerQRScan", data); // Navigér til skærmen "HostHangerQRScan", hvis ordren er verificeret
-      // } else error; // Ellers kast en fejl
-
-
-      // Du kan fortsætte med at bruge de analyserede data efter behov i din applikation
     } catch (error) {
       console.error("Fejl ved analyse af JSON:", error); // Log en fejl, hvis JSON-analysen mislykkes
       // Håndter fejlen eller giv brugeren feedback

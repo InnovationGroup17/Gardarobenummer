@@ -37,7 +37,7 @@ async function UpdateOrderToScanned(data) {
       const updateData = {
         payTime: orderData[1].payTime,
         paymentId: orderData[1].paymentId,
-        status: "OrdreScannetAfVært",
+        status: "orderScannedByHost",
       };
       await update(updateStatus, updateData);
     } else {

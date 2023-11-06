@@ -18,7 +18,9 @@ async function isUserHost() {
       console.log("isUserHost:", status);
       return status;
     } else {
-      throw new Error("Brugeren er ikke en vært");
+      status = false;
+      console.log("isUserHost:", status);
+      return status;
     }
   } catch (error) {
     console.error("Fejl i checkIfUserIsHost:", error);
@@ -26,11 +28,33 @@ async function isUserHost() {
   }
 }
 
+async function isUserInBarsRef() {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("Brugeren er ikke godkendt");
+    }
+
+    const userId = currentUser.uid;
+    const barsRef = ref(realtimeDB, "bars/" + userId);
+    const barsSnapshot = await get(barsRef);
+
+    return barsSnapshot.exists(); // Return true if the user's ID is in barsRef, false otherwise
+  } catch (error) {
+    console.error("Fejl i isUserInBarsRef:", error);
+    throw error; // Re-throw the error for handling by the calling code
+  }
+}
+
 async function CreateHangarsInBar() {
   const currentUser = auth.currentUser;
   if ((await isUserHost()) === true) {
     //create table called bars in realtimeDB:
-    console.log("test");
+    if ((await isUserInBarsRef()) === true) {
+      console.log("User is already in barsRef");
+      return;
+    }
+
     const barsRef = ref(realtimeDB, "bars/" + currentUser.uid);
     const barsData = {
       hangars: {
