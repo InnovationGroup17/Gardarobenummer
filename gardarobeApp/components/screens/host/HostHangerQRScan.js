@@ -9,7 +9,6 @@ import { useNavigation } from "@react-navigation/native"; // Importer brugen af 
 const HostClientQR = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const navigation = useNavigation(); // Brug hooket til at hente navigationsobjektet
 
   useEffect(() => {
     setHasPermission(getPermisionBarCodeScanner()); // Få tilladelse til at bruge stregkodescanneren
@@ -29,18 +28,11 @@ const HostClientQR = () => {
     setScanned(true); // Marker stregkoden som scannet
 
     try {
-      const status = await VerifyOrder(data); // Verificer de scannede ordredata
-      const parsedData = JSON.parse(data); // Analyser de scannede data som JSON
-      const user = parsedData.user;
-      const order = parsedData.orderId;
+      
+      // if (status === true) {
+      //   navigation.navigate("HostHangerQRScan", data); // Navigér til skærmen "HostHangerQRScan", hvis ordren er verificeret
+      // } else error; // Ellers kast en fejl
 
-      console.log("status", status); // Log status for ordreverifikation
-
-      if (status === true) {
-        navigation.navigate("HostHangerQRScan", data); // Navigér til skærmen "HostHangerQRScan", hvis ordren er verificeret
-      } else error; // Ellers kast en fejl
-
-      alert(`Stregkode med bruger-ID ${user} og ${order} er blevet scannet!`); // Vis en meddelelse med bruger- og ordredetaljer
 
       // Du kan fortsætte med at bruge de analyserede data efter behov i din applikation
     } catch (error) {

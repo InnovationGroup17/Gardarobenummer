@@ -75,7 +75,7 @@ function StackNavigator() {
           component={HostTabNavigator}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="HostStart" component={HostStart} />
+        <Stack.Screen name="HostStart" component={HostStart} options={{ headerShown: false }}/>
         <Stack.Screen name="HostClientQR" component={HostClientQR} />
         <Stack.Screen name="HostHangerQRScan" component={HostHangerQRScan} />
       </Stack.Navigator>
