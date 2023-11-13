@@ -1,5 +1,11 @@
 import { get, ref, set, update } from "firebase/database";
 import { auth, realtimeDB } from "../database/firebaseConfig";
+import { getMetroIPAddress } from "./getMetroIPAdress";
+
+//DEVELOPMENT MODE
+const metroIP = getMetroIPAddress();
+const SERVER_URL = `http://${metroIP}:5001`;
+//DEVELOPMENT MODE
 
 async function GetOrderData(data) {
   try {
@@ -45,7 +51,7 @@ async function UpdateOrderToActive(data) {
   } catch (error) {
     console.error("Fejl i UpdateOrderToScanned:", error);
     throw error; // Kast fejlen igen for at blive håndteret af opkaldet
-}
+  }
 }
 
 async function reserveHangar(data, orderData) {
@@ -61,7 +67,6 @@ async function reserveHangar(data, orderData) {
     "bars/" + currentUser.uid + "/hangars/" + data
   );
 
- 
   try {
     const snapshot = await get(barsRef);
     if (snapshot.exists()) {
@@ -72,11 +77,12 @@ async function reserveHangar(data, orderData) {
       };
       await set(barsRef, barsData);
       UpdateOrderToActive(parsedData);
-
     } else {
       console.log("incorrect qr code was scanned");
       alert("Incorrect QR code was scanned. Data not found in the table.");
-      throw new Error("Incorrect QR code was scanned. Data not found in the table.");
+      throw new Error(
+        "Incorrect QR code was scanned. Data not found in the table."
+      );
     }
   } catch (error) {
     console.error("Error in reserveHangar:", error);

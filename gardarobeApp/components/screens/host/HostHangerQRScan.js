@@ -4,12 +4,21 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import { getPermisionBarCodeScanner } from "../../../utilities/getPermisionBarCodeScanner";
 import { useRoute } from "@react-navigation/native";
 import reserveHangar from "../../../utilities/reserveHanger";
-import { set } from "firebase/database";
+import { ref, get } from "firebase/database";
+import { realtimeDB } from "../../../database/firebaseConfig";
+import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
+
+//DEVELOPMENT MODE
+const metroIP = getMetroIPAddress();
+const SERVER_URL = `http://${metroIP}:5001`;
+//DEVELOPMENT MODE
 
 // QR-scannerkomponent, der bruger BarCodeScanner-komponenten fra expo
 const HostClientQR = () => {
   const route = useRoute();
   const orderData = route.params;
+  const jsonRoute = JSON.parse(route.params); //VIGTIGT AT VI ARBEJDER MED ORDENTLIT DATA
+  console.log("1 orderData:", orderData);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -28,6 +37,7 @@ const HostClientQR = () => {
 
   // Metode til at håndtere scanninger af QR-koder til håndtering af ordredata
   const handleBarCodeScanned = async ({ data }) => {
+    setScanned(true); // Marker stregkoden som scannet
     if (data === orderData) {
       console.log("data:", data);
       console.log("orderdata:", orderData);
@@ -35,8 +45,22 @@ const HostClientQR = () => {
       return alert("Du har scannet den forkerte QR kode");
     }
     await reserveHangar(data, orderData);
-    setScanned(true); // Marker stregkoden som scannet
-    //console.log("data:", data);
+
+    //Gennemfør Betaling
+    const payment = async (order, user) => {
+      const orderRef = ref(realtimeDB, `orders/${user}/${order}`);
+      const snapshot = await get(orderRef);
+      const paymentId = snapshot.val()[1].paymentId;
+      await fetch(`${SERVER_URL}/payments/capture`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          paymentId: paymentId,
+        }),
+      });
+    };
+
+    payment(jsonRoute.orderId, jsonRoute.user); //Gennemfør Betaling
 
     try {
     } catch (error) {
