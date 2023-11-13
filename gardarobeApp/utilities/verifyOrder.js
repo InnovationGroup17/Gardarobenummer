@@ -5,7 +5,6 @@ import { get, ref, set, update } from "firebase/database"; // Korrekt import til
 import { auth, realtimeDB } from "../database/firebaseConfig"; // Importér de nødvendige Firebase-tjenester
 import CheckIfUserIsHost from "./checkUserHost";
 
-
 // Hent ordredata fra Realtime Database
 async function GetOrderData(data) {
   try {
@@ -41,6 +40,7 @@ async function UpdateOrderToScanned(data) {
       };
       await update(updateStatus, updateData);
     } else {
+      const error = "Ordren er allerede scannet";
       error;
     }
 
@@ -58,15 +58,12 @@ async function UpdateOrderToScanned(data) {
 async function VerifyOrder(data) {
   let status = false;
   data = JSON.parse(data);
-  console.log("verifyOrder:", data);
 
   try {
     const orderData = await GetOrderData(data);
     const userId = await CheckIfUserIsHost(); // Kald funktionen og vent på resultatet
     const barIDFromOrder = orderData[0].barId;
 
-   
-    
     if (userId === barIDFromOrder) {
       const checkStatus = await UpdateOrderToScanned(data);
       console.log("Brugeren er en vært");

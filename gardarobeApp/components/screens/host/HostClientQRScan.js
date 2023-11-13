@@ -36,13 +36,12 @@ const HostClientQR = () => {
 
       console.log("status", status); // Log status for ordreverifikation
 
+      alert(`Stregkode med bruger-ID ${user} og ${order} er blevet scannet!`); // Vis en meddelelse med bruger- og ordredetaljer
       if (status === true) {
         navigation.navigate("HostHangerQRScan", data); // Navigér til skærmen "HostHangerQRScan", hvis ordren er verificeret
       } else error; // Ellers kast en fejl
 
-      alert(`Stregkode med bruger-ID ${user} og ${order} er blevet scannet!`); // Vis en meddelelse med bruger- og ordredetaljer
-
-      // Du kan fortsætte med at bruge de analyserede data efter behov i din applikation
+      // Du kan fortsætte med at bruge de analyserede data efter behov
     } catch (error) {
       console.error("Fejl ved analyse af JSON:", error); // Log en fejl, hvis JSON-analysen mislykkes
       // Håndter fejlen eller giv brugeren feedback
