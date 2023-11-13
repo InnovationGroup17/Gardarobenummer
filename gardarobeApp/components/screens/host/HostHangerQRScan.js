@@ -51,7 +51,6 @@ const HostClientQR = () => {
       const orderRef = ref(realtimeDB, `orders/${user}/${order}`);
       const snapshot = await get(orderRef);
       const paymentId = snapshot.val()[1].paymentId;
-      console.log("paymentId:", paymentId);
       await fetch(`${SERVER_URL}/payments/capture`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
