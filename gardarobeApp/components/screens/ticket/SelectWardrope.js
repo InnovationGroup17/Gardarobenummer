@@ -19,10 +19,10 @@ import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
 import { calculateTotalUtil } from "../../../utilities/calculateTotalUtil";
 import { createStripeCustomer } from "../../../utilities/stripe/createCustomer";
 
-//DEVELOPMENT MODE
+// DEVELOPMENT MODE
 const metroIP = getMetroIPAddress();
 const SERVER_URL = `http://${metroIP}:5001`;
-//DEVELOPMENT MODE
+// DEVELOPMENT MODE
 
 const SelectWardrope = ({ route }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -101,7 +101,7 @@ const SelectWardrope = ({ route }) => {
     // Create a new customer with backend if the user doesn't have a stripeId
     await createStripeCustomer(user);
 
-    //ORDER DATA
+    // ORDER DATA
     const OrderData = {
       selectedWardrobes,
       totalPrice,
@@ -153,7 +153,7 @@ const SelectWardrope = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}></View>
-      <Text style={styles.WelcommeText}>Velkommen til {BarData.id.title}</Text>
+      <Text style={styles.WelcomeText}>Velkommen til {BarData.id.title}</Text>
       <FlatList
         data={firestoreData}
         renderItem={renderItem}
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: 10,
   },
-  WelcommeText: {
+  WelcomeText: {
     fontSize: 28,
     fontWeight: "bold",
     marginLeft: 10,

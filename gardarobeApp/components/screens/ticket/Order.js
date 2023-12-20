@@ -1,3 +1,4 @@
+// Importing necessary modules and components from React, React Native, and Firebase
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -6,37 +7,34 @@ import {
   ImageBackground,
   StyleSheet,
 } from "react-native";
-import BackgroundGif from "../../../assets/gifs/ByRk.gif";
-import QRCodeGenerator from "../../../utilities/QRCodeGenerator";
-import { useAuthListener } from "../../authenticate/RealTime";
-import { realtimeDB } from "../../../database/firebaseConfig";
-import { ref, get } from "firebase/database";
-import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
-import { useNavigation } from "@react-navigation/native";
+import BackgroundGif from "../../../assets/gifs/ByRk.gif"; // Importing a background GIF
+import QRCodeGenerator from "../../../utilities/QRCodeGenerator"; // Importing a custom QR code generator utility
+import { useAuthListener } from "../../authenticate/RealTime"; // Custom hook for listening to authentication changes
+import { realtimeDB } from "../../../database/firebaseConfig"; // Firebase database configuration
+import { ref, get } from "firebase/database"; // Firebase database methods
+import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress"; // Utility to get Metro IP address for development
+import { useNavigation } from "@react-navigation/native"; // Navigation hook from React Navigation
 
-//DEVELOPMENT MODE
+// Setting up the server URL for development mode
 const metroIP = getMetroIPAddress();
 const SERVER_URL = `http://${metroIP}:5001`;
-//DEVELOPMENT MODE
 
+// Defining the Order functional component
 const Order = ({ route }) => {
   const navigation = useNavigation();
-  const user = useAuthListener(); //can be used to check that the user is logged in and are the same as on the order
+  const user = useAuthListener(); // Using custom hook to check if the user is logged in
 
-  //NEED TO ME UPDATED LATER. IT WORKS FOR NOW
+  // Function to handle specific operations when pressed (to be updated later)
   const handlePress = async () => {
-    //Getting the order from the database
     const orderRef = ref(
       realtimeDB,
       `orders/${user.uid}/${route.params.dataToQR.orderId}`
     );
 
-    //setting the paymentId
     const snapshot = await get(orderRef);
     const paymentId = snapshot.val()[1].paymentId;
 
-    //SHOULD BE MOVED. This is just for testing. IT SHOULD BE MOVED TO AFTER THE HOST HAS ACCEPTED THE ORDER
-    //calling the backend to capture the payment
+    // Fetch request to the backend for payment capturing (to be moved later)
     await fetch(`${SERVER_URL}/payments/capture`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -44,15 +42,15 @@ const Order = ({ route }) => {
         paymentId: paymentId,
       }),
     });
-    //SHOULD BE MOVED
   };
 
+  // Render method defining the UI of the Order component
   return (
     <View style={styles.container}>
       <View style={styles.ticket}>
         <View style={styles.gifContainer}>
           <ImageBackground source={BackgroundGif} style={styles.gif}>
-            <QRCodeGenerator
+            <QRCodeGenerator // QR code generator component
               value={JSON.stringify(route.params.dataToQR)}
               size={250}
             />
@@ -61,16 +59,16 @@ const Order = ({ route }) => {
         <View>
           <Text style={styles.ticketText}>Ticket</Text>
         </View>
-        <TouchableOpacity
+        <TouchableOpacity // Button to navigate back to the home screen
           style={styles.button}
           onPress={() => {
-            navigation.popToTop(); //Back to the home screen
+            navigation.popToTop();
           }}
         >
           <Text style={styles.buttonText}>Home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        <TouchableOpacity // Button for testing purposes
           style={styles.button}
           onPress={() => {
             handlePress();
@@ -83,6 +81,7 @@ const Order = ({ route }) => {
   );
 };
 
+// StyleSheet for the Order component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -130,4 +129,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Exporting the Order component for use in other parts of the application
 export default Order;

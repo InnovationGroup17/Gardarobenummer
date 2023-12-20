@@ -7,6 +7,7 @@ import reserveHangar from "../../../utilities/reserveHanger";
 import { ref, get } from "firebase/database";
 import { realtimeDB } from "../../../database/firebaseConfig";
 import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
+import { useNavigation } from "@react-navigation/native";
 
 //DEVELOPMENT MODE
 const metroIP = getMetroIPAddress();
@@ -15,10 +16,11 @@ const SERVER_URL = `http://${metroIP}:5001`;
 
 // QR-scannerkomponent, der bruger BarCodeScanner-komponenten fra expo
 const HostClientQR = () => {
+  const navigation = useNavigation();
   const route = useRoute();
   const orderData = route.params;
   const jsonRoute = JSON.parse(route.params); //VIGTIGT AT VI ARBEJDER MED ORDENTLIT DATA
-  console.log("1 orderData:", orderData);
+  console.log("orderData:", orderData);
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -61,7 +63,7 @@ const HostClientQR = () => {
     };
 
     payment(jsonRoute.orderId, jsonRoute.user); //Gennemfør Betaling
-
+    navigation.popToTop();
     try {
     } catch (error) {
       console.error("Fejl ved analyse af JSON:", error); // Log en fejl, hvis JSON-analysen mislykkes

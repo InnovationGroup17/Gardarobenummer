@@ -1,106 +1,75 @@
-import { get, ref, set, update } from "firebase/database"; // Korrekt import til Realtime Database
-import { auth, realtimeDB } from "../database/firebaseConfig"; // Importér de nødvendige Firebase-tjenester
+// Imports for Firebase database operations and configuration
+import { get, ref, set } from "firebase/database";
+import { auth, realtimeDB } from "../database/firebaseConfig";
 
+// Function to check if the current user is a host
 async function isUserHost() {
-  let status = false;
   try {
+    // Getting the current authenticated user
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      throw new Error("Brugeren er ikke godkendt");
+      throw new Error("User is not authenticated");
     }
     const userId = currentUser.uid;
+    // Reference to user's data in the database
     const usersRef = ref(realtimeDB, "users/" + userId);
     const userSnapshot = await get(usersRef);
     const userData = userSnapshot.val();
 
-    if (userData && userData.type === "host") {
-      status = true;
-      console.log("isUserHost:", status);
-      return status;
-    } else {
-      status = false;
-      console.log("isUserHost:", status);
-      return status;
-    }
+    // Check if the user's type is 'host' and return the status
+    return userData && userData.type === "host";
   } catch (error) {
-    console.error("Fejl i checkIfUserIsHost:", error);
-    throw error; // Kast fejlen igen for at blive håndteret af opkaldet
+    console.error("Error in isUserHost:", error);
+    throw error;
   }
 }
 
+// Function to check if the current user is listed in the bars reference
 async function isUserInBarsRef() {
   try {
+    // Getting the current authenticated user
     const currentUser = auth.currentUser;
     if (!currentUser) {
-      throw new Error("Brugeren er ikke godkendt");
+      throw new Error("User is not authenticated");
     }
 
     const userId = currentUser.uid;
+    // Reference to check if the user is in the 'bars' node
     const barsRef = ref(realtimeDB, "bars/" + userId);
     const barsSnapshot = await get(barsRef);
 
-    return barsSnapshot.exists(); // Return true if the user's ID is in barsRef, false otherwise
+    // Return true if the user's ID is in the barsRef, false otherwise
+    return barsSnapshot.exists();
   } catch (error) {
-    console.error("Fejl i isUserInBarsRef:", error);
-    throw error; // Re-throw the error for handling by the calling code
+    console.error("Error in isUserInBarsRef:", error);
+    throw error;
   }
 }
 
+// Function to create hangars in a bar for the host user
 async function CreateHangarsInBar() {
-  const currentUser = auth.currentUser;
-  if ((await isUserHost()) === true) {
-    //create table called bars in realtimeDB:
-    if ((await isUserInBarsRef()) === true) {
+  if (await isUserHost()) {
+    // Check if the current user already has a bars reference
+    if (await isUserInBarsRef()) {
       console.log("User is already in barsRef");
       return;
     }
 
-    const barsRef = ref(realtimeDB, "bars/" + currentUser.uid);
+    // Creating a reference and data structure for bars with multiple hangars
+    const barsRef = ref(realtimeDB, "bars/" + auth.currentUser.uid);
     const barsData = {
       hangars: {
-        1: {
-          orderId: "",
-          hangarStatus: "available",
-        },
-        2: {
-          orderId: "",
-          hangarStatus: "available",
-        },
-        3: {
-          orderId: "",
-          hangarStatus: "available",
-        },
-        4: {
-          orderId: "",
-          hangarStatus: "available",
-        },
-        5: {
-          orderId: "",
-          hangarStatus: "available",
-        },
-        6: {
-          orderId: "",
-          hangarStatus: "available",
-        },
-        7: {
-          orderId: "",
-          hangarStatus: "available",
-        },
-        8: {
-          orderId: "",
-          hangarStatus: "available",
-        },
-        9: {
-          orderId: "",
-          hangarStatus: "available",
-        },
-        10: {
-          orderId: "",
-          hangarStatus: "available",
-        },
+        // Initializing each hangar with an empty orderId and available status
+        ...[...Array(10)].map((_, index) => ({
+          [index + 1]: { orderId: "", hangarStatus: "available" }
+        })).reduce((acc, val) => ({ ...acc, ...val }), {})
       },
     };
+
+    // Setting the bars data in the database
     await set(barsRef, barsData);
   }
 }
+
+// Exporting CreateHangarsInBar function for use elsewhere in the application
 export default CreateHangarsInBar;

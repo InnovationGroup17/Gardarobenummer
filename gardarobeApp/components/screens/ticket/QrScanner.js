@@ -7,7 +7,7 @@ import { getPermisionBarCodeScanner } from "../../../utilities/getPermisionBarCo
 import { fetchFirestoreData } from "../../../utilities/firebase/firestore/firestoreApi";
 import { useNavigation } from "@react-navigation/native";
 
-// Qr scanner komponent, der benytter sig af BarCodeScanner komponenten fra expo
+// QR scanner component that uses the BarCodeScanner component from expo
 const QrScanner = () => {
   const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState(null);
@@ -29,7 +29,7 @@ const QrScanner = () => {
     fetchData();
   }, [collectionName]);
 
-  // Metode til at håndtere scanninger af QR koder og lave en ticket med dataen fra QR koden
+  // Method to handle QR code scans and create a ticket with data from the QR code
   const handleBarCodeScanned = ({ data }) => {
     setScanned(true);
     let user = getAuth().currentUser;
@@ -37,7 +37,7 @@ const QrScanner = () => {
     const id = firestoreData.find((item) => item.id === parsedData.id);
 
     let BarData = {
-      id: id, //bar id
+      id: id, // bar id
       uid: user.uid, // user id
       time: timestamp(),
     };
@@ -45,17 +45,18 @@ const QrScanner = () => {
     navigation.navigate("SelectWardrope", { BarData });
   };
 
-  // Hvis der ikke er givet adgang til kameraet, så returneres en tekst, der informerer om dette
+  // If camera permission hasn't been granted yet, display a message requesting permission
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Requesting camera permission</Text>;
   }
+  // If access to the camera is denied, display a message indicating this
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
 
-  // Hvis der er givet adgang til kameraet, så returneres BarCodeScanner komponenten fra expo
+  // If camera permission is granted, render the BarCodeScanner component from expo
   return (
-    <View style={styles.constainer}>
+    <View style={styles.container}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
         style={styles.scanner}
@@ -70,7 +71,7 @@ const QrScanner = () => {
 export default QrScanner;
 
 const styles = StyleSheet.create({
-  constainer: {
+  container: {
     flex: 1,
     justifyContent: "center",
   },

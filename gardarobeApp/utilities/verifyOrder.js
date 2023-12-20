@@ -1,81 +1,116 @@
-// Denne kode har til formål at sikre, at en ordre bliver registreret i den korrekte bar
+// Purpose: To ensure that an order is correctly registered at a specific bar
 
-// Importér de nødvendige Firebase-tjenester fra firebaseConfig.js
-import { get, ref, set, update } from "firebase/database"; // Korrekt import til Realtime Database
-import { auth, realtimeDB } from "../database/firebaseConfig"; // Importér de nødvendige Firebase-tjenester
+// Imports Firebase services and utility functions
+import { get, ref, update } from "firebase/database";
+import { realtimeDB } from "../database/firebaseConfig";
 import CheckIfUserIsHost from "./checkUserHost";
 
-// Hent ordredata fra Realtime Database
+// Function to retrieve order data from the Firebase Realtime Database
 async function GetOrderData(data) {
   try {
+    // Creating a reference to the specific order in the database
     const orderRef = ref(
       realtimeDB,
       "orders/" + data.user + "/" + data.orderId
     );
+    // Fetching the order data
     const orderSnapshot = await get(orderRef);
+    // Extracting value from the snapshot
     const orderData = orderSnapshot.val();
     return orderData;
   } catch (error) {
-    console.error("Fejl i getOrderData:", error);
-    throw error; // Kast fejlen igen for at blive håndteret af opkaldet
+    console.error("Error in GetOrderData:", error);
+    throw error; // Rethrowing the error for caller to handle
   }
 }
 
+// Function to update an order's status
 async function UpdateOrderToScanned(data) {
   try {
+    // Retrieving order data
     const orderData = await GetOrderData(data);
+    // Extracting relevant information from order data
     const status = orderData[1].status;
-    console.log("orderData:", status);
+    const orderHanger = orderData[0].hangarNumber;
+    const barId = orderData[0].barId;
 
-    if (orderData[1].status === "readyToBeScanned") {
-      // Opdater status til "scannet" i Realtime Database
+    if (status === "active") {
+      // Reference to update the order status
+      const updateStatus = ref(
+        realtimeDB,
+        "orders/" + data.user + "/" + data.orderId + "/1"
+      );
+      // Data to update
+      const updateData = {
+        payTime: orderData[1].payTime,
+        paymentId: orderData[1].paymentId,
+        status: "resolved",
+      };
+
+      // Reference to update the hangar information
+      const hangerRef = ref(
+        realtimeDB,
+        "bars/" + barId + "/hangars/" + orderHanger
+      );
+      const barsData = {
+        hangarstatus: "available",
+        orderId: "",
+      };
+      // Executing updates
+      await update(updateStatus, updateData);
+      await update(hangerRef, barsData);
+
+    } else if (status === "readyToBeScanned") {
+      // Updating order status to scanned
       const updateStatus = ref(
         realtimeDB,
         "orders/" + data.user + "/" + data.orderId + "/1"
       );
       const updateData = {
+        status: "orderScannedByHost",
         payTime: orderData[1].payTime,
         paymentId: orderData[1].paymentId,
-        status: "orderScannedByHost",
       };
       await update(updateStatus, updateData);
     } else {
-      const error = "Ordren er allerede scannet";
-      error;
+      // Case when order is already scanned
+      throw new Error("Order is already scanned");
     }
-
-    // Opdater data i databasen
-    //await set(orderRef, orderData);
 
     return status;
   } catch (error) {
-    console.error("Fejl i UpdateOrderToScanned:", error);
-    throw error; // Kast fejlen igen for at blive håndteret af opkaldet
+    console.error("Error in UpdateOrderToScanned:", error);
+    throw error; // Rethrowing the error for caller to handle
   }
 }
 
-// Funktion til at hente brugerdata fra Realtime Database
+// Function to verify an order against the user's role (host)
 async function VerifyOrder(data) {
-  let status = false;
+  let status = "false";
   data = JSON.parse(data);
 
   try {
+    // Getting order data
     const orderData = await GetOrderData(data);
-    const userId = await CheckIfUserIsHost(); // Kald funktionen og vent på resultatet
+    // Checking if the user is the host for the bar in the order
+    const userId = await CheckIfUserIsHost();
     const barIDFromOrder = orderData[0].barId;
 
     if (userId === barIDFromOrder) {
+      // Update the order status if the user is a host
       const checkStatus = await UpdateOrderToScanned(data);
-      console.log("Brugeren er en vært");
-      console.log("Ordren er fra denne bar");
-      console.log("Ordren er verificeret");
-      console.log("checkStatus:", checkStatus);
-      return (status = true);
+      // Determining the return status based on the order's updated state
+      if (checkStatus === "readyToBeScanned") {
+        return (status = "true");
+      }
+      if (checkStatus === "active") {
+        return (status = "done");
+      }
     }
   } catch (error) {
     console.error(error.message);
-    // Håndter fejlen, hvis brugeren ikke er en vært
+    // Handling errors, especially when the user is not a host
   }
 }
 
-export default VerifyOrder;
+export default VerifyOrder; // Exporting the VerifyOrder function for use in other parts of the application

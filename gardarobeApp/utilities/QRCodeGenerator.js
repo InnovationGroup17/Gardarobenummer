@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 
+// A custom QRCode component that allows setting the background to transparent and changing the color
 const QRCodeWithBackground = ({ value, size }) => {
-  const [qrCodeKey, setQRCodeKey] = useState(""); // Key to force re-render of QR code
+  // State variable to force re-render of the QR code
+  const [qrCodeKey, setQRCodeKey] = useState("");
 
   useEffect(() => {
-    // Generate a random key to force re-render of QR code
+    // Generate a random key to force re-render of QR code when the component mounts
     setQRCodeKey(Math.random().toString(36).substring(7));
   }, []);
 
