@@ -8,3 +8,7 @@ To test payment use card number: 4242 4242 4242 4242 and then any valid informat
 
 Need two phones to run both as a user and as a host. Host need specific logins. Host Login - mail: barkowski@host.dk - password: 111111
 To test the host, the user need to get tickets at the same lokation as the hosts lokation. (barkowski host = barkowski bar)
+
+QR code to a hangar:
+<img width="155" alt="image" src="https://github.com/InnovationGroup17/Gardarobenummer/assets/91522333/2066b35e-905c-4214-b307-0cd9bebfb004">
+
