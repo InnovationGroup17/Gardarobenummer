@@ -3,6 +3,7 @@ import { Button, Text, View, TextInput, StyleSheet } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native"; // Import the useNavigation hook
 import GoBackButton from "../../GlobalComponents/GoBackButton";
+import CreateHangarsInBar from "../../../utilities/realtimeBarsTable";
 
 function LoginForm() {
   const navigation = useNavigation(); // Use the hook to get the navigation object
@@ -14,6 +15,7 @@ function LoginForm() {
   const handleSubmit = async () => {
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
+        CreateHangarsInBar();
         navigation.navigate("Home"); // Navigate to HomeScreen upon successful login
       })
       .catch((error) => {

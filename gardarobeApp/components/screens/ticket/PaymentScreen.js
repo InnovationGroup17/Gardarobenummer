@@ -28,6 +28,7 @@ const PaymentScreen = ({ route }) => {
       ticketTime: route.params.OrderData.ticketTime,
       totalPrice: route.params.OrderData.totalPrice,
       totalItems: route.params.OrderData.totalItems,
+      hangarNumber:""
     },
   ];
 
@@ -59,8 +60,14 @@ const PaymentScreen = ({ route }) => {
       }),
     });
 
-    const { paymentId, paymentIntent, ephemeralKey, customer } =
-      await response.json();
+    const {
+      paymentIntentInfo,
+      paymentId,
+      paymentIntent,
+      ephemeralKey,
+      customer,
+    } = await response.json();
+    console.log("paymentIntentInfo: ", paymentIntentInfo.payment_method_options);
     return { paymentId, paymentIntent, ephemeralKey, customer };
   };
 

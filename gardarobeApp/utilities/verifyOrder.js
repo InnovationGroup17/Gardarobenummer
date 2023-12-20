@@ -3,28 +3,7 @@
 // Importér de nødvendige Firebase-tjenester fra firebaseConfig.js
 import { get, ref, set, update } from "firebase/database"; // Korrekt import til Realtime Database
 import { auth, realtimeDB } from "../database/firebaseConfig"; // Importér de nødvendige Firebase-tjenester
-
-async function CheckIfUserIsHost() {
-  try {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      throw new Error("Brugeren er ikke godkendt");
-    }
-    const userId = currentUser.uid;
-    const usersRef = ref(realtimeDB, "users/" + userId);
-    const userSnapshot = await get(usersRef);
-    const userData = userSnapshot.val();
-
-    if (userData && userData.type === "host") {
-      return userId;
-    } else {
-      throw new Error("Brugeren er ikke en vært");
-    }
-  } catch (error) {
-    console.error("Fejl i checkIfUserIsHost:", error);
-    throw error; // Kast fejlen igen for at blive håndteret af opkaldet
-  }
-}
+import CheckIfUserIsHost from "./checkUserHost";
 
 // Hent ordredata fra Realtime Database
 async function GetOrderData(data) {
@@ -57,10 +36,11 @@ async function UpdateOrderToScanned(data) {
       const updateData = {
         payTime: orderData[1].payTime,
         paymentId: orderData[1].paymentId,
-        status: "OrdreScannetAfVært",
+        status: "orderScannedByHost",
       };
       await update(updateStatus, updateData);
     } else {
+      const error = "Ordren er allerede scannet";
       error;
     }
 
@@ -78,12 +58,11 @@ async function UpdateOrderToScanned(data) {
 async function VerifyOrder(data) {
   let status = false;
   data = JSON.parse(data);
-  console.log("verifyOrder:", data);
 
   try {
     const orderData = await GetOrderData(data);
     const userId = await CheckIfUserIsHost(); // Kald funktionen og vent på resultatet
-    const barIDFromOrder = orderData[0].BarData.barId;
+    const barIDFromOrder = orderData[0].barId;
 
     if (userId === barIDFromOrder) {
       const checkStatus = await UpdateOrderToScanned(data);
