@@ -36,8 +36,13 @@ const HostClientQR = () => {
 
       console.log("status", status); // Log status for ordreverifikation
 
-      if (status === true) {
+      if (status === "done") {
+        alert("Ordren er returneret til kunden");
+        navigation.navigate("HostStart"); // Navigér til skærmen "HostStart", hvis ordren er returneret
+      } else if (status === "true") {
+        console.log("asdasd");
         alert(`Stregkode med bruger-ID ${user} og ${order} er blevet scannet!`); // Vis en meddelelse med bruger- og ordredetaljer
+        console.log("1234");
         navigation.navigate("HostHangerQRScan", data); // Navigér til skærmen "HostHangerQRScan", hvis ordren er verificeret
       } else error; // Ellers kast en fejl
 
