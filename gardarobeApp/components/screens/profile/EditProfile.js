@@ -1,23 +1,27 @@
+// Importing necessary modules and hooks from React, React Native, and Firebase
 import React, { useState, useEffect } from "react";
 import { Button, Text, View, TextInput, StyleSheet } from "react-native";
 import { getAuth } from "firebase/auth";
 import { ref, get, set } from "firebase/database";
 import { realtimeDB } from "../../../database/firebaseConfig";
-import { useNavigation } from "@react-navigation/native"; // Import the useNavigation hook
+import { useNavigation } from "@react-navigation/native";
 
+// Defining the EditProfile functional component
 function EditProfile() {
+  // State hooks for handling user input and error messages
   const [displayName, setDisplayName] = useState("");
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedAge, setSelectedAge] = useState("");
   const [type, setType] = useState("user");
   const [stripeId, setStripeId] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigation = useNavigation(); // Use the hook to get the navigation object
+  const navigation = useNavigation(); // Hook to enable navigation to other screens
 
+  // Getting the current authenticated user from Firebase Auth
   const auth = getAuth();
   const user = auth.currentUser;
 
-  // Fetch user data from Realtime Database on component mount
+  // Effect hook to fetch and set user data from Firebase Realtime Database on component mount
   useEffect(() => {
     if (user) {
       const usersRef = ref(realtimeDB, "users/" + user.uid);
@@ -34,10 +38,10 @@ function EditProfile() {
     }
   }, [user]);
 
+  // Function to handle profile saving, including updating Firebase Realtime Database
   const handleSaveProfile = async () => {
     try {
       if (user) {
-        // Update additional user data in the Realtime Database
         const usersRef = ref(realtimeDB, "users/" + user.uid);
         const userData = {
           displayName: displayName,
@@ -48,17 +52,15 @@ function EditProfile() {
         };
 
         await set(usersRef, userData);
-
-        // Navigate to the user's profile or another appropriate screen
-        // Replace 'Profile' with the name of your user profile screen
-        navigation.navigate("Profile");
+        navigation.navigate("Profile"); // Navigate to the profile screen after saving
       }
     } catch (error) {
       const errorMessage = error.message;
-      setErrorMessage(errorMessage);
+      setErrorMessage(errorMessage); // Set error message if there is an error
     }
   };
 
+  // Render method defining the UI of the component
   return (
     <View>
       <Text style={styles.header}>Edit Profile</Text>
@@ -86,6 +88,7 @@ function EditProfile() {
   );
 }
 
+// StyleSheet for the EditProfile component
 const styles = StyleSheet.create({
   error: {
     color: "red",
@@ -101,4 +104,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Exporting the component for use in other parts of the application
 export default EditProfile;

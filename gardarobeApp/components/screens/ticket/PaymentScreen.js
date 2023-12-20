@@ -1,18 +1,19 @@
+// Importing necessary modules and components from React, React Native, Stripe, and Firebase
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Alert, Button } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { ref, push, set } from "firebase/database";
-import { realtimeDB } from "../../../database/firebaseConfig";
-import { timestamp } from "../../../utilities/timestamp";
-import { useStripe } from "@stripe/stripe-react-native";
-import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress";
-import getUserData from "../../../utilities/firebase/realtime/getUserData";
+import { useNavigation } from "@react-navigation/native"; // Navigation hook from React Navigation
+import { ref, push, set } from "firebase/database"; // Firebase database methods
+import { realtimeDB } from "../../../database/firebaseConfig"; // Firebase database configuration
+import { timestamp } from "../../../utilities/timestamp"; // Utility function for getting the current timestamp
+import { useStripe } from "@stripe/stripe-react-native"; // Stripe hook for handling payment
+import { getMetroIPAddress } from "../../../utilities/getMetroIPAdress"; // Utility to get Metro IP address for development
+import getUserData from "../../../utilities/firebase/realtime/getUserData"; // Utility function to get user data
 
-// DEVELOPMENT MODE
+// Setting up the server URL for development mode
 const metroIP = getMetroIPAddress();
 const SERVER_URL = `http://${metroIP}:5001`;
-// DEVELOPMENT MODE
 
+// Defining the PaymentScreen functional component
 const PaymentScreen = ({ route }) => {
   const [userDetails, setUserDetails] = useState({ uid: null, data: null });
   const [paymentIdInfo, setPaymentIdInfo] = useState();
@@ -28,10 +29,11 @@ const PaymentScreen = ({ route }) => {
       ticketTime: route.params.OrderData.ticketTime,
       totalPrice: route.params.OrderData.totalPrice,
       totalItems: route.params.OrderData.totalItems,
-      hangarNumber:""
+      hangarNumber: ""
     },
   ];
 
+  // Effect hook to fetch user data and initialize payment sheet
   useEffect(() => {
     async function getUser() {
       try {
@@ -49,7 +51,7 @@ const PaymentScreen = ({ route }) => {
     getUser();
   }, []);
 
-  //
+  // Function to fetch payment sheet parameters from the backend
   const fetchPaymentSheetParams = async (id, totalPrice) => {
     const response = await fetch(`${SERVER_URL}/payments/payment-sheet`, {
       method: "POST",
@@ -67,16 +69,14 @@ const PaymentScreen = ({ route }) => {
       ephemeralKey,
       customer,
     } = await response.json();
-    console.log("paymentIntentInfo: ", paymentIntentInfo.payment_method_options);
     return { paymentId, paymentIntent, ephemeralKey, customer };
   };
 
-  //
+  // Function to initialize the payment sheet
   const initializePaymentSheet = async (id, totalPrice) => {
     const { paymentId, paymentIntent, ephemeralKey, customer } =
       await fetchPaymentSheetParams(id, totalPrice);
 
-    console.log("paymentId: ", paymentId);
     setPaymentIdInfo(paymentId);
 
     const { error } = await initPaymentSheet({
@@ -91,36 +91,33 @@ const PaymentScreen = ({ route }) => {
     });
     if (error) {
       console.log("Error initializing payment sheet: ", error);
-    }
-
-    if (!error) {
+    } else {
       setIsPaymentSheetInitialized(true);
     }
   };
 
-  //
+  // Function to open the payment sheet and handle payment
   const openPaymentSheet = async () => {
-    console.log("paymentIdInfo: ", paymentIdInfo);
     const { error } = await presentPaymentSheet();
 
     if (error) {
       Alert.alert(`Error code: ${error.code}`, error.message);
     } else {
       Alert.alert("Success", "Your order is confirmed!");
-      //Payment was successful (it is Uncaptured)
+      // Payment was successful (it is Uncaptured)
       order.push({
-        payTime: timestamp(), //save the time of the Uncaptured payment
-        status: "readyToBeScanned", //set the status of the order to readyToBeScanned
-        paymentId: paymentIdInfo, //save the paymentId from Stripe
+        payTime: timestamp(), // Save the time of the Uncaptured payment
+        status: "readyToBeScanned", // Set the status of the order to readyToBeScanned
+        paymentId: paymentIdInfo, // Save the paymentId from Stripe
       });
 
-      //save the order in the Realtime firestore database
+      // Save the order in the Realtime Firestore database
       try {
         const ordersRef = ref(realtimeDB, `orders/${userDetails.uid}`);
         const newOrderRef = push(ordersRef);
         await set(newOrderRef, order);
 
-        //navigate to the OrderScreen with the dataToQR object
+        // Navigate to the OrderScreen with the dataToQR object
         let dataToQR = {
           orderId: newOrderRef.key,
           user: userDetails.uid,
@@ -132,6 +129,7 @@ const PaymentScreen = ({ route }) => {
     }
   };
 
+  // Render method defining the UI of the PaymentScreen component
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Payment Screen</Text>
@@ -146,6 +144,7 @@ const PaymentScreen = ({ route }) => {
 
 export default PaymentScreen;
 
+// StyleSheet for the PaymentScreen component
 const styles = StyleSheet.create({
   container: {
     flex: 1,

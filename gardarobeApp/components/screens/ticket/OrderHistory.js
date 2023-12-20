@@ -1,3 +1,4 @@
+// Importing necessary modules and components from React, React Native, and Firebase
 import React, { useState, useEffect, useMemo } from "react";
 import {
   View,
@@ -6,29 +7,34 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import Loading from "../../GlobalComponents/loading/Loading";
-import { useAuthListener } from "../../authenticate/RealTime";
-import { fetchFirestoreData } from "../../../utilities/firebase/firestore/firestoreApi";
-import { realtimeDB } from "../../../database/firebaseConfig";
-import { ref, onValue } from "firebase/database";
+import Loading from "../../GlobalComponents/loading/Loading"; // Importing a custom loading component
+import { useAuthListener } from "../../authenticate/RealTime"; // Custom hook for listening to authentication changes
+import { fetchFirestoreData } from "../../../utilities/firebase/firestore/firestoreApi"; // Utility function to fetch data from Firestore
+import { realtimeDB } from "../../../database/firebaseConfig"; // Firebase database configuration
+import { ref, onValue } from "firebase/database"; // Firebase database methods
 
+// Defining the OrderHistory functional component
 const OrderHistory = () => {
-  const user = useAuthListener();
+  const user = useAuthListener(); // Using custom hook to get the current user
+  // State hooks for managing orders, bars, loading state, and expanded order view
   const [orders, setOrders] = useState([]);
   const [allBars, setAllBars] = useState([]);
   const [isLoadingBars, setIsLoadingBars] = useState(true);
   const [expandedOrderId, setExpandedOrderId] = useState(null);
 
+  // Effect hook to fetch bar data
   useEffect(() => {
     fetchBars();
   }, []);
 
+  // Effect hook to fetch user orders
   useEffect(() => {
     if (user && !isLoadingBars) {
       fetchOrders(user.uid);
     }
   }, [user, isLoadingBars]);
 
+  // Function to fetch bars data from Firestore
   const fetchBars = async () => {
     try {
       const bars = await fetchFirestoreData("Bars");
@@ -39,6 +45,7 @@ const OrderHistory = () => {
     }
   };
 
+  // Function to fetch orders from Firebase Realtime Database
   const fetchOrders = (userId) => {
     const orderRef = ref(realtimeDB, `orders/${userId}`);
     const unsubscribe = onValue(orderRef, (snapshot) => {
@@ -51,6 +58,7 @@ const OrderHistory = () => {
     return () => unsubscribe();
   };
 
+  // Function to map orders with corresponding bar information
   const mapOrdersWithBarInfo = (allOrders) => {
     return Object.entries(allOrders).map(([id, order]) => {
       const barData = allBars.find((bar) => bar.id === order[0].barId);
@@ -63,6 +71,7 @@ const OrderHistory = () => {
     });
   };
 
+  // useMemo hook to sort orders based on time and status
   const sortedOrders = useMemo(() => {
     return orders.sort((a, b) => {
       const timeA = new Date(a.orderInfo.ticketTime).getTime();
@@ -83,6 +92,7 @@ const OrderHistory = () => {
     });
   }, [orders]);
 
+  // Function to handle order click and toggle expanded view
   const handleOrderClick = (orderId) => {
     if (expandedOrderId === orderId) {
       setExpandedOrderId(null);
@@ -91,8 +101,9 @@ const OrderHistory = () => {
     }
   };
 
+  // Render method defining the UI of the OrderHistory component
   return isLoadingBars ? (
-    <Loading />
+    <Loading /> // Display loading screen while data is loading
   ) : (
     <FlatList
       style={styles.flatListContainer}
@@ -134,6 +145,7 @@ const OrderHistory = () => {
   );
 };
 
+// StyleSheet for the OrderHistory component
 const styles = StyleSheet.create({
   flatListContainer: {
     flex: 1,
@@ -163,4 +175,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Exporting the OrderHistory component for use in other parts of the application
 export default OrderHistory;

@@ -1,3 +1,4 @@
+// Importing necessary modules from React, React Native, and other libraries
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Alert, Text } from "react-native";
 import MapView, { Callout, Marker, CalloutSubview } from "react-native-maps";
@@ -8,7 +9,9 @@ import { useNavigation } from "@react-navigation/native";
 import { timestamp } from "../../../utilities/timestamp";
 import Loading from "../../GlobalComponents/loading/Loading";
 
+// Defining the MapScreen component
 export default function MapScreen() {
+  // State variables for managing component state
   const [isLoading, setIsLoading] = useState(true);
   const navigation = useNavigation();
   const [initialRegion, setInitialRegion] = useState(null);
@@ -18,13 +21,14 @@ export default function MapScreen() {
   const [firestoreData, setFirestoreData] = useState(null);
   const collectionName = "Bars";
 
+  // Effect hook for Firebase authentication listener
   useEffect(() => {
-    // Set up the real-time listener for Firebase Authentication
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
   });
 
+  // Effect hook for requesting location permission and setting initial map region
   useEffect(() => {
     (async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -43,13 +47,14 @@ export default function MapScreen() {
     })();
   }, []);
 
+  // Effect hook for fetching data from Firestore and updating component state
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchData = await fetchFirestoreData(collectionName);
         setFirestoreData(fetchData);
 
-        // Create objects for locationOfInterest using a for loop
+        // Process Firestore data to create locationOfInterest objects
         const interestLocations = [];
         for (let i = 0; i < fetchData.length; i++) {
           interestLocations.push({
@@ -62,9 +67,8 @@ export default function MapScreen() {
             id: fetchData[i].id,
           });
         }
-        // Set the locationOfInterest state
         setLocationOfInterest(interestLocations);
-        setIsLoading(false); // Hide the loading screen after data is fetched
+        setIsLoading(false); // Hide loading screen after data is loaded
       } catch (error) {
         console.error("Error fetching data from Firestore:", error);
       }
@@ -73,11 +77,11 @@ export default function MapScreen() {
     fetchData();
   }, []);
 
+  // Function to handle marker press on the map
   const handleMarkerPress = (item) => {
     let user = getAuth().currentUser; // Get the current user
     let id = firestoreData.find((bar) => bar.id === item.id);
 
-    //NEEDS TO BE MADE LIKE THIS TO WORK
     let BarData = {
       id: id,
       uid: user.uid,
@@ -86,10 +90,12 @@ export default function MapScreen() {
     navigation.navigate("SelectWardrope", { BarData });
   };
 
+  // Conditional rendering based on isLoading state
   if (isLoading) {
     return <Loading />;
   }
 
+  // Main render method for the MapScreen component
   return (
     <View style={styles.container}>
       {initialRegion ? (
@@ -127,6 +133,7 @@ export default function MapScreen() {
   );
 }
 
+// StyleSheet for the MapScreen component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
