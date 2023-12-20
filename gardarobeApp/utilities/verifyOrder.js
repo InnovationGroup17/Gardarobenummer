@@ -25,9 +25,37 @@ async function UpdateOrderToScanned(data) {
   try {
     const orderData = await GetOrderData(data);
     const status = orderData[1].status;
-    console.log("orderData:", status);
+    console.log("orderStatus:", status);
+    console.log("orderData", orderData);
 
-    if (orderData[1].status === "readyToBeScanned") {
+    if (status === "active") {
+      const orderHanger = orderData[0].hangarNumber;
+      console.log("active");
+      const updateStatus = ref(
+        realtimeDB,
+        "orders/" + data.user + "/" + data.orderId
+      );
+      const updateData = {
+        payTime: orderData[1].payTime,
+        paymentId: orderData[1].paymentId,
+        status: "resolved",
+      };
+
+      //fjern reservingen af hangar
+      const hangerRef = ref(
+        realtimeDB,
+        "bars/" + data.barId + "/hangars" + orderHanger
+      );
+
+      const barsData = {
+        hangarstatus: "",
+        orderId: "",
+      };
+
+      await update(updateStatus + "/1", updateData);
+      await update(hangerRef, barsData);
+    } else if (status === "readyToBeScanned") {
+      console.log("TEST");
       // Opdater status til "scannet" i Realtime Database
       const updateStatus = ref(
         realtimeDB,
@@ -66,9 +94,6 @@ async function VerifyOrder(data) {
 
     if (userId === barIDFromOrder) {
       const checkStatus = await UpdateOrderToScanned(data);
-      console.log("Brugeren er en vært");
-      console.log("Ordren er fra denne bar");
-      console.log("Ordren er verificeret");
       console.log("checkStatus:", checkStatus);
       return (status = true);
     }

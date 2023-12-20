@@ -142,7 +142,7 @@ function SignUpForm() {
             >
               <Picker.Item label="Select Age" value="" />
               {Array.from({ length: 100 }, (_, i) => (
-                <Picker.Item label={`${i + 1}`} value={`${i + 1}`} key={i} />
+                <Picker.Item label={`${i + 18}`} value={`${i + 18}`} key={i} />
               ))}
             </Picker>
             <Button title="OK" onPress={handleAgeConfirm} />

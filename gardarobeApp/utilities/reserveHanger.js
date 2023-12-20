@@ -29,7 +29,7 @@ async function UpdateOrderToActive(data) {
     console.log("orderData:", status);
 
     if (orderData[1].status === "orderScannedByHost") {
-      // Opdater status til "scannet" i Realtime Database
+      // Opdater status til "active" i Realtime Database
       const updateStatus = ref(
         realtimeDB,
         "orders/" + data.user + "/" + data.orderId + "/1"
@@ -37,8 +37,9 @@ async function UpdateOrderToActive(data) {
       const updateData = {
         payTime: orderData[1].payTime,
         paymentId: orderData[1].paymentId,
-        status: "Active",
+        status: "active",
       };
+
       await update(updateStatus, updateData);
     } else {
       error;
@@ -67,6 +68,11 @@ async function reserveHangar(data, orderData) {
     "bars/" + currentUser.uid + "/hangars/" + data
   );
 
+  const orderRef = ref(
+    realtimeDB,
+    "orders/" + user + "/" + order + "/0" + "/hangarNumber"
+  );
+
   try {
     const snapshot = await get(barsRef);
     if (snapshot.exists()) {
@@ -76,6 +82,7 @@ async function reserveHangar(data, orderData) {
         orderId: order,
       };
       await set(barsRef, barsData);
+      await set(orderRef, data);
       UpdateOrderToActive(parsedData);
     } else {
       console.log("incorrect qr code was scanned");
